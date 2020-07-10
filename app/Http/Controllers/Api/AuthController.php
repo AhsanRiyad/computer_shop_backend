@@ -8,7 +8,7 @@ use App\User;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function signup(Request $request)
     {
         $validatedData =  $request->validate([
             "name" => "required|max:55",
@@ -36,5 +36,30 @@ class AuthController extends Controller
         }
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
         return response(['user' => auth()->user(), 'accessToken' => $accessToken]);
+    }
+
+
+
+    /**
+     * Logout user (Revoke the token)
+     *
+     * @return [string] message
+     */
+    public function logout(Request $request)
+    {
+        $request->user()->token()->revoke();
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ]);
+    }
+
+    /**
+     * Get the authenticated User
+     *
+     * @return [json] user object
+     */
+    public function user(Request $request)
+    {
+        return response()->json($request->user());
     }
 }

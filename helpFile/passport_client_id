@@ -1,6 +1,1 @@
-Personal access client created successfully.
-Client ID: 1
-Client secret: eLJvksPw7f4Jsj598X4bL9Y26Bl7haxTOjrJsGbd
-Password grant client created successfully.
-Client ID: 2
-Client secret: SckqKvmQTC3kLeOyN4YY2ztdohtizBP84KIgXZ6n
+php artisan passport:install --force

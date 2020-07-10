@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdersTable extends Migration
+class CreateSerialsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,18 @@ class CreateOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
-            $table->date('date')->nullable();
-            $table->integer('client_id')->nullable();
-            $table->boolean('isPurchase')->nullable();
-
+        Schema::create('serials', function (Blueprint $table) {
             $table->timestamps();
+            
             $table->increments('id');
+            $table->string('number', 100)->unique();
+            
+            $table->string('status', 100);
+            $table->integer('product_id');
+
+            $table->integer('order_id_p');
+            $table->integer('order_id_s');
+
             $table->integer('updated_by')->nullable();
             $table->integer('created_by')->nullable();
         });
@@ -32,6 +37,6 @@ class CreateOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('serials');
     }
 }

@@ -21,10 +21,8 @@ class CreateOrderDetailsTable extends Migration
 
             $table->timestamps();
             $table->increments('id');
-            $table->timestamp('createdAt')->nullable();
-            $table->timestamp('updatedAt')->nullable();
-            $table->integer('createdBy')->nullable();
-            $table->integer('updatedBy')->nullable();
+            $table->integer('updated_by')->nullable();
+            $table->integer('created_by')->nullable();
         });
     }
 
