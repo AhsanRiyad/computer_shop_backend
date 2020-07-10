@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Transactions;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Transactions\Transactions as T;
+
+
 
 class Transactions extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -15,6 +19,7 @@ class Transactions extends Controller
     public function index()
     {
         //
+        return T::all();
     }
 
     /**
@@ -36,6 +41,19 @@ class Transactions extends Controller
     public function store(Request $request)
     {
         //
+        return T::create($request->all());
+        /* 
+        $transaction = new T();
+        $t =  $transaction->save( $request->all() );
+        return $t; */
+        // $product->save($parameters);
+
+
+        // return $request;
+        // $a = new P;
+        // $a->name = $request->name;
+        // return $a->save();
+        // return $user;
     }
 
     /**
@@ -47,6 +65,7 @@ class Transactions extends Controller
     public function show($id)
     {
         //
+        return T::find($id);
     }
 
     /**
@@ -70,6 +89,8 @@ class Transactions extends Controller
     public function update(Request $request, $id)
     {
         //
+        $product =  T::find($id);
+        $product->save($request->all());
     }
 
     /**
@@ -81,5 +102,6 @@ class Transactions extends Controller
     public function destroy($id)
     {
         //
+        return T::destroy(1);
     }
 }

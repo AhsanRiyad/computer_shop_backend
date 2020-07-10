@@ -103,14 +103,18 @@ Route::group([], function () {
 
 
         // orders
-        
-
+        Route::get('orders', 'orders\orders@index');
+        Route::get('order/{id}', 'orders\orders@show');
+        Route::post('order', 'orders\orders@store');
+        Route::put('order/{id}', 'orders\orders@update');
+        Route::delete('order/{id}', 'orders\orders@destroy');
 
 
         // transactions
-
-
-
-
+        Route::get('transactions', 'transactions\transactions@index');
+        Route::get('transaction/{id}', 'transactions\transactions@show');
+        Route::post('transaction', 'transactions\transactions@store');
+        Route::put('transaction/{id}', 'transactions\transactions@update');
+        Route::delete('transaction/{id}', 'transactions\transactions@destroy');
     });
 });
