@@ -19,11 +19,11 @@ class CreateSerialsTable extends Migration
             $table->increments('id');
             $table->string('number', 100)->unique();
             
-            $table->string('status', 100);
-            $table->integer('product_id');
+            $table->string('status', 100)->nullable();
+            $table->integer('product_id')->nullable();
 
-            $table->integer('order_id_p');
-            $table->integer('order_id_s');
+            $table->integer('order_id_p')->nullable();
+            $table->integer('order_id_s')->nullable();
 
             $table->integer('updated_by')->nullable();
             $table->integer('created_by')->nullable();

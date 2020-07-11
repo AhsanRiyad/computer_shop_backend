@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Orders extends Model
 {
+    protected $guarded = ['id'];
     //
     public function order_details()
     {
@@ -14,12 +15,12 @@ class Orders extends Model
 
     public function serials_p()
     {
-        return $this->hasMany('App\Models\Serials\Serials', 'order_id_p');
+        return $this->hasMany('App\Models\Products\Serials', 'order_id_p');
     }
 
     public function serials_s()
     {
-        return $this->hasMany('App\Models\Serials\Serials', 'order_id_s');
+        return $this->hasMany('App\Models\Products\Serials', 'order_id_s');
     }
 
     public function transactions()

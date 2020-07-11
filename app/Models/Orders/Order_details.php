@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Models\Models\Orders;
+namespace App\Models\Orders;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Order_details extends Model
 {
+    protected $guarded = ['id'];
     //
     public function order()
     {

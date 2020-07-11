@@ -50,6 +50,8 @@ class Orders extends Controller
             $order->serials_s()->createMany($request->serials);
         return $order;
 
+        // return $request;
+
         // $product->save($parameters);
 
 

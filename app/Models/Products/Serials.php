@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Serials extends Model
 {
+    protected $guarded = ['id'];
     //
     public function product()
     {
