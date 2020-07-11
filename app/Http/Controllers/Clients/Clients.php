@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Clients;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Clients\Clients as C;
+use App\Models\Clients\Clients as C;
 
 class Clients extends Controller
 {

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Products\Categories as C;
+use App\Models\Products\Categories as C;
 
 class Categories extends Controller
 {

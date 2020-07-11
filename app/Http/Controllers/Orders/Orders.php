@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Orders;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Orders\Orders as O;
+use App\Models\Orders\Orders as O;
 
 class Orders extends Controller
 {

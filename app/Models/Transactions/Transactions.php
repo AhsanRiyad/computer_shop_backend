@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Transactions;
+namespace App\Models\Transactions;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -38,10 +38,10 @@ class Transactions extends Model
     //
     public function client()
     {
-        return $this->belongsTo('App\Clients\Clients', 'client_id', 'id');
+        return $this->belongsTo('App\Models\Clients\Clients', 'client_id', 'id');
     }
     public function order()
     {
-        return $this->belongsTo('App\Orders\Orders', 'order_id', 'id');
+        return $this->belongsTo('App\Models\Orders\Orders', 'order_id', 'id');
     }
 }

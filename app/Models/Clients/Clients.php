@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Clients;
+namespace App\Models\Models\Clients;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,11 +11,11 @@ class Clients extends Model
 
     public function orders()
     {
-        return $this->hasMany('App\Orders\Orders', 'client_id');
+        return $this->hasMany('App\Models\Orders\Orders', 'client_id');
     }
 
     public function transactions()
     {
-        return $this->hasMany('App\Transactions\Transactions', 'client_id');
+        return $this->hasMany('App\Models\Transactions\Transactions', 'client_id');
     }
 }

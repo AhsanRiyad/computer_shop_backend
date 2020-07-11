@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Transactions;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Transactions\Transactions as T;
+use App\Models\Transactions\Transactions as T;
 
 class Transactions extends Controller
 {

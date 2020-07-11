@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Products;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Products\Serials as S;
-use App\Orders\Orders;
+use App\Models\Orders\Orders;
 
 class Serials extends Controller
 {
