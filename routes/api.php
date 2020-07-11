@@ -101,7 +101,6 @@ Route::group([], function () {
         Route::put('client/{id}', 'clients\clients@update');
         Route::delete('client/{id}', 'clients\clients@destroy');
 
-
         // orders
         Route::get('orders', 'orders\orders@index');
         Route::get('order/{id}', 'orders\orders@show');
@@ -116,5 +115,7 @@ Route::group([], function () {
         Route::post('transaction', 'transactions\transactions@store');
         Route::put('transaction/{id}', 'transactions\transactions@update');
         Route::delete('transaction/{id}', 'transactions\transactions@destroy');
+
+
     });
 });

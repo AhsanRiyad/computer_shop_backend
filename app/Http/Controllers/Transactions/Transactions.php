@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Transactions\Transactions as T;
 
-
-
 class Transactions extends Controller
 {
 
@@ -90,7 +88,7 @@ class Transactions extends Controller
     {
         //
         $product =  T::find($id);
-        $product->save($request->all());
+        return $product->save($request->all());
     }
 
     /**
