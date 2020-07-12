@@ -49,7 +49,7 @@ Route::post('/login', 'Api\AuthController@login'); */
 
 Route::group([], function () {
 
-    Route::post('login', 'Api\AuthController@login');
+    Route::post('signin', 'Api\AuthController@login');
     Route::post('signup', 'Api\AuthController@signup');
 
     Route::group([
@@ -58,20 +58,6 @@ Route::group([], function () {
 
         Route::get('logout', 'Api\AuthController@logout');
         Route::get('user', 'Api\AuthController@user');
-
-        //products
-        Route::get('products', 'Products\Products@index');
-        Route::get('product/{id}', 'Products\Products@show');
-        Route::post('product', 'Products\Products@store');
-        Route::put('product/{id}', 'Products\Products@update');
-        Route::delete('product/{id}', 'Products\Products@destroy');
-
-        //serials
-        Route::get('serials', 'Products\Serials@index');
-        Route::get('serial/{id}', 'Products\Serials@show');
-        Route::post('serial', 'Products\Serials@store');
-        Route::put('serial/{id}', 'Products\Serials@update');
-        Route::delete('serial/{id}', 'Products\Serials@destroy');
 
         //category
         Route::get('categories', 'products\categories@index');
@@ -87,12 +73,19 @@ Route::group([], function () {
         Route::put('brand/{id}', 'products\brands@update');
         Route::delete('brand/{id}', 'products\brands@destroy');
 
-        //brands
-        Route::get('brands', 'products\brands@index');
-        Route::get('brand/{id}', 'products\brands@show');
-        Route::post('brand', 'products\brands@store');
-        Route::put('brand/{id}', 'products\brands@update');
-        Route::delete('brand/{id}', 'products\brands@destroy');
+        //products
+        Route::get('products', 'Products\Products@index');
+        Route::get('product/{id}', 'Products\Products@show');
+        Route::post('product', 'Products\Products@store');
+        Route::put('product/{id}', 'Products\Products@update');
+        Route::delete('product/{id}', 'Products\Products@destroy');
+
+        //serials
+        Route::get('serials', 'Products\Serials@index');
+        Route::get('serial/{id}', 'Products\Serials@show');
+        Route::post('serial', 'Products\Serials@store');
+        Route::put('serial/{id}', 'Products\Serials@update');
+        Route::delete('serial/{id}', 'Products\Serials@destroy');
 
         //clients
         Route::get('clients', 'clients\clients@index');
@@ -108,14 +101,11 @@ Route::group([], function () {
         Route::put('order/{id}', 'orders\orders@update');
         Route::delete('order/{id}', 'orders\orders@destroy');
 
-
         // transactions
         Route::get('transactions', 'transactions\transactions@index');
         Route::get('transaction/{id}', 'transactions\transactions@show');
         Route::post('transaction', 'transactions\transactions@store');
         Route::put('transaction/{id}', 'transactions\transactions@update');
         Route::delete('transaction/{id}', 'transactions\transactions@destroy');
-
-
     });
 });
