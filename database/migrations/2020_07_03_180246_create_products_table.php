@@ -15,8 +15,12 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             // $table->id();
-            $table->integer('brand_id')->nullable();
-            $table->integer('category_id')->nullable();
+            $table->integer('brand_id')->unsigned()->nullable();
+            $table->foreign('brand_id')->references('id')->on('brands');
+            
+            $table->integer('category_id')->unsigned()->nullable();
+            $table->foreign('category_id')->references('id')->on('categories');
+            
             $table->integer('warranty')->nullable();
             $table->boolean('having_serial')->nullable();
             $table->double('cost', 8, 2)->nullable();
@@ -30,6 +34,7 @@ class CreateProductsTable extends Migration
             $table->string('name', 100)->nullable();
             $table->integer('updated_by')->nullable();
             $table->integer('created_by')->nullable();
+            
         });
     }
 
