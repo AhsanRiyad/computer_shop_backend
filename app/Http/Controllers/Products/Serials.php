@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Products\Serials as S;
+use App\Models\Products\Serials as S;
 use App\Models\Orders\Orders;
 
 class Serials extends Controller
@@ -99,6 +99,6 @@ class Serials extends Controller
     public function destroy($id)
     {
         //
-        return S::destroy(1);
+        return S::destroy($id);
     }
 }
