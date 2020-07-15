@@ -11,12 +11,12 @@ class Transactions extends Model
 
     protected $guarded = ['id'];
 
-    const created_by = 1;
-    const updated_by = true;
+    /* const created_by = 1;
+    const updated_by = true; */
 
-    protected $attributes = [
+    /* protected $attributes = [
         'created_by' => self::created_by,
-    ];
+    ]; */
 
    /*  protected static function boot()
     {
