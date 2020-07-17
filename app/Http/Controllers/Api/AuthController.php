@@ -24,7 +24,7 @@ class AuthController extends Controller
         return response(['user' => $User, 'accessToken' => $accessToken]);
     }
 
-    public function login(Request $request)
+    public function signin(Request $request)
     {
         $loginData =  $request->validate([
             "email" => "email|required",
@@ -45,7 +45,7 @@ class AuthController extends Controller
      *
      * @return [string] message
      */
-    public function logout(Request $request)
+    public function signout(Request $request)
     {
         $request->user()->token()->revoke();
         return response()->json([

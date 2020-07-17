@@ -14,14 +14,8 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->date('date')->nullable();
-            $table->integer('client_id')->nullable();
-            $table->boolean('isPurchase')->nullable();
-
+            $table->id();
             $table->timestamps();
-            $table->increments('id');
-            $table->integer('updated_by')->nullable();
-            $table->integer('created_by')->nullable();
         });
     }
 
