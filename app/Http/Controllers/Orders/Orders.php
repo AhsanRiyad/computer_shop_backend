@@ -124,6 +124,6 @@ class Orders extends Controller
     public function destroy($id)
     {
         //
-        return O::destroy(1);
+        return O::destroy($id);
     }
 }

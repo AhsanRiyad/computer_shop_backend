@@ -95,7 +95,7 @@ class Clients extends Controller
     public function destroy($id)
     {
         //
-        return C::destroy(1);
+        return C::destroy($id);
     }
 
 }

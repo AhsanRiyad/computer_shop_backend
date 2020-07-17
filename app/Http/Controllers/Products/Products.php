@@ -96,6 +96,6 @@ class Products extends Controller
     public function destroy($id)
     {
         //
-        return P::destroy(1);
+        return P::destroy($id);
     }
 }

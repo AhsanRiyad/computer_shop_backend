@@ -107,5 +107,13 @@ Route::group([], function () {
         Route::post('transaction', 'transactions\transactions@store');
         Route::put('transaction/{id}', 'transactions\transactions@update');
         Route::delete('transaction/{id}', 'transactions\transactions@destroy');
+        
+        //test
+        
+        
+        
+        
     });
 });
+
+Route::get('getAllProduct', 'test@getAllProduct');

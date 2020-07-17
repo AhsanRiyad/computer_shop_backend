@@ -96,7 +96,7 @@ class Brands extends Controller
     public function destroy($id)
     {
         //
-        return B::destroy(1);
+        return B::destroy($id);
     }
 
 
