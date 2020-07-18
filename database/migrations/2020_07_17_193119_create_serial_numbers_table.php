@@ -21,25 +21,25 @@ class CreateSerialNumbersTable extends Migration
             $table->foreign('created_by')->references('id')->on('users');
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->foreign('updated_by')->references('id')->on('users');
+            
+            $table->string('number')->nullable()->unique();
 
             $table->bigInteger('order_return_id')->unsigned()->nullable();
-            $table->foreign('order_return_id')->references('id')->on('order_return');
+            $table->foreign('order_return_id')->references('id')->on('order_returns');
 
             $table->bigInteger('order_detail_id')->unsigned()->nullable();
-            $table->foreign('order_detail_id')->references('id')->on('order_detail');
+            $table->foreign('order_detail_id')->references('id')->on('order_details');
 
             $table->bigInteger('product_id')->unsigned()->nullable();
             $table->foreign('product_id')->references('id')->on('products');
 
             $table->bigInteger('warranty_detail_id')->unsigned()->nullable();
-            $table->foreign('warranty_detail_id')->references('id')->on('warranty_detail');
-
+            $table->foreign('warranty_detail_id')->references('id')->on('warranty_details');
 
             $table->bigInteger('warranty_exchange_detail_id')->unsigned()->nullable();
-            $table->foreign('warranty_exchange_detail_id')->references('id')->on('warranty_exchange_detail');
+            $table->foreign('warranty_exchange_detail_id')->references('id')->on('warranty_exchange_details');
 
             $table->string('status')->nullable();
-
         });
     }
 

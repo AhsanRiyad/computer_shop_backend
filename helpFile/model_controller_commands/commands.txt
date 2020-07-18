@@ -13,10 +13,8 @@ php artisan make:controller  Warranty/Warranty_exchange_detail --resource
 php artisan make:controller  Orders/Order_return --resource
 php artisan make:controller  Orders/Order_return_detail --resource
 php artisan make:controller  Products/Serial_number --resource
-php artisan make:controller  Transactions/Transactions --resource
-php artisan make:controller  Transactions/Refunds --resource
-
-
+php artisan make:controller  Transactions/Transaction --resource
+php artisan make:controller  Transactions/Refund --resource
 
 php artisan make:model  Models/Clients/Client
 php artisan make:model  Models/Orders/Order
@@ -33,24 +31,23 @@ php artisan make:model  Models/Warranty/Warranty_exchange_detail
 php artisan make:model  Models/Orders/Order_return
 php artisan make:model  Models/Orders/Order_return_detail
 php artisan make:model  Models/Products/Serial_number
-php artisan make:model  Models/Transactions/Transactions
-php artisan make:model  Models/Transactions/Refunds
+php artisan make:model  Models/Transactions/Transaction
+php artisan make:model  Models/Transactions/Refund
 
-
-php artisan make:resource  Clients/Client 
-php artisan make:resource  Orders/Order 
-php artisan make:resource  Address/Address 
-php artisan make:resource  Salary/Salary 
-php artisan make:resource  Categories/Category 
-php artisan make:resource  Brands/Brand 
-php artisan make:resource  Products/Product 
-php artisan make:resource  Orders/Order_detail 
-php artisan make:resource  Warranty/Warranty 
-php artisan make:resource  Warranty/Warranty_detail 
-php artisan make:resource  Warranty/Warranty_exchange 
-php artisan make:resource  Warrant
-php artisan make:resource  Orders/Order_return 
-php artisan make:resource  Orders/Order_return_detail 
-php artisan make:resource  Products/Serial_number 
-php artisan make:resource  Transactions/Transactions 
-php artisan make:resource  Transactions/Refunds 
+php artisan make:request  Clients/Client 
+php artisan make:request  Orders/Order 
+php artisan make:request  Addresses/Address 
+php artisan make:request  Salaries/Salary 
+php artisan make:request  Categories/Category 
+php artisan make:request  Brands/Brand 
+php artisan make:request  Products/Product 
+php artisan make:request  Orders/Order_detail 
+php artisan make:request  Warranties/Warranty 
+php artisan make:request  Warranties/Warranty_detail 
+php artisan make:request  Warranties/Warranty_exchange 
+php artisan make:request  Warranties/Warranty_exchange_detail
+php artisan make:request  Orders/Order_return 
+php artisan make:request  Orders/Order_return_detail 
+php artisan make:request  Products/Serial_number 
+php artisan make:request  Transactions/Transaction 
+php artisan make:request  Transactions/Refund

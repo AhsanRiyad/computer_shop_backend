@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSalaryTable extends Migration
+class CreateOrderDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateSalaryTable extends Migration
      */
     public function up()
     {
-        Schema::create('salary', function (Blueprint $table) {
+        Schema::create('order_details', function (Blueprint $table) {
             // $table->increments('id');
             $table->id();
             $table->timestamps();
@@ -21,14 +21,17 @@ class CreateSalaryTable extends Migration
             $table->foreign('created_by')->references('id')->on('users');
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->foreign('updated_by')->references('id')->on('users');
+
+            $table->bigInteger('order_id')->unsigned()->nullable();
+            $table->foreign('order_id')->references('id')->on('orders');
+
+            $table->bigInteger('product_id')->unsigned()->nullable();
+            $table->foreign('product_id')->references('id')->on('products');
             
-            $table->integer('month')->nullable();
-            $table->integer('year')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->double('price' , 8 , 2)->nullable();
 
-            $table->bigInteger('user_id')->unsigned()->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
-
-            $table->integer('tk')->nullable();
+            
 
         });
     }
@@ -40,6 +43,6 @@ class CreateSalaryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('salary');
+        Schema::dropIfExists('order_detail');
     }
 }

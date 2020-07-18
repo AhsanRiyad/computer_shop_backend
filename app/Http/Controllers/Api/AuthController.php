@@ -30,6 +30,7 @@ class AuthController extends Controller
             "email" => "email|required",
             "password" => "required|max:100"
         ]);
+        
 
         if (!auth()->attempt($loginData)) {
             return response(["msg" => "invalid user"]);

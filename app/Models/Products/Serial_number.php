@@ -8,7 +8,6 @@ class Serial_number extends Model
 {
     //
     protected $guarded = ['id'];
-    
 
     public function product()
     {

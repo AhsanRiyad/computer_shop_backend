@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Orders;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Orders\Order as C;
-use App\Http\Resources\Orders\Order as CR;
+use App\Models\Orders\Order as O;
+use App\Models\Products\Serial_number as S;
+use App\Http\Resources\Orders\Order as R;
 
 class Order extends Controller
 {
@@ -17,7 +18,7 @@ class Order extends Controller
     public function index()
     {
         //
-        return CR::collection(C::all());
+        return R::collection(O::all());
     }
 
     /**
@@ -29,7 +30,7 @@ class Order extends Controller
     {
         //
         foreach ($request->all() as $value) {
-            C::Create($value);
+            O::Create($value);
         }
     }
 
@@ -42,11 +43,32 @@ class Order extends Controller
     public function store(Request $request)
     {
         //
-        C::create($request->all());
-        return new CR($request->all());
+        // C::create($request->all());
+        // return new CR($request->all());
+        // return new CR($request->order_detail);
+        // $order = new O;
+        // for updated
+        // return $request->serials;
+        //check if serials already used
+        $s = S::whereIn('number', $request->serials)->get();
+        if ($s != []) return response( $s , 403 );
+
+        $order = O::create($request->order);
+        foreach (collect($request->order_detail) as $product) {
+            # code...
+            // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+            $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+            $order_detail =  $order->order_detail()->create($o);
+            $s = collect($product)->only(['serials'])->all();
+            $order_detail->serial_numbers()->createMany($s['serials']);
+            // $serials[] = collect($product)->only(['serials'])->all();
+        }
+        // return $order_detail;
+        // $order->refresh();
+        return $order;
+        // return $s['serials'];
 
         // $product->save($parameters);
-
         // return $request;
         // $a = new P;
         // $a->name = $request->name;
@@ -63,7 +85,7 @@ class Order extends Controller
     public function show($id)
     {
         //
-        return new CR(C::find($id));
+        return new R(O::find($id));
     }
 
     /**
@@ -87,9 +109,9 @@ class Order extends Controller
     public function update(Request $request, $id)
     {
         //
-        $product =  C::find($id);
+        $product =  O::find($id);
         if ($product->save($request->all())) {
-            return new CR($request->all());
+            return new R($request->all());
         };
         abort(403, 'Not found');
     }
@@ -103,9 +125,9 @@ class Order extends Controller
     public function destroy($id)
     {
         //
-        $menu = C::find($id);
-        if (C::destroy($id)) {
-            return new CR($menu);
+        $menu = O::find($id);
+        if (O::destroy($id)) {
+            return new R($menu);
         }
         abort(403, 'Not found');
     }

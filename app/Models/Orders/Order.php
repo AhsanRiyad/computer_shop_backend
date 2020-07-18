@@ -16,28 +16,28 @@ class Order extends Model
 
     public function client()
     {
-        return $this->belongsTo('App\Models\Clients\Client', 'client_id');
+        return $this->belongsTo('App\Models\Clients\Client', 'order_id');
     }
 
     public function warranty()
     {
-        return $this->hasMany('App\Models\Warranty\Warranty', 'client_id');
+        return $this->hasMany('App\Models\Warranty\Warranty', 'order_id');
     }
 
 
     public function order_detail()
     {
-        return $this->hasMany('App\Models\Orders\Order_detail', 'client_id');
+        return $this->hasMany('App\Models\Orders\Order_detail', 'order_id');
     }
 
     public function transactions()
     {
-        return $this->hasMany('App\Models\Transactions\Transaction', 'client_id');
+        return $this->hasMany('App\Models\Transactions\Transaction', 'order_id');
     }
 	
     public function order_return()
     {
-        return $this->hasMany('App\Models\Orders\Order_return', 'client_id');
+        return $this->hasMany('App\Models\Orders\Order_return', 'order_id');
     }
 
 }

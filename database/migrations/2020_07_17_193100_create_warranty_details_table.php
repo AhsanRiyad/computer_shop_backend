@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrderReturnTable extends Migration
+class CreateWarrantyDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateOrderReturnTable extends Migration
      */
     public function up()
     {
-        Schema::create('order_return', function (Blueprint $table) {
+        Schema::create('warranty_details', function (Blueprint $table) {
             // $table->increments('id');
             $table->id();
             $table->timestamps();
@@ -22,8 +22,9 @@ class CreateOrderReturnTable extends Migration
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->foreign('updated_by')->references('id')->on('users');
 
-            $table->bigInteger('order_id')->unsigned()->nullable();
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->bigInteger('warranty_id')->unsigned()->nullable();
+            $table->foreign('warranty_id')->references('id')->on('warranties');
+
 
         });
     }
@@ -35,6 +36,6 @@ class CreateOrderReturnTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_return');
+        Schema::dropIfExists('warranty_detail');
     }
 }

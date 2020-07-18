@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWarrantyExchangeDetailTable extends Migration
+class CreateWarrantyExchangeDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateWarrantyExchangeDetailTable extends Migration
      */
     public function up()
     {
-        Schema::create('warranty_exchange_detail', function (Blueprint $table) {
+        Schema::create('warranty_exchange_details', function (Blueprint $table) {
             // $table->increments('id');
             $table->id();
             $table->timestamps();
@@ -23,7 +23,7 @@ class CreateWarrantyExchangeDetailTable extends Migration
             $table->foreign('updated_by')->references('id')->on('users');
 
             $table->bigInteger('warranty_exchange_id')->unsigned()->nullable();
-            $table->foreign('warranty_exchange_id')->references('id')->on('warranty_exchange');
+            $table->foreign('warranty_exchange_id')->references('id')->on('warranty_exchanges');
 
             $table->bigInteger('product_id')->unsigned()->nullable();
             $table->foreign('product_id')->references('id')->on('products');
