@@ -12,7 +12,7 @@ php artisan make:controller  Warranty/Warranty_exchange --resource
 php artisan make:controller  Warranty/Warranty_exchange_detail --resource
 php artisan make:controller  Orders/Order_return --resource
 php artisan make:controller  Orders/Order_return_detail --resource
-php artisan make:controller  Products/Serial_numbers --resource
+php artisan make:controller  Products/Serial_number --resource
 php artisan make:controller  Transactions/Transactions --resource
 php artisan make:controller  Transactions/Refunds --resource
 
@@ -32,7 +32,7 @@ php artisan make:model  Models/Warranty/Warranty_exchange
 php artisan make:model  Models/Warranty/Warranty_exchange_detail
 php artisan make:model  Models/Orders/Order_return
 php artisan make:model  Models/Orders/Order_return_detail
-php artisan make:model  Models/Products/Serial_numbers
+php artisan make:model  Models/Products/Serial_number
 php artisan make:model  Models/Transactions/Transactions
 php artisan make:model  Models/Transactions/Refunds
 
@@ -51,6 +51,6 @@ php artisan make:resource  Warranty/Warranty_exchange
 php artisan make:resource  Warrant
 php artisan make:resource  Orders/Order_return 
 php artisan make:resource  Orders/Order_return_detail 
-php artisan make:resource  Products/Serial_numbers 
+php artisan make:resource  Products/Serial_number 
 php artisan make:resource  Transactions/Transactions 
 php artisan make:resource  Transactions/Refunds 

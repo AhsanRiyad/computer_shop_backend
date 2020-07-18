@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Products;
+namespace App\Http\Resources\Transactions;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Serial_numbers extends JsonResource
+class Transaction extends JsonResource
 {
     /**
      * Transform the resource into an array.

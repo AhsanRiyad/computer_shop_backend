@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Products;
+namespace App\Http\Controllers\Transactions;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class Serial_numbers extends Controller
+class Refund extends Controller
 {
     /**
      * Display a listing of the resource.

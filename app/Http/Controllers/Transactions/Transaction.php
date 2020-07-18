@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Transactions;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class Refunds extends Controller
+class Transaction extends Controller
 {
     /**
      * Display a listing of the resource.

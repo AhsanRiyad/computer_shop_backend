@@ -4,7 +4,7 @@ namespace App\Http\Resources\Transactions;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Transactions extends JsonResource
+class Refund extends JsonResource
 {
     /**
      * Transform the resource into an array.
