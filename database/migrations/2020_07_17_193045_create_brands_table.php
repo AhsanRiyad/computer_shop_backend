@@ -14,8 +14,18 @@ class CreateBrandsTable extends Migration
     public function up()
     {
         Schema::create('brands', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->timestamps();
+            $table->bigInteger('created_by')->unsigned()->nullable();
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->bigInteger('updated_by')->unsigned()->nullable();
+            $table->foreign('updated_by')->references('id')->on('users');
+
+
+            $table->string('name')->nullable();
+            $table->string('description')->nullable();
+
+
         });
     }
 

@@ -14,8 +14,19 @@ class CreateWarrantyExchangeDetailTable extends Migration
     public function up()
     {
         Schema::create('warranty_exchange_detail', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->timestamps();
+            $table->bigInteger('created_by')->unsigned()->nullable();
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->bigInteger('updated_by')->unsigned()->nullable();
+            $table->foreign('updated_by')->references('id')->on('users');
+
+            $table->integer('warranty_exchange_id')->unsigned()->nullable();
+            $table->foreign('warranty_exchange_id')->references('id')->on('warranty_exchange');
+
+            $table->integer('product_id')->unsigned()->nullable();
+            $table->foreign('product_id')->references('id')->on('products');
+            
         });
     }
 

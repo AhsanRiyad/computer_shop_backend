@@ -14,8 +14,28 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->timestamps();
+            $table->bigInteger('created_by')->unsigned()->nullable();
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->bigInteger('updated_by')->unsigned()->nullable();
+            $table->foreign('updated_by')->references('id')->on('users');
+
+
+            $table->string('name')->nullable();
+            $table->text('description')->nullable();
+            $table->integer('alert_quantity')->nullable();
+            $table->integer('warranty')->nullable();
+            $table->double('cost', 8  , 2)->nullable();
+            $table->double('price', 8  , 2)->nullable();
+            $table->boolean('having_serial')->nullable();
+
+
+            $table->integer('brand_id')->unsigned()->nullable();
+            $table->foreign('brand_id')->references('id')->on('brands');
+
+            $table->integer('category_id')->unsigned()->nullable();
+            $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 
