@@ -9,7 +9,6 @@ class Warranty_exchange_detail extends Model
     //
     protected $guarded = ['id'];
 
-
     public function warranty_exchange()
     {
         return $this->belongsTo('App\Models\Warranty\Warranty_exchange', 'warranty_exchange_id', 'id');
