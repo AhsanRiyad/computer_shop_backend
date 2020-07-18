@@ -58,6 +58,48 @@ Route::group([], function () {
 
         //test
         
+        //category
+        Route::get('categories', 'Categories\Category@index');
+        Route::get('category/{id}', 'Categories\Category@show');
+        Route::post('category', 'Categories\Category@store');
+        Route::put('category/{id}', 'Categories\Category@update');
+        Route::delete('category/{id}', 'Categories\Category@destroy');
+        //bulk create
+        Route::post('categories', 'Categories\Category@create');
         
+
+        
+        //brand
+        Route::get('brands', 'Brands\Brand@index');
+        Route::get('brand/{id}', 'Brands\Brand@show');
+        Route::post('brand', 'Brands\Brand@store');
+        Route::put('brand/{id}', 'Brands\Brand@update');
+        Route::delete('brand/{id}', 'Brands\Brand@destroy');
+        //bulk create
+        Route::post('brands', 'Brands\Brand@create');
+
+        //product
+        Route::get('products', 'Products\Product@index');
+        Route::get('product/{id}', 'Products\Product@show');
+        Route::post('product', 'Products\Product@store');
+        Route::put('product/{id}', 'Products\Product@update');
+        Route::delete('product/{id}', 'Products\Product@destroy');
+        //bulk create
+        Route::post('products', 'Products\Product@create');
+
+        //salary
+        Route::get('salary', 'Salary\Salary@index');
+        Route::get('salary/{id}', 'Salary\Salary@show');
+        Route::post('salary', 'Salary\Salary@store');
+        Route::put('salary/{id}', 'Salary\Salary@update');
+        Route::delete('salary/{id}', 'Salary\Salary@destroy');
+        //bulk create
+        Route::post('salaries', 'Salary\Salary@create');
+        
+        
+
+
+
+
     });
 });

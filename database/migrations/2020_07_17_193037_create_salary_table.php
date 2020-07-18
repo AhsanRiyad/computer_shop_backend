@@ -20,11 +20,12 @@ class CreateSalaryTable extends Migration
             $table->foreign('created_by')->references('id')->on('users');
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->foreign('updated_by')->references('id')->on('users');
-
+            
+            $table->integer('month')->nullable();
+            $table->integer('year')->nullable();
 
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users');
-
 
             $table->integer('tk')->nullable();
 

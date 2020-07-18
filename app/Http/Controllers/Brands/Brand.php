@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Brands;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Brands\Brand as B;
+use App\Http\Resources\Brands\Brand as BR;
 
 class Brand extends Controller
 {
@@ -15,6 +17,7 @@ class Brand extends Controller
     public function index()
     {
         //
+        return BR::collection(B::all());
     }
 
     /**
@@ -22,9 +25,12 @@ class Brand extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         //
+        foreach ($request->all() as $value) {
+            B::Create($value);
+        }
     }
 
     /**
@@ -36,6 +42,16 @@ class Brand extends Controller
     public function store(Request $request)
     {
         //
+        B::create($request->all());
+        return new BR($request->all());
+
+        // $product->save($parameters);
+
+        // return $request;
+        // $a = new P;
+        // $a->name = $request->name;
+        // return $a->save();
+        // return $user;
     }
 
     /**
@@ -47,6 +63,7 @@ class Brand extends Controller
     public function show($id)
     {
         //
+        return new BR(B::find($id));
     }
 
     /**
@@ -70,6 +87,11 @@ class Brand extends Controller
     public function update(Request $request, $id)
     {
         //
+        $product =  B::find($id);
+        if ($product->save($request->all())) {
+            return new BR($request->all());
+        };
+        abort(403, 'Not found');
     }
 
     /**
@@ -81,5 +103,10 @@ class Brand extends Controller
     public function destroy($id)
     {
         //
+        $menu = B::find($id);
+        if (B::destroy($id)) {
+            return new BR($menu);
+        }
+        abort(403, 'Not found');
     }
 }
