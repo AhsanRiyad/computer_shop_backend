@@ -14,7 +14,8 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->increments('id');
+            // $table->increments('id');
+            $table->id();
             $table->timestamps();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->foreign('created_by')->references('id')->on('users');
@@ -27,7 +28,7 @@ class CreateOrdersTable extends Migration
             $table->string('reference')->nullable();
             $table->integer('discount')->nullable();
 
-            $table->integer('client_id')->unsigned()->nullable();
+            $table->bigInteger('client_id')->unsigned()->nullable();
             $table->foreign('client_id')->references('id')->on('clients');
 
         });

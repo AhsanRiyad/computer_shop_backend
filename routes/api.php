@@ -67,8 +67,6 @@ Route::group([], function () {
         //bulk create
         Route::post('categories', 'Categories\Category@create');
         
-
-        
         //brand
         Route::get('brands', 'Brands\Brand@index');
         Route::get('brand/{id}', 'Brands\Brand@show');
@@ -95,11 +93,45 @@ Route::group([], function () {
         Route::delete('salary/{id}', 'Salary\Salary@destroy');
         //bulk create
         Route::post('salaries', 'Salary\Salary@create');
+
+        //Client
+        Route::get('clients', 'Clients\Client@index');
+        Route::get('client/{id}', 'Clients\Client@show');
+        Route::post('client', 'Clients\Client@store');
+        Route::put('client/{id}', 'Clients\Client@update');
+        Route::delete('client/{id}', 'Clients\Client@destroy');
+        //bulk create
+        Route::post('clients', 'Clients\Client@create');
+
+        //Order
+        Route::get('orders', 'Orders\Order@index');
+        Route::get('order/{id}', 'Orders\Order@show');
+        Route::post('order', 'Orders\Order@store');
+        Route::put('order/{id}', 'Orders\Order@update');
+        Route::delete('order/{id}', 'Orders\Order@destroy');
+        //bulk create
+        Route::post('orders', 'Orders\Order@create');
+
+
+        //Transaction
+        Route::get('transactions', 'Transactions\Transaction@index');
+        Route::get('transaction/{id}', 'Transactions\Transaction@show');
+        Route::post('transaction', 'Transactions\Transaction@store');
+
+        Route::post('transaction/order/{order_id}', 'Transactions\Transaction@store');
+        Route::put('transaction/order/{order_id}', 'Transactions\Transaction@store');
+        Route::delete('transaction/order/{order_id}', 'Transactions\Transaction@store');
+
+        Route::post('transaction/client/{order_id}', 'Transactions\Transaction@store');
+        Route::put('transaction/client/{order_id}', 'Transactions\Transaction@store');
+        Route::delete('transaction/client/{order_id}', 'Transactions\Transaction@store');
         
+        Route::put('transaction/{id}', 'Transactions\Transaction@update');
+        Route::delete('transaction/{id}', 'Transactions\Transaction@destroy');
+        //bulk create
+        Route::post('transactions', 'Transactions\Transaction@create');
+
         
-
-
-
 
     });
 });

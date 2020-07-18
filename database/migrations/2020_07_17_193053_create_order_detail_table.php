@@ -14,17 +14,18 @@ class CreateOrderDetailTable extends Migration
     public function up()
     {
         Schema::create('order_detail', function (Blueprint $table) {
-            $table->increments('id');
+            // $table->increments('id');
+            $table->id();
             $table->timestamps();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->foreign('created_by')->references('id')->on('users');
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->foreign('updated_by')->references('id')->on('users');
 
-            $table->integer('order_id')->unsigned()->nullable();
+            $table->bigInteger('order_id')->unsigned()->nullable();
             $table->foreign('order_id')->references('id')->on('orders');
 
-            $table->integer('product_id')->unsigned()->nullable();
+            $table->bigInteger('product_id')->unsigned()->nullable();
             $table->foreign('product_id')->references('id')->on('products');
             
             $table->integer('quantity')->nullable();

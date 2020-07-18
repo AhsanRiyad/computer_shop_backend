@@ -14,7 +14,8 @@ class CreateAddressesTable extends Migration
     public function up()
     {
         Schema::create('addresses', function (Blueprint $table) {
-            $table->increments('id');
+            // $table->increments('id');
+            $table->id();
             $table->timestamps();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->foreign('created_by')->references('id')->on('users');
@@ -26,7 +27,7 @@ class CreateAddressesTable extends Migration
             $table->string('mobile')->nullable();
             $table->text('addresse')->nullable();
 
-            $table->integer('order_id')->unsigned()->nullable();
+            $table->bigInteger('order_id')->unsigned()->nullable();
             $table->foreign('order_id')->references('id')->on('orders');
 
 

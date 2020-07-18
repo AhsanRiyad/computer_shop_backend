@@ -14,7 +14,8 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->increments('id');
+            // $table->increments('id');
+            $table->id();
             $table->timestamps();
             $table->bigInteger('created_by')->unsigned()->nullable();
             $table->foreign('created_by')->references('id')->on('users');
@@ -31,10 +32,10 @@ class CreateProductsTable extends Migration
             $table->boolean('having_serial')->nullable();
 
 
-            $table->integer('brand_id')->unsigned()->nullable();
+            $table->bigInteger('brand_id')->unsigned()->nullable();
             $table->foreign('brand_id')->references('id')->on('brands');
 
-            $table->integer('category_id')->unsigned()->nullable();
+            $table->bigInteger('category_id')->unsigned()->nullable();
             $table->foreign('category_id')->references('id')->on('categories');
         });
     }

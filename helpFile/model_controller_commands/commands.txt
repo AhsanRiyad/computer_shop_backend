@@ -1,4 +1,4 @@
-php artisan make:controller  Clients/Clients --resource
+php artisan make:controller  Clients/Client --resource
 php artisan make:controller  Orders/Order --resource
 php artisan make:controller  Address/Address --resource
 php artisan make:controller  Salary/Salary --resource
@@ -18,7 +18,7 @@ php artisan make:controller  Transactions/Refunds --resource
 
 
 
-php artisan make:model  Models/Clients/Clients
+php artisan make:model  Models/Clients/Client
 php artisan make:model  Models/Orders/Order
 php artisan make:model  Models/Address/Address
 php artisan make:model  Models/Salary/Salary
@@ -37,7 +37,7 @@ php artisan make:model  Models/Transactions/Transactions
 php artisan make:model  Models/Transactions/Refunds
 
 
-php artisan make:resource  Clients/Clients 
+php artisan make:resource  Clients/Client 
 php artisan make:resource  Orders/Order 
 php artisan make:resource  Address/Address 
 php artisan make:resource  Salary/Salary 

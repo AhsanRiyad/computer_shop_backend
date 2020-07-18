@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Clients;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Clients\Client as C;
+use App\Http\Resources\Clients\Client as CR;
 
-class Clients extends Controller
+class Client extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,6 +17,7 @@ class Clients extends Controller
     public function index()
     {
         //
+        return CR::collection(C::all());
     }
 
     /**
@@ -22,9 +25,12 @@ class Clients extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         //
+        foreach ($request->all() as $value) {
+            C::Create($value);
+        }
     }
 
     /**
@@ -36,6 +42,16 @@ class Clients extends Controller
     public function store(Request $request)
     {
         //
+        C::create($request->all());
+        return new CR($request->all());
+
+        // $product->save($parameters);
+
+        // return $request;
+        // $a = new P;
+        // $a->name = $request->name;
+        // return $a->save();
+        // return $user;
     }
 
     /**
@@ -47,6 +63,7 @@ class Clients extends Controller
     public function show($id)
     {
         //
+        return new CR(C::find($id));
     }
 
     /**
@@ -70,6 +87,11 @@ class Clients extends Controller
     public function update(Request $request, $id)
     {
         //
+        $product =  C::find($id);
+        if ($product->save($request->all())) {
+            return new CR($request->all());
+        };
+        abort(403, 'Not found');
     }
 
     /**
@@ -81,5 +103,10 @@ class Clients extends Controller
     public function destroy($id)
     {
         //
+        $menu = C::find($id);
+        if (C::destroy($id)) {
+            return new CR($menu);
+        }
+        abort(403, 'Not found');
     }
 }
