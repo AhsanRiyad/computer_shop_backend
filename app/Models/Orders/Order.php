@@ -21,7 +21,7 @@ class Order extends Model
 
     public function warranty()
     {
-        return $this->hasMany('App\Models\Warranty\Warranty', 'order_id');
+        return $this->hasMany('App\Models\Warranties\Warranty', 'order_id');
     }
 
 

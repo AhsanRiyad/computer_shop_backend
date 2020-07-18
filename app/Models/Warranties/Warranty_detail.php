@@ -11,7 +11,7 @@ class Warranty_detail extends Model
 
     public function warranty()
     {
-        return $this->belongsTo('App\Models\Warranty\Warranty', 'warranty_id', 'id');
+        return $this->belongsTo('App\Models\Warranties\Warranty', 'warranty_id', 'id');
     }
 
 	public function product()
@@ -23,7 +23,4 @@ class Warranty_detail extends Model
     {
         return $this->hasMany('App\Models\Products\Subcategory', 'warranty_detail_id');
     }
-
-
-
 }

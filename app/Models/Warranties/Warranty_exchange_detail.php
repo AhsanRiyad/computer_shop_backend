@@ -11,7 +11,7 @@ class Warranty_exchange_detail extends Model
 
     public function warranty_exchange()
     {
-        return $this->belongsTo('App\Models\Warranty\Warranty_exchange', 'warranty_exchange_id', 'id');
+        return $this->belongsTo('App\Models\Warranties\Warranty_exchange', 'warranty_exchange_id', 'id');
     }
 
     public function product()

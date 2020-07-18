@@ -31,12 +31,12 @@ class Product extends Model
 
     public function warranty_exchange_detail()
     {
-        return $this->hasMany('App\Models\Warranty\Warranty_exchange_detail', 'product_id');
+        return $this->hasMany('App\Models\Warranties\Warranty_exchange_detail', 'product_id');
     }
 
     public function warranty_detail()
     {
-        return $this->hasMany('App\Models\Warranty\Warranty_detail', 'product_id');
+        return $this->hasMany('App\Models\Warranties\Warranty_detail', 'product_id');
     }
 
 }

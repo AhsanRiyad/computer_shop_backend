@@ -26,16 +26,11 @@ class Serial_number extends Model
 
     public function warranty_detail()
     {
-        return $this->belongsTo('App\Models\Warranty\Warranty_detail', 'warranty_detail_id', 'id');
+        return $this->belongsTo('App\Models\Warranties\Warranty_detail', 'warranty_detail_id', 'id');
     }
 
     public function warranty_exchange_detail()
     {
-        return $this->belongsTo('App\Models\Warranty\Warranty_exchange_detail', 'warranty_exchange_detail_id', 'id');
+        return $this->belongsTo('App\Models\Warranties\Warranty_exchange_detail', 'warranty_exchange_detail_id', 'id');
     }
-
-    
-
-
-
 }

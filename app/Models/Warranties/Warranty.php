@@ -16,12 +16,12 @@ class Warranty extends Model
 
     public function warranty_exchange()
     {
-        return $this->hasMany('App\Models\Warranty\Warranty_exchange', 'warranty_exchange_id');
+        return $this->hasMany('App\Models\Warranties\Warranty_exchange', 'warranty_exchange_id');
     }
 
     public function warranty_detail()
     {
-        return $this->hasMany('App\Models\Warranty\Warranty_detail', 'warranty_detail_id');
+        return $this->hasMany('App\Models\Warranties\Warranty_detail', 'warranty_detail_id');
     }
     
 }

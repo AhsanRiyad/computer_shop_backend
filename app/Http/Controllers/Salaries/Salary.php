@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Salary;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Salary\Salary as C;
-use App\Http\Resources\Salary\Salary as CR;
+use App\Models\Salaries\Salary as C;
+use App\Http\Resources\Salaries\Salary as CR;
 
 class Salary extends Controller
 {
