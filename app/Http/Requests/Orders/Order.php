@@ -13,7 +13,7 @@ class Order extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,6 +25,23 @@ class Order extends FormRequest
     {
         return [
             //
+            /* 'order.reference' => [
+                'required', 'String',
+                function ($attribute, $value, $fail) {
+                    $fail($attribute . ' is invalid.');
+                },
+            ],
+            'order_detail' => [function ($attribute, $value, $fail) {
+                $fail($attribute .  $value[0]['product_id'] .' order detail is invalid.');
+            },], */
+        ];
+    }
+
+
+    public function messages()
+    {
+        return [
+            // 'order.reference.string' => 'A value :attribute :input  is required',
         ];
     }
 }

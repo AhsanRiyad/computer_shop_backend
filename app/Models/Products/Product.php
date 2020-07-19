@@ -24,7 +24,7 @@ class Product extends Model
         return $this->hasMany('App\Models\Orders\Order_detail', 'product_id');
     }
 
-    public function serial_number()
+    public function serial_numbers()
     {
         return $this->hasMany('App\Models\Products\Serial_number', 'product_id');
     }
