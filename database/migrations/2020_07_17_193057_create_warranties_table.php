@@ -24,7 +24,7 @@ class CreateWarrantiesTable extends Migration
 
             
             $table->bigInteger('order_id')->unsigned()->nullable();
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
 
         });
     }

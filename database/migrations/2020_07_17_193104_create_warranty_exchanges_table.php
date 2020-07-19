@@ -23,7 +23,7 @@ class CreateWarrantyExchangesTable extends Migration
             $table->foreign('updated_by')->references('id')->on('users');
 
             $table->bigInteger('warranty_id')->unsigned()->nullable();
-            $table->foreign('warranty_id')->references('id')->on('warranties');
+            $table->foreign('warranty_id')->references('id')->on('warranties')->onDelete('cascade');
         });
     }
 

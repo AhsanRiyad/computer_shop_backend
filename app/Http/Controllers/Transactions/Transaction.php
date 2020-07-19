@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Transactions;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Transactions\Transaction as C;
+use App\Models\Orders\Order;
+use App\Models\Clients\Client;
 use App\Http\Resources\Transactions\Transaction as CR;
 
 class Transaction extends Controller
@@ -53,6 +55,48 @@ class Transaction extends Controller
         // return $a->save();
         // return $user;
     }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store_by_order(Request $request, $order_id)
+    {
+        //
+        $order = Order::find($order_id);
+        $order->transactions()->create($request->all());
+        return new CR($request->all());
+
+        // $product->save($parameters);
+
+        // return $request;
+        // $a = new P;
+        // $a->name = $request->name;
+        // return $a->save();
+        // return $user;
+    }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store_by_client(Request $request, $client_id)
+    {
+        //
+        $client = Client::find($client_id);
+        $client->transactions()->create($request->all());
+        return new CR($request->all());
+
+        // $product->save($parameters);
+
+        // return $request;
+        // $a = new P;
+        // $a->name = $request->name;
+        // return $a->save();
+        // return $user;
+    }
 
     /**
      * Display the specified resource.
@@ -64,6 +108,30 @@ class Transaction extends Controller
     {
         //
         return new CR(C::find($id));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show_by_order($order_id)
+    {
+        //
+        return new CR( Order::find($order_id)->Transactions );
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show_by_client($client_id)
+    {
+        //
+        return new CR( Client::find($client_id)->Transactions );
     }
 
     /**

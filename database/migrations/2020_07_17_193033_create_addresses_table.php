@@ -28,7 +28,7 @@ class CreateAddressesTable extends Migration
             $table->text('addresse')->nullable();
 
             $table->bigInteger('order_id')->unsigned()->nullable();
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
 
 
         });

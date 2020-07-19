@@ -23,10 +23,10 @@ class CreateOrderReturnDetailsTable extends Migration
             $table->foreign('updated_by')->references('id')->on('users');
 
             $table->bigInteger('order_return_id')->unsigned()->nullable();
-            $table->foreign('order_return_id')->references('id')->on('order_returns');
+            $table->foreign('order_return_id')->references('id')->on('order_returns')->onDelete('cascade');
 
             $table->bigInteger('product_id')->unsigned()->nullable();
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
 
             
         });

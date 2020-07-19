@@ -23,10 +23,10 @@ class CreateOrderDetailsTable extends Migration
             $table->foreign('updated_by')->references('id')->on('users');
 
             $table->bigInteger('order_id')->unsigned()->nullable();
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
 
             $table->bigInteger('product_id')->unsigned()->nullable();
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             
             $table->integer('quantity')->nullable();
             $table->double('price' , 8 , 2)->nullable();

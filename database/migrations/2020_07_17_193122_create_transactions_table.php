@@ -23,11 +23,14 @@ class CreateTransactionsTable extends Migration
             $table->foreign('updated_by')->references('id')->on('users');
 
             $table->bigInteger('order_id')->unsigned()->nullable();
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+
+            $table->bigInteger('client_id')->unsigned()->nullable();
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
 
             $table->boolean('is_debit')->nullable();
-            $table->boolean('is_cash')->nullable();
-            $table->boolean('is_advance')->nullable();
+            $table->boolean('is_cash')->default(true)->nullable();
+            $table->boolean('is_advance')->default(false)->nullable();
             $table->double('tk' , 8 , 2)->nullable();
 
             $table->string('bank')->nullable();

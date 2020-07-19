@@ -57,7 +57,7 @@ Route::group([], function () {
         Route::get('user', 'Api\AuthController@user');
 
         //test
-        
+
         //category
         Route::get('categories', 'Categories\Category@index');
         Route::get('category/{id}', 'Categories\Category@show');
@@ -66,7 +66,7 @@ Route::group([], function () {
         Route::delete('category/{id}', 'Categories\Category@destroy');
         //bulk create
         Route::post('categories', 'Categories\Category@create');
-        
+
         //brand
         Route::get('brands', 'Brands\Brand@index');
         Route::get('brand/{id}', 'Brands\Brand@show');
@@ -117,21 +117,16 @@ Route::group([], function () {
         Route::get('transactions', 'Transactions\Transaction@index');
         Route::get('transaction/{id}', 'Transactions\Transaction@show');
         Route::post('transaction', 'Transactions\Transaction@store');
-
-        Route::post('transaction/order/{order_id}', 'Transactions\Transaction@store');
-        Route::put('transaction/order/{order_id}', 'Transactions\Transaction@store');
-        Route::delete('transaction/order/{order_id}', 'Transactions\Transaction@store');
-
-        Route::post('transaction/client/{order_id}', 'Transactions\Transaction@store');
-        Route::put('transaction/client/{order_id}', 'Transactions\Transaction@store');
-        Route::delete('transaction/client/{order_id}', 'Transactions\Transaction@store');
-        
         Route::put('transaction/{id}', 'Transactions\Transaction@update');
         Route::delete('transaction/{id}', 'Transactions\Transaction@destroy');
+
+        Route::get('transactions/order/{order_id}', 'Transactions\Transaction@show_by_order');
+        Route::post('transaction/order/{order_id}', 'Transactions\Transaction@store_by_order');
+
+        Route::get('transactions/client/{client_id}', 'Transactions\Transaction@show_by_client');
+        Route::post('transaction/client/{client_id}', 'Transactions\Transaction@store_by_client');
+
         //bulk create
         Route::post('transactions', 'Transactions\Transaction@create');
-
-        
-
     });
 });

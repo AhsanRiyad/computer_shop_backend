@@ -23,7 +23,7 @@ class CreateOrderReturnsTable extends Migration
             $table->foreign('updated_by')->references('id')->on('users');
 
             $table->bigInteger('order_id')->unsigned()->nullable();
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
 
         });
     }

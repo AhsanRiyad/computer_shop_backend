@@ -14,4 +14,9 @@ class Client extends Model
         return $this->hasMany('App\Models\Orders\Order', 'client_id');
     }
 
+    public function transactions()
+    {
+        return $this->hasMany('App\Models\Transactions\Transaction', 'client_id');
+    }
+
 }

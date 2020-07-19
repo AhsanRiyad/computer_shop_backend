@@ -29,7 +29,7 @@ class CreateOrdersTable extends Migration
             $table->integer('discount')->nullable();
 
             $table->bigInteger('client_id')->unsigned()->nullable();
-            $table->foreign('client_id')->references('id')->on('clients');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
 
         });
     }
