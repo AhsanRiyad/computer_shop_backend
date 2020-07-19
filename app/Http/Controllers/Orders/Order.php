@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Orders;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Orders\Order as O;
+use App\Http\Requests\Orders\Order as OV;
 use App\Models\Products\Serial_number as S;
 use App\Http\Resources\Orders\Order as R;
 
@@ -40,7 +41,7 @@ class Order extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(OV $request)
     {
         //
         // C::create($request->all());
@@ -108,12 +109,24 @@ class Order extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-        $product =  O::find($id);
-        if ($product->save($request->all())) {
-            return new R($request->all());
-        };
-        abort(403, 'Not found');
+        $order = O::find($id);
+        
+        collect($order->order_detail)->each( function( $item , $key ){
+            $item->serial_numbers()->delete();
+        });
+
+        /* foreach (collect($request->order_detail) as $product) {
+            # code...
+            // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+            $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+            $order_detail =  $order->order_detail()->updateOrCreate( [ "product_id"=> $o['product_id'] ], $o);
+            $s = collect($product)->only(['serials'])->all();
+            $order_detail->serial_numbers()->createMany($s['serials']);
+            // $serials[] = collect($product)->only(['serials'])->all();
+        }
+        // return $order_detail;
+        $order->refresh();
+        return $order; */
     }
 
     /**
