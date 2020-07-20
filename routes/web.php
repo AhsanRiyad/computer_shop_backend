@@ -16,3 +16,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+		//category
+        Route::get('inventory/category', 'Categories\Category@index');
+        Route::get('inventory/category/{id}', 'Categories\Category@show');
+        Route::post('inventory/category', 'Categories\Category@store');
+        Route::put('inventory/category/{id}', 'Categories\Category@update');
+        Route::delete('inventory/category/{id}', 'Categories\Category@destroy');
+        //bulk create
+        Route::post('inventory/categories', 'Categories\Category@create');

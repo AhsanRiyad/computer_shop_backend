@@ -87,9 +87,9 @@ class Brand extends Controller
     public function update(Request $request, $id)
     {
         //
-        $product =  B::find($id);
-        if ($product->save($request->all())) {
-            return new BR($request->all());
+        // C::where('id' , $id)->update($request->all()));
+        if ( B::where('id' , $id)->update( $request->all() ) )  {
+            return new BR( B::find($id) );
         };
         abort(403, 'Not found');
     }

@@ -15,8 +15,8 @@ return [
     |
     */
 
-    // 'paths' => ['api/*'],
-    'paths' => ['*'],
+    'paths' => ['api/*'],
+    // 'paths' => ['*'],
 
     'allowed_methods' => ['*'],
 
@@ -24,12 +24,24 @@ return [
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+    'allow_headers' => [
+            'Content-Type',
+            'X-Auth-Token',
+            'Origin',
+            'Authorization',
+        ],
 
-    'exposed_headers' => [],
+     'expose_headers' => [
+            'Cache-Control',
+            'Content-Language',
+            'Content-Type',
+            'Expires',
+            'Last-Modified',
+            'Pragma',
+        ],
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    'supports_credentials' => true,
 
 ];

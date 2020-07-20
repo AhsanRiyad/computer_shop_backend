@@ -57,33 +57,34 @@ Route::group([], function () {
         Route::get('user', 'Api\AuthController@user');
 
         //test
-
+        
         //category
-        Route::get('categories', 'Categories\Category@index');
-        Route::get('category/{id}', 'Categories\Category@show');
-        Route::post('category', 'Categories\Category@store');
-        Route::put('category/{id}', 'Categories\Category@update');
-        Route::delete('category/{id}', 'Categories\Category@destroy');
+        Route::get('inventory/category', 'Categories\Category@index');
+        Route::get('inventory/category/{id}', 'Categories\Category@show');
+        Route::post('inventory/category', 'Categories\Category@store');
+        Route::put('inventory/category/{id}', 'Categories\Category@update');
+        Route::delete('inventory/category/{id}', 'Categories\Category@destroy');
         //bulk create
-        Route::post('categories', 'Categories\Category@create');
+        Route::post('inventory/categories', 'Categories\Category@create');
+
 
         //brand
-        Route::get('brands', 'Brands\Brand@index');
-        Route::get('brand/{id}', 'Brands\Brand@show');
-        Route::post('brand', 'Brands\Brand@store');
-        Route::put('brand/{id}', 'Brands\Brand@update');
-        Route::delete('brand/{id}', 'Brands\Brand@destroy');
+        Route::get('inventory/brand', 'Brands\Brand@index');
+        Route::get('inventory/brand/{id}', 'Brands\Brand@show');
+        Route::post('inventory/brand', 'Brands\Brand@store');
+        Route::put('inventory/brand/{id}', 'Brands\Brand@update');
+        Route::delete('inventory/brand/{id}', 'Brands\Brand@destroy');
         //bulk create
-        Route::post('brands', 'Brands\Brand@create');
+        Route::post('inventory/brands', 'Brands\Brand@create');
 
         //product
-        Route::get('products', 'Products\Product@index');
-        Route::get('product/{id}', 'Products\Product@show');
-        Route::post('product', 'Products\Product@store');
-        Route::put('product/{id}', 'Products\Product@update');
-        Route::delete('product/{id}', 'Products\Product@destroy');
+        Route::get('inventory/product', 'Products\Product@index');
+        Route::get('inventory/product/{id}', 'Products\Product@show');
+        Route::post('inventory/product', 'Products\Product@store');
+        Route::put('inventory/product/{id}', 'Products\Product@update');
+        Route::delete('inventory/product/{id}', 'Products\Product@destroy');
         //bulk create
-        Route::post('products', 'Products\Product@create');
+        Route::post('inventory/products', 'Products\Product@create');
 
         //salary
         Route::get('salary', 'Salary\Salary@index');
@@ -130,3 +131,7 @@ Route::group([], function () {
         Route::post('transactions', 'Transactions\Transaction@create');
     });
 });
+
+        
+
+  
