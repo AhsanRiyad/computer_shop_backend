@@ -20,6 +20,18 @@ class Client extends Controller
         return CR::collection(C::all());
     }
 
+    public function index_seller()
+    {
+        //
+        return CR::collection(C::where('type' , '=' , 'seller')->get());
+    }
+
+    public function index_customer()
+    {
+        //
+        return CR::collection(C::where('type' , '=' , 'customer')->get());
+    }
+
     /**
      * Show the form for creating a new resource.
      *

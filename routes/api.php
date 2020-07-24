@@ -48,6 +48,22 @@ Route::group([], function () {
 
     Route::post('signin', 'Api\AuthController@signin');
     Route::post('signup', 'Api\AuthController@signup');
+    
+    
+    Route::get('test', function(){
+        // return request()->url();
+        /* return request()->path();
+        if( request()->path('test') ){
+            return 'test';
+        }; */
+
+        return auth()->guest();
+        // return auth()->user();
+        // return auth()->check();
+
+
+    });
+
 
     Route::group([
         'middleware' => 'auth:api'
@@ -58,7 +74,17 @@ Route::group([], function () {
 
         //test
         
+        //dropdown
+        Route::get('dropdown/category', 'Categories\Category@index');
+        Route::get('dropdown/brand', 'Brands\Brand@index');
+        Route::get('dropdown/product', 'Products\Product@index');
+        Route::get('dropdown/seller', 'Clients\Client@index_seller');
+        Route::get('dropdown/customer', 'Clients\Client@index_customer');
+        
+
+
         //category
+        Route::get('inventory/category', 'Categories\Category@index');
         Route::get('inventory/category', 'Categories\Category@index');
         Route::get('inventory/category/{id}', 'Categories\Category@show');
         Route::post('inventory/category', 'Categories\Category@store');
@@ -96,7 +122,12 @@ Route::group([], function () {
         Route::post('salaries', 'Salary\Salary@create');
 
         //Client
-        Route::get('clients', 'Clients\Client@index');
+        Route::get('client', 'Clients\Client@index');
+
+        Route::get('clients/seller', 'Clients\Client@index_seller');
+        Route::get('clients/customer', 'Clients\Client@index_customer');
+
+
         Route::get('client/{id}', 'Clients\Client@show');
         Route::post('client', 'Clients\Client@store');
         Route::put('client/{id}', 'Clients\Client@update');

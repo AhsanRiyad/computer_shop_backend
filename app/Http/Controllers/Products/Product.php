@@ -17,7 +17,11 @@ class Product extends Controller
     public function index()
     {
         //
+        // return response( CR::collection(C::all()) ) ;
         return CR::collection(C::all());
+
+
+
     }
 
     /**
@@ -87,9 +91,10 @@ class Product extends Controller
     public function update(Request $request, $id)
     {
         //
-        $product =  C::find($id);
-        if ($product->save($request->all())) {
-            return new CR($request->all());
+        // $category =  C::find($id);
+        // C::where('id' , $id)->update($request->all()));
+        if ( C::where('id' , $id)->update( $request->all() ) )  {
+            return new CR( C::find($id) );
         };
         abort(403, 'Not found');
     }

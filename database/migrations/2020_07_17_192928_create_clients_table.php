@@ -23,8 +23,8 @@ class CreateClientsTable extends Migration
             $table->foreign('updated_by')->references('id')->on('users');
             
             $table->string('name')->nullable();
-            $table->string('email')->nullable();
-            $table->string('mobile')->nullable();
+            $table->string('email')->nullable()->unique();
+            $table->string('mobile')->nullable()->unique();
             $table->string('company_name')->nullable();
             $table->text('address')->nullable();
             $table->string('type')->nullable();
