@@ -141,9 +141,9 @@ class Order extends Controller
     {
         $order = O::find($id);
         //delete all serial number related to the order
-        $order->serial_numbers()->delete();
+        // $order->serial_numbers()->delete();
         // return 0;
-
+        $address = $order->address()->updateOrCreate( [ 'mobile' => $request->address['mobile'] ], $request->address);
         /* collect($order->order_detail)->each( function( $item , $key ){
             $item->serial_numbers()->delete();
         }); */
@@ -153,8 +153,15 @@ class Order extends Controller
             // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
             $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
             $order_detail =  $order->order_details()->updateOrCreate( [ "product_id"=> $o['product_id'] ], $o);
-            $s = collect($product)->only(['serials'])->all();
-            $order_detail->serial_numbers()->createMany($s['serials']);
+            $serials = collect($product)->only(['serials'])->all();
+
+            foreach ( $serials['serials'] as $s ) {
+                # code...
+                $order_detail->serial_numbers()->updateOrCreate([ "number" => $s["number"] ], $s);
+            }
+
+            // $order_detail->serial_numbers()->createMany($s['serials']);
+
             // $serials[] = collect($product)->only(['serials'])->all();
         }
         // return $order_detail;
