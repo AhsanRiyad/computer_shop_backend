@@ -21,7 +21,7 @@ class Product extends JsonResource
             'price' => $this->price,
             'cost' => $this->cost,
             'name' => $this->name,
-            'quantity' => "1",
+            'quantity' => 1,
             'having_serial' => $this->having_serial
  
         ];

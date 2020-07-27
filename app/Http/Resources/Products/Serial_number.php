@@ -14,6 +14,11 @@ class Serial_number extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'isNew' => false,
+            'number' => $this->number,
+            'product_id' => $this->product_id,
+            'status' => 'Purchase'
+        ];
     }
 }

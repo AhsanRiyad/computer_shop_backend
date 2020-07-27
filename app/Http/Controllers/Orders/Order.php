@@ -8,6 +8,7 @@ use App\Models\Orders\Order as O;
 use App\Http\Requests\Orders\Order as OV;
 use App\Models\Products\Serial_number as S;
 use App\Http\Resources\Orders\Order as R;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Controller
 {
@@ -26,8 +27,23 @@ class Order extends Controller
         //  return $menu->order_details; 
         // return $menu;
        
+/*
+        return R::collection( O::with(['address', 'client' , 'order_details'])->get() );*/
+        $order_info= [];
+        // return O::find(1)->getTotal();
 
-        return R::collection(O::all());
+        O::with(['address', 'client' , 'order_details', 'created_by', 'warranty' , 'transactions', 'order_return', 'serial_numbers' ])->chunk( 200 , function($result) use (&$order_info){
+            
+            foreach ($result as $order) {
+                # code...
+                $order['total'] = $order->getTotal();
+                $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount() ;
+                $order['subtotal'] = $order->getSubTotal();
+                $order_info[] = $order;
+            }
+
+        });
+        return R::collection( collect($order_info)->reverse());
     }
 
     /**
@@ -61,10 +77,14 @@ class Order extends Controller
         //check if serials already used
         // return $request->order;
         
+        // return $request;
+
         $s = S::whereIn('number', $request->serials)->get();
         if (count($s) > 0) return response( $s , 403 );
         
         $order = O::create($request->order);
+        $address = $order->address()->create($request->address);
+        // $address = O::create($request->address);
         foreach (collect($request->order_detail) as $product) {
             # code...
             // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();

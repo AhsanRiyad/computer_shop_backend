@@ -8,6 +8,7 @@ class Product extends Model
 {
     //
     protected $guarded = ['id'];
+    protected $casts = [ "having_serial" => 'boolean'  ];
 
     public function category()
     {

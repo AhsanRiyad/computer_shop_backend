@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Products;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\Products\Serial_number as S;
+use App\Http\Resources\Products\Serial_number as R;
+
+
 class Serial_number extends Controller
 {
     /**
@@ -15,6 +19,7 @@ class Serial_number extends Controller
     public function index()
     {
         //
+        return R::collection( S::all() );
     }
 
     /**

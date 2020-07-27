@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Warranty;
+namespace App\Models\Warranties;
 
 use Illuminate\Database\Eloquent\Model;
 

@@ -82,6 +82,9 @@ Route::group([], function () {
         Route::get('dropdown/customer', 'Clients\Client@index_customer');
         
 
+        //serials
+        Route::get('serial', 'Products\Serial_number@index');
+
 
         //category
         Route::get('inventory/category', 'Categories\Category@index');
@@ -136,7 +139,7 @@ Route::group([], function () {
         Route::post('clients', 'Clients\Client@create');
 
         //Order
-        Route::get('orders', 'Orders\Order@index');
+        Route::get('order', 'Orders\Order@index');
         Route::get('order/{id}', 'Orders\Order@show');
         Route::post('order', 'Orders\Order@store');
         Route::put('order/{id}', 'Orders\Order@update');
