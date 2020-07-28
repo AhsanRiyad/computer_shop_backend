@@ -18,7 +18,9 @@ class Product extends Controller
     {
         //
         // return response( CR::collection(C::all()) ) ;
-        return CR::collection(C::all());
+        /*$products = C::with(['brand', 'category', 'created_by'])->get();*/
+
+        return CR::collection(C::with(['brand', 'category', 'created_by'])->get());
 
 
 
@@ -46,8 +48,10 @@ class Product extends Controller
     public function store(Request $request)
     {
         //
-        C::create($request->all());
-        return new CR($request->all());
+        // return $request;
+        return C::create($request->all());
+        // return 'ok';
+        // return new CR($request->all());
 
         // $product->save($parameters);
 

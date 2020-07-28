@@ -37,9 +37,21 @@ class Serial_number extends Model
 
     public function order_detail_purchase()
     {
+        return $this->belongsTo('App\Models\Orders\Order_detail', 'order_detail_purchase_id', 'id');
+    }
+
+    public function order_detail_sell()
+    {
+        return $this->belongsTo('App\Models\Orders\Order_detail', 'order_detail_sell_id', 'id');
+    }
+
+
+    /*
+    public function order_detail_purchase()
+    {
         return $this->belongsTo('App\Models\Orders\Order_detail', 'order_detail_id', 'id')->with(['order' => function($query){
                 $query->where('orders.type', '=', 'purchase');
         } ]);
-    }
+    }*/
     
 }

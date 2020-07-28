@@ -32,7 +32,7 @@ class Order extends Controller
         $order_info= [];
         // return O::find(1)->getTotal();
 
-        O::with(['address', 'client' , 'order_details', 'created_by', 'warranty' , 'transactions', 'order_return', 'serial_numbers' ])->chunk( 200 , function($result) use (&$order_info){
+        O::with(['address', 'client' , 'order_details', 'created_by', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase', 'serial_numbers_sell' ])->chunk( 200 , function($result) use (&$order_info){
             
             foreach ($result as $order) {
                 # code...
@@ -91,7 +91,7 @@ class Order extends Controller
             $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
             $order_detail =  $order->order_details()->create($o);
             $s = collect($product)->only(['serials'])->all();
-            $order_detail->serial_numbers()->createMany($s['serials']);
+            $order_detail->serial_numbers_purchase()->createMany($s['serials']);
             // $serials[] = collect($product)->only(['serials'])->all();
         }
         // return $order_detail;
@@ -157,7 +157,7 @@ class Order extends Controller
 
             foreach ( $serials['serials'] as $s ) {
                 # code...
-                $order_detail->serial_numbers()->updateOrCreate([ "number" => $s["number"] ], $s);
+                $order_detail->serial_numbers_purchase()->updateOrCreate([ "number" => $s["number"] ], $s);
             }
 
             // $order_detail->serial_numbers()->createMany($s['serials']);

@@ -20,6 +20,11 @@ class Product extends Model
         return $this->belongsTo('App\Models\Brands\Brand', 'brand_id', 'id');
     }
 
+    public function created_by()
+    {
+        return $this->belongsTo('App\User', 'created_by', 'id');
+    }
+
     public function order_detail()
     {
         return $this->hasMany('App\Models\Orders\Order_detail', 'product_id');

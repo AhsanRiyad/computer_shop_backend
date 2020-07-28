@@ -33,14 +33,30 @@ class Order extends Model
 
     public function order_details()
     {
-        return $this->hasMany('App\Models\Orders\Order_detail', 'order_id')->with(['products' , 'serial_numbers']);
+        return $this->hasMany('App\Models\Orders\Order_detail', 'order_id')->with(['products' , 'serial_numbers_purchase', 'serial_numbers_sell']);
     }
+
 
     public function serial_numbers()
     {
         /*return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail')->with(['product']);*/
 
         return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail');
+    }
+
+    public function serial_numbers_purchase()
+    {
+        /*return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail')->with(['product']);*/
+
+        return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail', 'order_id' , 'order_detail_purchase_id', 'id' , 'id');
+    }
+
+
+    public function serial_numbers_sell()
+    {
+        /*return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail')->with(['product']);*/
+
+        return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail', 'order_id' , 'order_detail_sell_id', 'id' , 'id');
     }
 
     public function products()
