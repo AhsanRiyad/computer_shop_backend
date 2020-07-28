@@ -27,8 +27,12 @@ class CreateSerialNumbersTable extends Migration
             $table->bigInteger('order_return_id')->unsigned()->nullable();
             $table->foreign('order_return_id')->references('id')->on('order_returns')->onDelete('cascade');
 
+
             $table->bigInteger('order_detail_id')->unsigned()->nullable();
             $table->foreign('order_detail_id')->references('id')->on('order_details')->onDelete('cascade');
+
+
+            
 
             $table->bigInteger('product_id')->unsigned()->nullable();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');

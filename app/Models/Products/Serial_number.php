@@ -33,4 +33,13 @@ class Serial_number extends Model
     {
         return $this->belongsTo('App\Models\Warranties\Warranty_exchange_detail', 'warranty_exchange_detail_id', 'id');
     }
+
+
+    public function order_detail_purchase()
+    {
+        return $this->belongsTo('App\Models\Orders\Order_detail', 'order_detail_id', 'id')->with(['order' => function($query){
+                $query->where('orders.type', '=', 'purchase');
+        } ]);
+    }
+    
 }

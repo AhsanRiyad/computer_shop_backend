@@ -19,7 +19,11 @@ class Serial_number extends Controller
     public function index()
     {
         //
-        return R::collection( S::all() );
+        // return R::collection( S::with(['product'])->get() );
+        return S::with(['product', 'order_detail_purchase' ])->get() ;
+
+
+       /* return S::with(['product', 'order_detail_purchase' ,'order_detail'])->has( 'order_detail.order.type' , '=' , 'purchase' ) ;*/
     }
 
     /**
