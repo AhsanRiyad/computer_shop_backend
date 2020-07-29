@@ -80,7 +80,9 @@ Route::group([], function () {
         Route::get('dropdown/product', 'Products\Product@index');
         Route::get('dropdown/seller', 'Clients\Client@index_seller');
         Route::get('dropdown/customer', 'Clients\Client@index_customer');
-        
+
+        Route::get('dropdown/product_n_serial', 'Products\Product@index_product_n_serial');
+
 
         //serials
         Route::get('serial', 'Products\Serial_number@index');
@@ -146,6 +148,12 @@ Route::group([], function () {
         Route::delete('order/{id}', 'Orders\Order@destroy');
         //bulk create
         Route::post('orders', 'Orders\Order@create');
+
+
+        //sell
+        Route::get('sell', 'Orders\Order@index_sell');
+        Route::post('sell', 'Orders\Order@store_sell');
+        Route::put('sell/{id}', 'Orders\Order@update_sell');
 
 
         //Transaction

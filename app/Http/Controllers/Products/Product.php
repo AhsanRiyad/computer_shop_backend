@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Products;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Products\Product as C;
+use App\Models\Products\Serial_number as S;
 use App\Http\Resources\Products\Product as CR;
 
 class Product extends Controller
@@ -23,6 +24,24 @@ class Product extends Controller
         return CR::collection(C::with(['brand', 'category', 'created_by'])->get());
 
 
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index_product_n_serial()
+    {
+        //
+        // return response( CR::collection(C::all()) ) ;
+        /*$products = C::with(['brand', 'category', 'created_by'])->get();*/
+        $products =  CR::collection(C::with(['brand', 'category', 'created_by'])->get());
+
+        $serials = S::doesntHave('order_detail_sell')->get();
+
+        return response( ['products' => $products , 'serials' => $serials ] , 200 );
 
     }
 

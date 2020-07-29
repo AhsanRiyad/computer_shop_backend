@@ -32,7 +32,40 @@ class Order extends Controller
         $order_info= [];
         // return O::find(1)->getTotal();
 
-        O::with(['address', 'client' , 'order_details', 'created_by', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase', 'serial_numbers_sell' ])->chunk( 200 , function($result) use (&$order_info){
+        O::with(['address', 'client' , 'order_details', 'created_by', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase', 'serial_numbers_sell' ])->where('type', '=' ,'purchase')->chunk( 200 , function($result) use (&$order_info){
+            
+            foreach ($result as $order) {
+                # code...
+                $order['total'] = $order->getTotal();
+                $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount() ;
+                $order['subtotal'] = $order->getSubTotal();
+                $order_info[] = $order;
+            }
+
+        });
+        return R::collection( collect($order_info)->reverse());
+    }
+/**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index_sell()
+    {
+        //
+
+        //  $menu = O::find(2);
+        //  return $menu->serial_numbers; 
+        //  return $menu->products; 
+        //  return $menu->order_details; 
+        // return $menu;
+       
+/*
+        return R::collection( O::with(['address', 'client' , 'order_details'])->get() );*/
+        $order_info= [];
+        // return O::find(1)->getTotal();
+
+        O::with(['address', 'client' , 'order_details', 'created_by', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase', 'serial_numbers_sell' ])->where('type', '=' ,'sell')->chunk( 200 , function($result) use (&$order_info){
             
             foreach ($result as $order) {
                 # code...
@@ -78,7 +111,6 @@ class Order extends Controller
         // return $request->order;
         
         // return $request;
-
         $s = S::whereIn('number', $request->serials)->get();
         if (count($s) > 0) return response( $s , 403 );
         
@@ -92,6 +124,58 @@ class Order extends Controller
             $order_detail =  $order->order_details()->create($o);
             $s = collect($product)->only(['serials'])->all();
             $order_detail->serial_numbers_purchase()->createMany($s['serials']);
+            // $serials[] = collect($product)->only(['serials'])->all();
+        }
+        // return $order_detail;
+        // $order->refresh();
+        return $order;
+        // return $s['serials'];
+
+        // $product->save($parameters);
+        // return $request;
+        // $a = new P;
+        // $a->name = $request->name;
+        // return $a->save();
+        // return $user;
+    }  
+
+     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store_sell(OV $request)
+    {
+        //
+        // C::create($request->all());
+        // return new CR($request->all());
+        // return new CR($request->order_detail);
+        // $order = new O;
+        // for updated
+        // return $request->serials;
+        //check if serials already used
+        // return $request->order;
+        
+        // return $request;
+        // $s = S::whereIn('number', $request->serials)->get();
+        // if (count($s) > 0) return response( $s , 403 );
+        
+        $order = O::create($request->order);
+        $address = $order->address()->create($request->address);
+        // $address = O::create($request->address);
+        foreach (collect($request->order_detail) as $product) {
+            # code...
+            // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+            $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+            $order_detail =  $order->order_details()->create($o);
+            $s = collect($product)->only(['serials'])->all();
+            // $order_detail->serial_numbers_purchase()->createMany($s['serials']);
+
+            // $order_detail->serial_numbers_sell()->sync($s);
+
+            S::whereIn('id', $s)->update(['order_detail_sell_id' => $order_detail->id , 'status' => 'sell']);
+
             // $serials[] = collect($product)->only(['serials'])->all();
         }
         // return $order_detail;
@@ -147,6 +231,7 @@ class Order extends Controller
         /* collect($order->order_detail)->each( function( $item , $key ){
             $item->serial_numbers()->delete();
         }); */
+        $order->update($request->order );
 
          foreach (collect($request->order_detail) as $product) {
             # code...
