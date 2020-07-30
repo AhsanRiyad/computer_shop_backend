@@ -94,6 +94,34 @@ class Order extends Model
         return ( $this->getSubTotal() - ($this->getSubTotal() * $this->discount ) / 100);
     }
 
+    public function paid()
+    {
+        /* return $this->getDiscount() == "" ? $this->getSubTotal() : $this->coupon->istk ? $this->getSubTotal() - $this->coupon->tk : ""; */
+
+        return ( $this->transactions->where('is_debit', '=', true)->sum(DB::raw( 'tk' )) );
+    }
+
+
+    public function received()
+    {
+        /* return $this->getDiscount() == "" ? $this->getSubTotal() : $this->coupon->istk ? $this->getSubTotal() - $this->coupon->tk : ""; */
+
+        return ( $this->transactions->where('is_debit', '=', false)->sum(DB::raw( 'tk' )) );
+    }
+
+    public function balance()
+    {
+        /* return $this->getDiscount() == "" ? $this->getSubTotal() : $this->coupon->istk ? $this->getSubTotal() - $this->coupon->tk : ""; */
+
+        return  round( (   $this->getTotal() -  ( $this->paid() - $this->received() )  ) , 2 );
+
+
+
+        // $t =  (double) $this->getTotal();
+    
+        // return $t;
+    }
+
 
 
 }

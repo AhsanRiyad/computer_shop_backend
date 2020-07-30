@@ -37,8 +37,13 @@ class Order extends Controller
             foreach ($result as $order) {
                 # code...
                 $order['total'] = $order->getTotal();
+                $order['balance'] = $order->balance();
                 $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount() ;
                 $order['subtotal'] = $order->getSubTotal();
+                $order['paid'] = $order->paid();
+                $order['received'] = $order->received();
+                
+
                 $order_info[] = $order;
             }
 

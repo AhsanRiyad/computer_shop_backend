@@ -160,6 +160,28 @@ class Transaction extends Controller
             return new CR($request->all());
         };
         abort(403, 'Not found');
+    } 
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update_by_order(Request $request, $order_id, $transaction_id)
+    {
+        //
+
+
+        $transaction =  C::find($transaction_id);
+        $transaction->update($request->all());
+        return response( $transaction->refresh(), 200 );
+
+        /*if ($product->save($request->all())) {
+            return new CR($request->all());
+        };
+        abort(403, 'Not found');*/
     }
 
     /**

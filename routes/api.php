@@ -157,14 +157,18 @@ Route::group([], function () {
 
 
         //Transaction
-        Route::get('transactions', 'Transactions\Transaction@index');
+        Route::get('transaction', 'Transactions\Transaction@index');
         Route::get('transaction/{id}', 'Transactions\Transaction@show');
         Route::post('transaction', 'Transactions\Transaction@store');
         Route::put('transaction/{id}', 'Transactions\Transaction@update');
         Route::delete('transaction/{id}', 'Transactions\Transaction@destroy');
 
-        Route::get('transactions/order/{order_id}', 'Transactions\Transaction@show_by_order');
+        
+        Route::get('transaction/order/{order_id}', 'Transactions\Transaction@show_by_order');
         Route::post('transaction/order/{order_id}', 'Transactions\Transaction@store_by_order');
+        Route::put('transaction/order/{order_id}/{transaction_id}', 'Transactions\Transaction@update_by_order');
+
+
 
         Route::get('transactions/client/{client_id}', 'Transactions\Transaction@show_by_client');
         Route::post('transaction/client/{client_id}', 'Transactions\Transaction@store_by_client');
