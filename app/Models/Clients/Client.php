@@ -19,4 +19,9 @@ class Client extends Model
         return $this->hasMany('App\Models\Transactions\Transaction', 'client_id');
     }
 
+    public function created_by()
+    {
+        return $this->belongsTo('App\User', 'created_by', 'id');
+    }
+
 }

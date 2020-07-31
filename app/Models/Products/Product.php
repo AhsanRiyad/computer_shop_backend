@@ -3,6 +3,7 @@
 namespace App\Models\Products;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Product extends Model
 {
@@ -43,6 +44,43 @@ class Product extends Model
     public function warranty_detail()
     {
         return $this->hasMany('App\Models\Warranties\Warranty_detail', 'product_id');
+    }
+
+
+    public function purchased()
+    {
+        // return $this->order_detail->sum(DB::raw( 'quantity' ));
+
+        $orders = [];
+
+        foreach ( $this->order_detail as $order) {
+            # code...
+            $order['type'] = $order->order->type; 
+            $orders[] = $order;
+        }
+
+        return collect($orders)->where('type' , 'purchase')->sum( DB::raw('quantity') );
+    }
+
+    public function sold()
+    {
+        $orders = [];
+
+        foreach ( $this->order_detail as $order) {
+            # code...
+            $order['type'] = $order->order->type; 
+            $orders[] = $order;
+    }
+
+        return collect($orders)->where('type' , 'sell')->sum( DB::raw('quantity') );
+    }
+
+
+    public function inStock()
+    {
+        
+
+        return $this->purchased() - $this->sold();
     }
 
 }

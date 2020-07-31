@@ -19,7 +19,7 @@ class Category extends Controller
     public function index()
     {
         //
-        return CR::collection(C::all());
+        return CR::collection(C::with(['created_by'])->get());
     }
 
     /**

@@ -17,7 +17,7 @@ class Client extends Controller
     public function index()
     {
         //
-        return CR::collection(C::all());
+        return CR::collection(C::with(['created_by'])->get());
     }
 
     public function index_seller()

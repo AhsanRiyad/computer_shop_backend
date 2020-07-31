@@ -15,6 +15,9 @@ class Product extends JsonResource
     public function toArray($request)
     {
         $all =  parent::toArray($request);
+        $all['purchased'] = $this->purchased();
+        $all['sold'] = $this->sold();
+        $all['inStock'] = $this->inStock();
         $all['quantity'] = 1;
         return $all;
 
