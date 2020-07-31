@@ -21,9 +21,7 @@ class CreateSerialsPurchaseTable extends Migration
             $table->bigInteger('order_detail_id')->unsigned()->nullable();
             $table->foreign('order_detail_id')->references('id')->on('order_details');
 
-            $table->boolean('is_returned')->default(false)->nullable();
-
-            $table->boolean('is_sold')->default(false)->nullable();
+            $table->boolean('is_returned')->nullable();
 
         });
     }
