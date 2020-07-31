@@ -116,8 +116,8 @@ class Order extends Controller
         // return $request->order;
         
         // return $request;
-        $s = S::whereIn('number', $request->serials)->get();
-        if (count($s) > 0) return response( $s , 403 );
+        // $s = S::whereIn('number', $request->serials)->get();
+        // if (count($s) > 0) return response( $s , 403 );
         
         $order = O::create($request->order);
         $address = $order->address()->create($request->address);

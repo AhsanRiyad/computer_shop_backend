@@ -49,7 +49,6 @@ Route::group([], function () {
     Route::post('signin', 'Api\AuthController@signin');
     Route::post('signup', 'Api\AuthController@signup');
     
-    
     Route::get('test', function(){
         // return request()->url();
         /* return request()->path();
@@ -60,7 +59,6 @@ Route::group([], function () {
         return auth()->guest();
         // return auth()->user();
         // return auth()->check();
-
 
     });
 
@@ -83,10 +81,8 @@ Route::group([], function () {
 
         Route::get('dropdown/product_n_serial', 'Products\Product@index_product_n_serial');
 
-
         //serials
         Route::get('serial', 'Products\Serial_number@index');
-
 
         //category
         Route::get('inventory/category', 'Categories\Category@index');

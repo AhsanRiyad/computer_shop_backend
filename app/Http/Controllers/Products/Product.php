@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Products\Product as C;
 use App\Models\Products\Serial_number as S;
+use App\Models\Products\Serials_purchase;
+use App\Models\Products\Serials_sell;
 use App\Http\Resources\Products\Product as CR;
 
 class Product extends Controller
@@ -39,7 +41,9 @@ class Product extends Controller
         /*$products = C::with(['brand', 'category', 'created_by'])->get();*/
         $products =  CR::collection(C::with(['brand', 'category', 'created_by'])->get());
 
-        $serials = S::doesntHave('order_detail_sell')->get();
+        $serials = Serials_purchase::where('is_returned', '=' ,  false)->select('number')->get();
+
+        // $serials = S::doesntHave('order_detail_sell')->get();
 
         return response( ['products' => $products , 'serials' => $serials ] , 200 );
 

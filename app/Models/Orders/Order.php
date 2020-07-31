@@ -48,7 +48,7 @@ class Order extends Model
     {
         /*return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail')->with(['product']);*/
 
-        return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail', 'order_id' , 'order_detail_purchase_id', 'id' , 'id');
+        return $this->hasManyThrough('App\Models\Products\Serials_purchase', 'App\Models\Orders\Order_detail', 'order_id' , 'order_detail_id', 'id' , 'id');
     }
 
 
@@ -56,7 +56,7 @@ class Order extends Model
     {
         /*return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail')->with(['product']);*/
 
-        return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail', 'order_id' , 'order_detail_sell_id', 'id' , 'id');
+        return $this->hasManyThrough('App\Models\Products\Serials_sell', 'App\Models\Orders\Order_detail', 'order_id' , 'order_detail_id', 'id' , 'id');
     }
 
     public function products()
