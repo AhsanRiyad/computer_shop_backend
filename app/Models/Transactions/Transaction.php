@@ -9,6 +9,11 @@ class Transaction extends Model
     //
     protected $guarded = ['id'];
 
+    public function client()
+    {
+        return $this->belongsTo('App\Models\Clients\Client', 'client_id' , 'id');
+    }
+
 	public function order()
     {
         return $this->belongsTo('App\Models\Orders\Order', 'order_id', 'id');

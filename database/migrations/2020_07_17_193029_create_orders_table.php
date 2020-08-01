@@ -32,6 +32,8 @@ class CreateOrdersTable extends Migration
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
 
         });
+
+        DB::statement('ALTER TABLE orders AUTO_INCREMENT = 10000;');
     }
 
     /**

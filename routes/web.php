@@ -26,3 +26,9 @@ Route::get('/', function () {
         Route::delete('inventory/category/{id}', 'Categories\Category@destroy');
         //bulk create
         Route::post('inventory/categories', 'Categories\Category@create');
+
+        //test controller
+        Route::get('test', 'Categories\Category@test');
+        Route::post('test', 'Categories\Category@test');
+
+

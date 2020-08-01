@@ -7,6 +7,28 @@ use Illuminate\Http\Request;
 use App\Models\Clients\Client as C;
 use App\Http\Resources\Clients\Client as CR;
 
+
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class ClientResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        // $client =  parent::toArray($request);
+        return [
+            'name' => $this->name . ' Type: ' . $this->type,
+            'id' => $this->id
+        ];
+    }
+}
+
+
 class Client extends Controller
 {
     /**
@@ -30,6 +52,13 @@ class Client extends Controller
     {
         //
         return CR::collection(C::where('type' , '=' , 'customer')->get());
+    }
+
+
+    public function index_client()
+    {
+        //
+        return ClientResource::collection(C::all());
     }
 
     /**

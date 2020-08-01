@@ -123,5 +123,19 @@ class Order extends Model
     }
 
 
+    public function balance_sell()
+    {
+        /* return $this->getDiscount() == "" ? $this->getSubTotal() : $this->coupon->istk ? $this->getSubTotal() - $this->coupon->tk : ""; */
+
+        return  round( (   $this->getTotal() -  ( $this->received() - $this->paid() )  ) , 2 );
+
+
+
+        // $t =  (double) $this->getTotal();
+    
+        // return $t;
+    }
+
+
 
 }

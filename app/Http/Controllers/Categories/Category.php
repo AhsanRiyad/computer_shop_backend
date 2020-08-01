@@ -7,10 +7,20 @@ use Illuminate\Http\Request;
 use App\Models\Categories\Category as C;
 use App\Http\Resources\Categories\Category as CR;
 use Illuminate\Http\Response;
-
+use PDF;
 
 class Category extends Controller
 {
+
+    public function test()
+    {
+        //
+        // return CR::collection(C::with(['created_by'])->get());
+        // $data['users_info'] = $req->users_info;
+        $pdf = PDF::loadView('invoice.invoice' );
+        $pdf->save('storage/users_info.pdf');
+        return $pdf->stream('users_info.pdf');
+    }
     /**
      * Display a listing of the resource.
      *

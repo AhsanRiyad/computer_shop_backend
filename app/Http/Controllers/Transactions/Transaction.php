@@ -19,7 +19,7 @@ class Transaction extends Controller
     public function index()
     {
         //
-        return CR::collection(C::all());
+        return CR::collection( C::with(['client'])->get() );
     }
 
     /**
@@ -65,8 +65,12 @@ class Transaction extends Controller
     {
         //
         $order = Order::find($order_id);
-        $order->transactions()->create($request->all());
-        return new CR($request->all());
+
+        $info = $request->all();
+        $info['client_id'] = $order->client_id;
+
+        $order->transactions()->create($info);
+        return new CR($info);
 
         // $product->save($parameters);
 
