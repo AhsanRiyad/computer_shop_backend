@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Products\Serial_number as S;
+use App\Models\Products\Serial_purchase;
 use App\Http\Resources\Products\Serial_number as R;
 
 
@@ -20,7 +21,7 @@ class Serial_number extends Controller
     {
         //
         // return R::collection( S::with(['product'])->get() );
-        return S::with(['product', 'order_detail_purchase' ])->get() ;
+        return Serial_purchase::with(['product', 'order_detail' ])->get() ;
 
 
        /* return S::with(['product', 'order_detail_purchase' ,'order_detail'])->has( 'order_detail.order.type' , '=' , 'purchase' ) ;*/

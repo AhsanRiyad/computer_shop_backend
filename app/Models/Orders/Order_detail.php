@@ -26,12 +26,12 @@ class Order_detail extends Model
 
     public function serial_numbers_purchase()
     {
-        return $this->hasMany('App\Models\Products\Serial_number', 'order_detail_purchase_id');
+        return $this->hasMany('App\Models\Products\Serial_purchase', 'order_detail_id');
     }
 
     public function serial_numbers_sell()
     {
-        return $this->hasMany('App\Models\Products\Serial_number', 'order_detail_sell_id');
+        return $this->hasMany('App\Models\Products\Serial_number', 'order_detail_id');
     }
 
 }

@@ -19,7 +19,6 @@ class Order extends Model
         return $this->belongsTo('App\User', 'created_by', 'id');
     }
 
-
     public function client()
     {
         return $this->belongsTo('App\Models\Clients\Client', 'client_id' , 'id');
@@ -48,7 +47,7 @@ class Order extends Model
     {
         /*return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail')->with(['product']);*/
 
-        return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail', 'order_id' , 'order_detail_purchase_id', 'id' , 'id');
+        return $this->hasManyThrough('App\Models\Products\Serial_purchase', 'App\Models\Orders\Order_detail', 'order_id' , 'order_detail_id', 'id' , 'id');
     }
 
 
@@ -56,7 +55,7 @@ class Order extends Model
     {
         /*return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail')->with(['product']);*/
 
-        return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail', 'order_id' , 'order_detail_sell_id', 'id' , 'id');
+        return $this->hasManyThrough('App\Models\Products\Serial_sell', 'App\Models\Orders\Order_detail', 'order_id' , 'order_detail_id', 'id' , 'id');
     }
 
     public function products()

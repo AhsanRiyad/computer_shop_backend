@@ -248,6 +248,7 @@ class Order extends Controller
             $item->serial_numbers()->delete();
         }); */
         $order->update($request->order );
+        $order->order_details()->delete();
 
          foreach (collect($request->order_detail) as $product) {
             # code...
