@@ -29,7 +29,7 @@ class Order extends Controller
         //  return $menu->order_details; 
         // return $menu;
        
-/*
+        /*
         return R::collection( O::with(['address', 'client' , 'order_details'])->get() );*/
         $order_info= [];
         // return O::find(1)->getTotal();
@@ -247,10 +247,11 @@ class Order extends Controller
         /* collect($order->order_detail)->each( function( $item , $key ){
             $item->serial_numbers()->delete();
         }); */
+        $order->serial_numbers_purchase()->delete();
         $order->update($request->order );
         $order->order_details()->delete();
 
-         foreach (collect($request->order_detail) as $product) {
+        foreach (collect($request->order_detail) as $product) {
             # code...
             // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
             $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
