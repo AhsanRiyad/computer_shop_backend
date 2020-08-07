@@ -31,7 +31,7 @@ class Order_detail extends Model
 
     public function serial_numbers_sell()
     {
-        return $this->hasMany('App\Models\Products\Serial_number', 'order_detail_id');
+        return $this->hasMany('App\Models\Products\Serial_sell', 'order_detail_id');
     }
 
 }
