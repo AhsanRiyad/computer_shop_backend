@@ -41,6 +41,7 @@ hr.dottedGrey{
 }
 
 .mediumBlackText{
+  line-height: 1.2;
   color: black;
   font-weight: bold;
 }
@@ -165,11 +166,16 @@ hr.dottedGrey{
   margin-top: 30px;
   font-weight: bold;
 }
+
+.tableBody-container p{
+  line-height: 1.2
+}
 .tableBody-item-1{
   margin-left: 20px;
   line-height: .6;
   float: left;
   width: 30%;
+  
 }
 .tableBody-item-2{
   line-height: .6;
@@ -255,8 +261,8 @@ margin-top:20px;
       Invoice
     </div>
     <div class="head-item-2">
-      <p> Email: riyad298@gmail.com </p>
-      <p> Mobile: 01919448787 </p>
+      <p> Email: mahmudhasanauvi@gmail.com  </p>
+      <p> Mobile: 01788-989698 </p>
       <p> www.hasancomputers.com </p>
     </div>
     <div class="head-item-3">
@@ -350,6 +356,7 @@ margin-top:20px;
 
 	  <div class="clearfix"></div>
 
+  <hr class="dottedGrey">
 
 	@endforeach
 
@@ -357,7 +364,6 @@ margin-top:20px;
 
 	
 
-  <hr class="dottedGrey">
 
 
   <!-- summary container -->

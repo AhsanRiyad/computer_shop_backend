@@ -14,6 +14,11 @@ class Order_detail extends Model
         return $this->belongsTo('App\Models\Orders\Order', 'order_id', 'id');
     }
 
+    public function created_by()
+    {
+        return $this->belongsTo('App\User', 'created_by', 'id');
+    }
+
     public function products()
     {
         return $this->belongsTo('App\Models\Products\Product', 'product_id', 'id');

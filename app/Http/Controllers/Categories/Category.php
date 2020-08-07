@@ -8,6 +8,7 @@ use App\Models\Categories\Category as C;
 use App\Http\Resources\Categories\Category as CR;
 use Illuminate\Http\Response;
 use PDF;
+use DB;
 
 class Category extends Controller
 {
@@ -40,9 +41,14 @@ class Category extends Controller
     public function create(Request $request)
     {
         //
-        foreach ($request->all() as $value) {
+        DB::table('categories')->insert(
+            $request->all()
+        );
+        return $request;
+
+        /*foreach ($request->all() as $value) {
             C::Create($value);
-        }
+        }*/
     }
 
     /**

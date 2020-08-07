@@ -24,6 +24,7 @@ class CreateProductsTable extends Migration
 
 
             $table->string('name')->nullable();
+            $table->string('unit')->nullable();
             $table->text('description')->nullable();
             $table->integer('alert_quantity')->nullable();
             $table->integer('warranty')->nullable();

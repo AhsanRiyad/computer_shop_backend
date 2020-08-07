@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Brands\Brand as B;
 use App\Http\Resources\Brands\Brand as BR;
+use DB;
 
 class Brand extends Controller
 {
@@ -28,9 +29,14 @@ class Brand extends Controller
     public function create(Request $request)
     {
         //
-        foreach ($request->all() as $value) {
+        DB::table('brands')->insert(
+            $request->all()
+        );
+        return $request;
+
+        /*foreach ($request->all() as $value) {
             B::Create($value);
-        }
+        }*/
     }
 
     /**

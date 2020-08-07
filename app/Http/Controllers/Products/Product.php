@@ -6,7 +6,35 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Products\Product as C;
 use App\Models\Products\Serial_number as S;
+use App\Models\Products\Serial_purchase;
+use App\Models\Products\Serial_sell;
 use App\Http\Resources\Products\Product as CR;
+
+use DB;
+
+//
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class Serial_number extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        return [
+            'id' => $this->id,
+            'isNew' => false,
+            'number' => $this->number,
+            'product_id' => $this->order_detail->product_id,
+            'status' => 'Purchase'
+        ];
+    }
+}
+
 
 class Product extends Controller
 {
@@ -23,8 +51,6 @@ class Product extends Controller
 
         return CR::collection(C::with(['brand', 'category', 'created_by', 'order_detail'])->get());
 
-
-
     }
 
     /**
@@ -39,9 +65,12 @@ class Product extends Controller
         /*$products = C::with(['brand', 'category', 'created_by'])->get();*/
         $products =  CR::collection(C::with(['brand', 'category', 'created_by'])->get());
 
-        $serials = S::doesntHave('order_detail_sell')->get();
+        // $serials_sell = Serial_sell::all();
+        // $serials_numbers_sell = collect($serials_sell)->pluck('number');
+        // $serials_purchase = Serial_purchase::whereNotIn('number', $serials_numbers_sell )->get();
+        $serials_purchase = Serial_purchase::whereNotIn('number', Serial_sell::select('number')->get() )->get();
 
-        return response( ['products' => $products , 'serials' => $serials ] , 200 );
+        return response(['products' => $products , 'serials' => Serial_number::collection( $serials_purchase )] , 200 );
 
     }
 
@@ -53,9 +82,21 @@ class Product extends Controller
     public function create(Request $request)
     {
         //
-        foreach ($request->all() as $value) {
+        /*foreach ($request->all() as $value) {
             C::Create($value);
+        }*/
+
+        //bulk create
+        /*DB::table('products')->insert(
+            $request->all()
+        );*/
+
+        //bulk update
+        foreach ($request->all() as $p) {
+            # code...
+            C::updateOrCreate( [ 'id' => $p['id'] ], $p);
         }
+        return $request;
     }
 
     /**

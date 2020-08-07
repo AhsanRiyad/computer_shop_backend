@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Orders\Order as O;
 use App\Http\Requests\Orders\Order as OV;
 use App\Models\Products\Serial_number as S;
+use App\Models\Products\Serial_sell;
+use App\Models\Products\Serial_purchase;
 use App\Http\Resources\Orders\Order as R;
 use Illuminate\Support\Facades\DB;
 use PDF;
@@ -34,7 +36,7 @@ class Order extends Controller
         $order_info= [];
         // return O::find(1)->getTotal();
 
-        O::with(['address', 'client' , 'order_details', 'created_by', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('type', '=' ,'purchase')->chunk( 200 , function($result) use (&$order_info){
+        O::with(['address', 'client' , 'created_by' ,'order_details', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('type', '=' ,'purchase')->chunk( 200 , function($result) use (&$order_info){
             
             foreach ($result as $order) {
                 # code...
@@ -46,6 +48,7 @@ class Order extends Controller
                 $order['subtotal'] = $order->getSubTotal();
                 $order['paid'] = $order->paid();
                 $order['received'] = $order->received();
+                $order['created'] = $order->created_by();
                 
 
                 $order_info[] = $order;
@@ -74,7 +77,7 @@ class Order extends Controller
         $order_info= [];
         // return O::find(1)->getTotal();
 
-        O::with(['address', 'client' , 'order_details', 'created_by', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase', 'serial_numbers_sell' ])->where('type', '=' ,'sell')->chunk( 200 , function($result) use (&$order_info){
+        O::with(['address', 'client' , 'created_by' ,'order_details', 'created_by', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase', 'serial_numbers_sell.order_detail' ])->where('type', '=' ,'sell')->chunk( 200 , function($result) use (&$order_info){
             
             foreach ($result as $order) {
                 # code...
@@ -170,12 +173,15 @@ class Order extends Controller
         // $order = new O;
         // for updated
         // return $request->serials;
-        //check if serials already used
+        // check if serials already used
         // return $request->order;
         
         // return $request;
         // $s = S::whereIn('number', $request->serials)->get();
         // if (count($s) > 0) return response( $s , 403 );
+        
+       $s = Serial_sell::whereIn('number', $request->serials)->get();
+        if (count($s) > 0) return response( $s , 403 );
         
         $order = O::create($request->order);
         $address = $order->address()->create($request->address);
@@ -186,12 +192,7 @@ class Order extends Controller
             $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
             $order_detail =  $order->order_details()->create($o);
             $s = collect($product)->only(['serials'])->all();
-            // $order_detail->serial_numbers_purchase()->createMany($s['serials']);
-
-            // $order_detail->serial_numbers_sell()->sync($s);
-
-            S::whereIn('id', $s)->update(['order_detail_sell_id' => $order_detail->id , 'status' => 'sell']);
-
+            $order_detail->serial_numbers_sell()->createMany($s['serials']);
             // $serials[] = collect($product)->only(['serials'])->all();
         }
         // return $order_detail;
@@ -297,31 +298,37 @@ class Order extends Controller
         // if (count($s) > 0) return response( $s , 403 );
         
         // return $request;
-
         $order = O::find($id);
-        $order->update($request->order);
-        $order->address()->update($request->address);
-
+        //delete all serial number related to the order
+        // $order->serial_numbers()->delete();
+        // return 0;
+        $address = $order->address()->updateOrCreate( [ 'mobile' => $request->address['mobile'] ], $request->address);
+        /* collect($order->order_detail)->each( function( $item , $key ){
+            $item->serial_numbers()->delete();
+        }); */
+        $order->serial_numbers_sell()->delete();
+        $order->update($request->order );
         $order->order_details()->delete();
 
-        // $address = O::create($request->address);
         foreach (collect($request->order_detail) as $product) {
             # code...
             // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
             $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-            $order_detail =  $order->order_details()->create($o);
-            $s = collect($product)->only(['serials'])->all();
-            // $order_detail->serial_numbers_purchase()->createMany($s['serials']);
+            $order_detail =  $order->order_details()->updateOrCreate( [ "product_id"=> $o['product_id'] ], $o);
+            $serials = collect($product)->only(['serials'])->all();
 
-            // $order_detail->serial_numbers_sell()->sync($s);
+            foreach ( $serials['serials'] as $s ) {
+                # code...
+                $order_detail->serial_numbers_sell()->updateOrCreate([ "number" => $s["number"] ], $s);
+            }
 
-            S::whereIn('id', $s)->update(['order_detail_sell_id' => $order_detail->id , 'status' => 'sell']);
+            // $order_detail->serial_numbers()->createMany($s['serials']);
 
             // $serials[] = collect($product)->only(['serials'])->all();
         }
         // return $order_detail;
-        // $order->refresh();
-        return $order;
+        $order->refresh();
+        return $order; 
         // return $s['serials'];
 
         // $product->save($parameters);

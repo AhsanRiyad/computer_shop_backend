@@ -23,6 +23,7 @@ class CreateSerialPurchaseTable extends Migration
             $table->foreign('updated_by')->references('id')->on('users');
 
             $table->string('number')->nullable()->unique();
+            $table->boolean('isSold')->default(false)->nullable();
 
 
             $table->bigInteger('order_detail_id')->unsigned()->nullable();
