@@ -261,14 +261,14 @@ margin-top:20px;
       Invoice
     </div>
     <div class="head-item-2">
-      <p> Email: mahmudhasanauvi@gmail.com  </p>
-      <p> Mobile: 01788-989698 </p>
-      <p> www.hasancomputers.com </p>
+      <p> Email: ridey_75@hotmail.com  </p>
+      <p> Mobile: +33651934204 </p>
+      <!-- <p> www.hasancomputers.com </p> -->
     </div>
     <div class="head-item-3">
-      <p> Hasan Computers </p>
-      <p> Zila Parishad </p>
-      <p> Kurigram Sadar, Kurigram </p>
+      <p> Zoom Mobile PC </p>
+      <p> 86 rue des rigoles </p>
+      <p> 75020 Paris </p>
     </div>
   </div>
   
