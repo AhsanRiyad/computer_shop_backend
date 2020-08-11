@@ -90,7 +90,6 @@ class Order extends Controller
                 $order['paid'] = $order->paid();
                 $order['received'] = $order->received();
 
-
                 $order_info[] = $order;
             }
 
@@ -130,24 +129,43 @@ class Order extends Controller
         // return $request->order;
         
         // return $request;
-        $s = Serial_purchase::whereIn('number', $request->serials)->get();
-        if (count($s) > 0) return response( $s , 403 );
-        
-        $order = O::create($request->order);
-        $address = $order->address()->create($request->address);
-        // $address = O::create($request->address);
-        foreach (collect($request->order_detail) as $product) {
-            # code...
-            // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-            $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-            $order_detail =  $order->order_details()->create($o);
-            $s = collect($product)->only(['serials'])->all();
-            $order_detail->serial_numbers_purchase()->createMany($s['serials']);
-            // $serials[] = collect($product)->only(['serials'])->all();
+
+
+        DB::beginTransaction();
+
+        try {
+
+            $s = Serial_purchase::whereIn('number', $request->serials)->get();
+            if (count($s) > 0) return response( $s , 403 );
+
+            $order = O::create($request->order);
+            $address = $order->address()->create($request->address);
+            // $address = O::create($request->address);
+            foreach (collect($request->order_detail) as $product) {
+                # code...
+                // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+                $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+                $order_detail =  $order->order_details()->create($o);
+                $s = collect($product)->only(['serials'])->all();
+                $order_detail->serial_numbers_purchase()->createMany($s['serials']);
+                // $serials[] = collect($product)->only(['serials'])->all();
+            }
+            // return $order_detail;
+            // $order->refresh();
+            DB::commit();
+            return $order;
+            // all good
+        } catch (\Exception $e) {
+            DB::rollback();
+            // something went wrong
         }
-        // return $order_detail;
-        // $order->refresh();
-        return $order;
+
+
+
+
+
+
+
         // return $s['serials'];
 
         // $product->save($parameters);
@@ -180,24 +198,38 @@ class Order extends Controller
         // $s = S::whereIn('number', $request->serials)->get();
         // if (count($s) > 0) return response( $s , 403 );
         
-       $s = Serial_sell::whereIn('number', $request->serials)->get();
-        if (count($s) > 0) return response( $s , 403 );
-        
-        $order = O::create($request->order);
-        $address = $order->address()->create($request->address);
-        // $address = O::create($request->address);
-        foreach (collect($request->order_detail) as $product) {
-            # code...
-            // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-            $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-            $order_detail =  $order->order_details()->create($o);
-            $s = collect($product)->only(['serials'])->all();
-            $order_detail->serial_numbers_sell()->createMany($s['serials']);
-            // $serials[] = collect($product)->only(['serials'])->all();
+        DB::beginTransaction();
+
+        try {
+            
+
+           $s = Serial_sell::whereIn('number', $request->serials)->get();
+            if (count($s) > 0) return response( $s , 403 );
+            
+            $order = O::create($request->order);
+            $address = $order->address()->create($request->address);
+            // $address = O::create($request->address);
+            foreach (collect($request->order_detail) as $product) {
+                # code...
+                // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+                $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+                $order_detail =  $order->order_details()->create($o);
+                $s = collect($product)->only(['serials'])->all();
+                $order_detail->serial_numbers_sell()->createMany($s['serials']);
+                // $serials[] = collect($product)->only(['serials'])->all();
+            }
+            // return $order_detail;
+            // $order->refresh();
+
+            DB::commit();
+            return $order;
+            // all good
+        } catch (\Exception $e) {
+            DB::rollback();
+            // something went wrong
         }
-        // return $order_detail;
-        // $order->refresh();
-        return $order;
+
+
         // return $s['serials'];
 
         // $product->save($parameters);
@@ -240,37 +272,58 @@ class Order extends Controller
      */
     public function update(Request $request, $id)
     {
-        $order = O::find($id);
-        //delete all serial number related to the order
-        // $order->serial_numbers()->delete();
-        // return 0;
-        $address = $order->address()->updateOrCreate( [ 'mobile' => $request->address['mobile'] ], $request->address);
-        /* collect($order->order_detail)->each( function( $item , $key ){
-            $item->serial_numbers()->delete();
-        }); */
-        $order->serial_numbers_purchase()->delete();
-        $order->update($request->order );
-        $order->order_details()->delete();
 
-        foreach (collect($request->order_detail) as $product) {
-            # code...
-            // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-            $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-            $order_detail =  $order->order_details()->updateOrCreate( [ "product_id"=> $o['product_id'] ], $o);
-            $serials = collect($product)->only(['serials'])->all();
 
-            foreach ( $serials['serials'] as $s ) {
+
+        DB::beginTransaction();
+
+        try {
+
+            $order = O::find($id);
+            //delete all serial number related to the order
+            // $order->serial_numbers()->delete();
+            // return 0;
+            $address = $order->address()->updateOrCreate( [ 'mobile' => $request->address['mobile'] ], $request->address);
+            /* collect($order->order_detail)->each( function( $item , $key ){
+                $item->serial_numbers()->delete();
+            }); */
+            $order->serial_numbers_purchase()->delete();
+            $order->update($request->order );
+            $order->order_details()->delete();
+
+            foreach (collect($request->order_detail) as $product) {
                 # code...
-                $order_detail->serial_numbers_purchase()->updateOrCreate([ "number" => $s["number"] ], $s);
+                // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+                $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+                $order_detail =  $order->order_details()->updateOrCreate( [ "product_id"=> $o['product_id'] ], $o);
+                $serials = collect($product)->only(['serials'])->all();
+
+                foreach ( $serials['serials'] as $s ) {
+                    # code...
+                    $order_detail->serial_numbers_purchase()->updateOrCreate([ "number" => $s["number"] ], $s);
+                }
+
+                // $order_detail->serial_numbers()->createMany($s['serials']);
+
+                // $serials[] = collect($product)->only(['serials'])->all();
             }
+            // return $order_detail;
+            $order->refresh();
+            DB::commit();
+            return $order; 
 
-            // $order_detail->serial_numbers()->createMany($s['serials']);
 
-            // $serials[] = collect($product)->only(['serials'])->all();
+            // all good
+        } catch (\Exception $e) {
+            DB::rollback();
+            // something went wrong
         }
-        // return $order_detail;
-        $order->refresh();
-        return $order; 
+
+
+
+
+
+
     }
 
 
@@ -296,39 +349,61 @@ class Order extends Controller
         // return $request;
         // $s = S::whereIn('number', $request->serials)->get();
         // if (count($s) > 0) return response( $s , 403 );
-        
-        // return $request;
-        $order = O::find($id);
-        //delete all serial number related to the order
-        // $order->serial_numbers()->delete();
-        // return 0;
-        $address = $order->address()->updateOrCreate( [ 'mobile' => $request->address['mobile'] ], $request->address);
-        /* collect($order->order_detail)->each( function( $item , $key ){
-            $item->serial_numbers()->delete();
-        }); */
-        $order->serial_numbers_sell()->delete();
-        $order->update($request->order );
-        $order->order_details()->delete();
 
-        foreach (collect($request->order_detail) as $product) {
-            # code...
-            // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-            $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-            $order_detail =  $order->order_details()->updateOrCreate( [ "product_id"=> $o['product_id'] ], $o);
-            $serials = collect($product)->only(['serials'])->all();
 
-            foreach ( $serials['serials'] as $s ) {
-                # code...
-                $order_detail->serial_numbers_sell()->updateOrCreate([ "number" => $s["number"] ], $s);
-            }
+        DB::beginTransaction();
 
-            // $order_detail->serial_numbers()->createMany($s['serials']);
+        try {
 
-            // $serials[] = collect($product)->only(['serials'])->all();
+
+                    // return $request;
+                $order = O::find($id);
+                //delete all serial number related to the order
+                // $order->serial_numbers()->delete();
+                // return 0;
+                $address = $order->address()->updateOrCreate( [ 'mobile' => $request->address['mobile'] ], $request->address);
+                /* collect($order->order_detail)->each( function( $item , $key ){
+                    $item->serial_numbers()->delete();
+                }); */
+                $order->serial_numbers_sell()->delete();
+                $order->update($request->order );
+                $order->order_details()->delete();
+
+                foreach (collect($request->order_detail) as $product) {
+                    # code...
+                    // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+                    $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+                    $order_detail =  $order->order_details()->updateOrCreate( [ "product_id"=> $o['product_id'] ], $o);
+                    $serials = collect($product)->only(['serials'])->all();
+
+                    foreach ( $serials['serials'] as $s ) {
+                        # code...
+                        $order_detail->serial_numbers_sell()->updateOrCreate([ "number" => $s["number"] ], $s);
+                    }
+
+                    // $order_detail->serial_numbers()->createMany($s['serials']);
+
+                    // $serials[] = collect($product)->only(['serials'])->all();
+                }
+                // return $order_detail;
+                $order->refresh();
+                DB::commit();
+                return $order; 
+
+
+            // all good
+        } catch (\Exception $e) {
+            DB::rollback();
+            // something went wrong
         }
-        // return $order_detail;
-        $order->refresh();
-        return $order; 
+
+
+
+
+
+
+        
+
         // return $s['serials'];
 
         // $product->save($parameters);

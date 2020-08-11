@@ -159,9 +159,8 @@ class Transaction extends Controller
     public function update(Request $request, $id)
     {
         //
-        $product =  C::find($id);
-        if ($product->save($request->all())) {
-            return new CR($request->all());
+         if ( C::where('id' , $id)->update( $request->all() ) )  {
+            return new CR( C::find($id) );
         };
         abort(403, 'Not found');
     } 
