@@ -65,7 +65,7 @@ class Order extends Model
 
     public function transactions()
     {
-        return $this->hasMany('App\Models\Transactions\Transaction', 'order_id');
+        return $this->hasMany('App\Models\Transactions\Transaction', 'order_id')->with(['client']);
     }
 	
     public function order_return()

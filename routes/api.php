@@ -85,8 +85,6 @@ Route::group([], function () {
         Route::get('dropdown/product_n_serial', 'Products\Product@index_product_n_serial');
 
 
-
-
         //serials
         Route::get('serial', 'Products\Serial_number@index');
 

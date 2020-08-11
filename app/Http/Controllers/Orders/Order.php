@@ -130,7 +130,7 @@ class Order extends Controller
         // return $request->order;
         
         // return $request;
-        $s = S::whereIn('number', $request->serials)->get();
+        $s = Serial_purchase::whereIn('number', $request->serials)->get();
         if (count($s) > 0) return response( $s , 403 );
         
         $order = O::create($request->order);
