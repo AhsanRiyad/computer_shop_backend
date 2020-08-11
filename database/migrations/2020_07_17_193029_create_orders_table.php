@@ -28,6 +28,9 @@ class CreateOrdersTable extends Migration
             $table->string('reference')->nullable();
             $table->integer('discount')->nullable();
 
+
+            $table->text('notes')->nullable();
+
             $table->bigInteger('client_id')->unsigned()->nullable();
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
 
