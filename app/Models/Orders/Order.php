@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 class Order extends Model
 {
     //
-    protected $guarded = ['id'];
+    protected $fillable  = ['id' , 'status' , 'type' , 'correction_status' , 'reference' , 'date' , 'notes' , 'discount' , 'client_id'];
 
     public function address()
     {
@@ -15,6 +15,11 @@ class Order extends Model
     }
 
     public function created_by()
+    {
+        return $this->belongsTo('App\User', 'created_by', 'id');
+    }
+
+    public function updated_by()
     {
         return $this->belongsTo('App\User', 'created_by', 'id');
     }

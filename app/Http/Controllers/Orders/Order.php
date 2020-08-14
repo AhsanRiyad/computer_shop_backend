@@ -12,7 +12,7 @@ use App\Models\Products\Serial_purchase;
 use App\Http\Resources\Orders\Order as R;
 use Illuminate\Support\Facades\DB;
 use PDF;
-
+use Illuminate\Support\Facades\Auth;
 
 class Order extends Controller
 {
@@ -36,7 +36,7 @@ class Order extends Controller
         $order_info= [];
         // return O::find(1)->getTotal();
 
-        O::with(['address', 'client' , 'created_by' ,'order_details', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('type', '=' ,'purchase')->chunk( 200 , function($result) use (&$order_info){
+        O::with(['address', 'client' , 'created_by' , 'updated_by' , 'order_details', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('type', '=' ,'purchase')->chunk( 200 , function($result) use (&$order_info){
             
             foreach ($result as $order) {
                 # code...
@@ -77,7 +77,7 @@ class Order extends Controller
         $order_info= [];
         // return O::find(1)->getTotal();
 
-        O::with(['address', 'client' , 'created_by' ,'order_details', 'created_by', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase', 'serial_numbers_sell.order_detail' ])->where('type', '=' ,'sell')->chunk( 200 , function($result) use (&$order_info){
+        O::with(['address', 'client' , 'created_by' , 'updated_by' ,'order_details',  'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase', 'serial_numbers_sell.order_detail' ])->where('type', '=' ,'sell')->chunk( 200 , function($result) use (&$order_info){
             
             foreach ($result as $order) {
                 # code...
@@ -131,6 +131,13 @@ class Order extends Controller
         // return $request;
 
 
+        // return date('Y');
+        // $year = date('Y');
+        $maxId =  O::select(DB::raw("max(id) as maxId") )->first()->maxId + 1;
+        // return 2020 . $maxId;
+
+        $finalId =  date('Y') . substr( $maxId ,  4 , 10  ); 
+        // return  $finalId;
         DB::beginTransaction();
 
         try {
@@ -138,7 +145,9 @@ class Order extends Controller
             $s = Serial_purchase::whereIn('number', $request->serials)->get();
             if (count($s) > 0) return response( $s , 403 );
 
-            $order = O::create($request->order);
+            $order_info = $request->order;
+            $order_info['id'] = $finalId;
+            $order = O::create($order_info);
             $address = $order->address()->create($request->address);
             // $address = O::create($request->address);
             foreach (collect($request->order_detail) as $product) {
@@ -153,6 +162,11 @@ class Order extends Controller
             // return $order_detail;
             // $order->refresh();
             DB::commit();
+
+            $order->refresh();
+            $order->created_by = Auth::id();
+            $order->save();
+
             return $order;
             // all good
         } catch (\Exception $e) {
@@ -197,7 +211,13 @@ class Order extends Controller
         // return $request;
         // $s = S::whereIn('number', $request->serials)->get();
         // if (count($s) > 0) return response( $s , 403 );
-        
+        $maxId =  O::select(DB::raw("max(id) as maxId") )->first()->maxId + 1;
+        // return 2020 . $maxId;
+
+        $finalId =  date('Y') . substr( $maxId ,  4 , 10  ); 
+        // return  $finalId;
+
+
         DB::beginTransaction();
 
         try {
@@ -206,7 +226,13 @@ class Order extends Controller
            $s = Serial_sell::whereIn('number', $request->serials)->get();
             if (count($s) > 0) return response( $s , 403 );
             
-            $order = O::create($request->order);
+            // $order = O::create($request->order);
+
+            $order_info = $request->order;
+            $order_info['id'] = $finalId;
+            $order = O::create($order_info);
+
+
             $address = $order->address()->create($request->address);
             // $address = O::create($request->address);
             foreach (collect($request->order_detail) as $product) {
@@ -220,7 +246,9 @@ class Order extends Controller
             }
             // return $order_detail;
             // $order->refresh();
-
+            $order->refresh();
+            $order->created_by = Auth::id();
+            $order->save();
             DB::commit();
             return $order;
             // all good
@@ -309,6 +337,8 @@ class Order extends Controller
             }
             // return $order_detail;
             $order->refresh();
+            $order->updated_by = Auth::id();
+            $order->save();
             DB::commit();
             return $order; 
 
@@ -387,6 +417,8 @@ class Order extends Controller
                 }
                 // return $order_detail;
                 $order->refresh();
+                $order->updated_by = Auth::id();
+                $order->save();
                 DB::commit();
                 return $order; 
 
