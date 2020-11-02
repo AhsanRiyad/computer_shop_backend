@@ -88,7 +88,7 @@ class Order_detail extends Model
 
     {
 
-        return $this->price * $this.quantity;
+        return $this->price * $this->quantity;
 
     }
 

@@ -54,15 +54,15 @@ class Order extends Controller
 
         //  $menu = O::find(2);
 
-        //  return $menu->serial_numbers;
+        //  return $menu->serial_numbers; 
 
-        //  return $menu->products;
+        //  return $menu->products; 
 
-        //  return $menu->order_details;
+        //  return $menu->order_details; 
 
         // return $menu;
 
-
+       
 
         /*
 
@@ -76,7 +76,7 @@ class Order extends Controller
 
         O::with(['address', 'client' , 'created_by' , 'updated_by' , 'order_details', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('type', '=' ,'purchase')->chunk( 200 , function($result) use (&$order_info){
 
-
+            
 
             foreach ($result as $order) {
 
@@ -108,7 +108,7 @@ class Order extends Controller
 
                 $order['created'] = $order->created_by();
 
-
+                
 
 
 
@@ -144,15 +144,15 @@ class Order extends Controller
 
         //  $menu = O::find(2);
 
-        //  return $menu->serial_numbers;
+        //  return $menu->serial_numbers; 
 
-        //  return $menu->products;
+        //  return $menu->products; 
 
-        //  return $menu->order_details;
+        //  return $menu->order_details; 
 
         // return $menu;
 
-
+       
 
 /*
 
@@ -166,7 +166,7 @@ class Order extends Controller
 
         O::with(['address', 'client' , 'created_by' , 'updated_by' ,'order_details',  'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase', 'serial_numbers_sell.order_detail' ])->where('type', '=' ,'sell')->chunk( 200 , function($result) use (&$order_info){
 
-
+            
 
             foreach ($result as $order) {
 
@@ -264,7 +264,7 @@ class Order extends Controller
 
         // return $request->order;
 
-
+        
 
         // return $request;
 
@@ -282,7 +282,7 @@ class Order extends Controller
 
 
 
-        $finalId =  date('Y') . substr( $maxId ,  4 , 10  );
+        $finalId =  date('Y') . substr( $maxId ,  4 , 10  ); 
 
         // return  $finalId;
 
@@ -386,7 +386,7 @@ class Order extends Controller
 
         // return $user;
 
-    }
+    }  
 
 
 
@@ -424,7 +424,7 @@ class Order extends Controller
 
         // return $request->order;
 
-
+        
 
         // return $request;
 
@@ -438,7 +438,7 @@ class Order extends Controller
 
 
 
-        $finalId =  date('Y') . substr( $maxId ,  4 , 10  );
+        $finalId =  date('Y') . substr( $maxId ,  4 , 10  ); 
 
         // return  $finalId;
 
@@ -452,7 +452,7 @@ class Order extends Controller
 
         try {
 
-
+            
 
 
 
@@ -460,7 +460,7 @@ class Order extends Controller
 
             if (count($s) > 0) return response( $s , 403 );
 
-
+            
 
             // $order = O::create($request->order);
 
@@ -690,7 +690,7 @@ class Order extends Controller
 
             DB::commit();
 
-            return $order;
+            return $order; 
 
 
 
@@ -760,7 +760,7 @@ class Order extends Controller
 
         // return $request->order;
 
-
+        
 
         // return $request;
 
@@ -850,7 +850,7 @@ class Order extends Controller
 
                 DB::commit();
 
-                return $order;
+                return $order; 
 
 
 
@@ -878,7 +878,7 @@ class Order extends Controller
 
 
 
-
+        
 
 
 
@@ -966,9 +966,74 @@ class Order extends Controller
 
         //
 
-        $order['order_info'] = O::find($order_id);
+        // $order['order_info'] = O::with(['address', 'client' , 'created_by' , 'updated_by' , 'order_details', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('id', '=' , $order_id)->get()[0];
 
-        $pdf = PDF::loadView('invoice.invoice' , $order );
+
+
+        // return $order['order_info'];
+
+        // $pdf = PDF::loadView('invoice.invoice' , $order );
+
+        // $pdf->save('storage/users_info.pdf');
+
+        // return $pdf->stream('users_info.pdf');
+
+
+        $order_info= [];
+
+        // return O::find(1)->getTotal();
+
+
+
+        O::with(['address', 'client' , 'created_by' , 'updated_by' , 'order_details', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('id', '=' , $order_id)->chunk( 200 , function($result) use (&$order_info){
+
+            
+
+            foreach ($result as $order) {
+
+                # code...
+
+
+
+                $order['id_customized'] =  'HCC-' . $order->id;
+
+
+                // $order['subtotal'] = $order->getSubTotal();
+                $order['subtotal'] = $order->order_details->sum(function($p){
+                    return $p['price']*$p['quantity'];
+                });
+
+                // $order['total'] = $order->getTotal();
+                $order['total'] = ( $order['subtotal'] - ( $order['subtotal'] * $order->discount ) / 100);
+
+
+                // $order['balance'] = $order->balance();
+                $order['balance'] = round( (   $order['total'] -  ( $order->paid() - $order->received() )  ) , 2 );;
+
+                $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount() ;
+
+
+                $order['paid'] = $order->paid();
+
+                $order['received'] = $order->received();
+
+                $order['created'] = $order->created_by();
+
+                $order_info[] = $order;
+
+            }
+
+
+
+        });
+
+        $order1['order_info'] = collect($order_info)->reverse() ;
+
+        // var_dump($order1);
+
+        // return $order1['order_info'][0];
+
+        $pdf = PDF::loadView('invoice.invoice' , $order1['order_info'][0] );
 
         $pdf->save('storage/users_info.pdf');
 
@@ -976,10 +1041,5 @@ class Order extends Controller
 
     }
 
-
-
-
-
-
-
 }
+
