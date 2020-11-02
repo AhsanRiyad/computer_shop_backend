@@ -538,15 +538,15 @@ margin-top:20px;
 
 
 
-  @if ($order_info->client['name'] == 'Walk In')
+  @if ($client['name'] == 'Walk In')
 
 
 
-    <p class="mediumBlackText"> {{ $order_info->address['name']    }} </p>
+    <p class="mediumBlackText"> {{ $address['name']    }} </p>
 
-      <p class="mediumBlackText"> {{ $order_info->address['mobile']  }} </p>
+      <p class="mediumBlackText"> {{ $address['mobile']  }} </p>
 
-      <p class="mediumBlackText"> {{ $order_info->address['address'] }} </p>
+      <p class="mediumBlackText"> {{ $address['address'] }} </p>
 
 
 
@@ -554,12 +554,12 @@ margin-top:20px;
 
 
 
-    <p class="mediumBlackText"> {{ $order_info->client['company_name']    }}  </p>
-    <p class="mediumBlackText"> {{ $order_info->client['name']    }}  </p>
+    <p class="mediumBlackText"> {{ $client['company_name']    }}  </p>
+    <p class="mediumBlackText"> {{ $client['name']    }}  </p>
 
-      <p class="mediumBlackText"> {{ $order_info->client['mobile']  }}  </p>
+      <p class="mediumBlackText"> {{ $client['mobile']  }}  </p>
 
-      <p class="mediumBlackText"> {{ $order_info->client['address'] }}  </p>
+      <p class="mediumBlackText"> {{ $client['address'] }}  </p>
 
 
 
@@ -575,11 +575,11 @@ margin-top:20px;
 
       <p class="smallGreyText"> Invoice Number </p>
 
-      <p class="mediumBlackText"> HCC-{{ $order_info->id }} </p>
+      <p class="mediumBlackText"> HCC-{{ $id }} </p>
 
       <p class="smallGreyText"> Date Of Issue </p>
 
-      <p class="mediumBlackText"> {{ $order_info->date }} </p>
+      <p class="mediumBlackText"> {{ $date }} </p>
 
     </div>
 
@@ -587,7 +587,13 @@ margin-top:20px;
 
       <p class="smallGreyText"> Invoice Total </p>
 
-      <p class="largeBlueText"> {{  $order_info->getTotal() }} </p>
+
+<p class="largeBlueText"> 
+
+
+
+        {{ $total }}
+</p>
 
     </div>
 
@@ -643,19 +649,19 @@ margin-top:20px;
 
 
 
-  @foreach ($order_info->order_details as $p)
+  @foreach ($order_details as $p)
 
     
 
-    <!-- table body -->
+  <!-- table body -->
 
     <div class=" tableBody-container ">
 
       <div class="tableBody-item-1">
 
-        <p class="mediumBlackText"> {{ $p->products['name']  }} </p>
+        <p class="mediumBlackText"> {{ $p['products']['name']  }} </p>
 
-        <p class="smallGreyText"> {{ $p->products['description']  }} </p>
+        <p class="smallGreyText"> {{ $p['products']['description']  }} </p>
 
       </div>
 
@@ -689,7 +695,10 @@ margin-top:20px;
 
   <hr class="dottedGrey">
 
+
   @endforeach
+
+
 
 
 
@@ -735,11 +744,9 @@ margin-top:20px;
 
     <div class="summary-item-3">
 
-      <p> {{ $order_info->getSubTotal() }} </p>
-
-      <p> {{ $order_info->getDiscount() }} </p>
-
-      <p> {{ $order_info->getTotal() }} </p>
+  <p> {{ $subtotal }} </p>
+  <p> {{ $discount }} </p>
+  <p> {{ $total }} </p>
 
     </div>
 
