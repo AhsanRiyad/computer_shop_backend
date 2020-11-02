@@ -158,13 +158,14 @@ class Order extends Controller
 
         return R::collection( O::with(['address', 'client' , 'order_details'])->get() );*/
 
+   
         $order_info= [];
 
         // return O::find(1)->getTotal();
 
 
 
-        O::with(['address', 'client' , 'created_by' , 'updated_by' ,'order_details',  'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase', 'serial_numbers_sell.order_detail' ])->where('type', '=' ,'sell')->chunk( 200 , function($result) use (&$order_info){
+        O::with(['address', 'client' , 'created_by' , 'updated_by' , 'order_details', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('type', '=' ,'sell')->chunk( 200 , function($result) use (&$order_info){
 
             
 
@@ -172,21 +173,31 @@ class Order extends Controller
 
                 # code...
 
-
-
                 $order['id_customized'] =  'HCC-' . $order->id;
 
-                $order['total'] = $order->getTotal();
 
-                $order['balance'] = $order->balance_sell();
+                // $order['subtotal'] = $order->getSubTotal();
+                $order['subtotal'] = $order->order_details->sum(function($p){
+                    return $p['price']*$p['quantity'];
+                });
+
+                // $order['total'] = $order->getTotal();
+                $order['total'] = ( $order['subtotal'] - ( $order['subtotal'] * $order->discount ) / 100);
+
+
+                // $order['balance'] = $order->balance();
+                $order['balance'] = round( (   $order['total'] -  ( $order->paid() - $order->received() )  ) , 2 );;
 
                 $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount() ;
 
-                $order['subtotal'] = $order->getSubTotal();
 
                 $order['paid'] = $order->paid();
 
                 $order['received'] = $order->received();
+
+                $order['created'] = $order->created_by();
+
+                
 
 
 
@@ -981,7 +992,7 @@ class Order extends Controller
 
         $order_info= [];
 
-        // return O::find(1)->getTotal();
+        // return O::find($order_id)->getTotal();
 
 
 
