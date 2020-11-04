@@ -18,7 +18,7 @@ class Order extends Model
 
     protected $fillable  = ['id' , 'status' , 'type' , 'correction_status' , 'reference' , 'date' , 'notes' , 'discount' , 'client_id'];
 
-
+    protected $casts = [ 'client_id' => 'integer'  ];
 
     public function address()
 
