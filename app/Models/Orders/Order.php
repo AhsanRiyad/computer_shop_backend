@@ -9,6 +9,8 @@ class Order extends Model
     //
     protected $guarded = ['id'];
 
+    protected $casts = [ 'client_id' => 'integer' ];
+
     public function address()
     {
         return $this->hasOne('App\Models\Addresses\Address', 'order_id');
