@@ -615,10 +615,65 @@ class Order extends Controller
     {
 
     // return $request;
-    return $request->address;
+    // return $request->address;
     $order = O::find($id);
-    $address = $order->address()->updateOrCreate( [ 'mobile' => $request->address['mobile'] ], $request->address);
-        return $order;
+    /*$address = $order->address()->updateOrCreate( [ 'mobile' => $request->address['mobile'] ], $request->address);*/
+    $address = \App\Models\Addresses\Address::updateOrCreate(
+    $request->address ,
+    ['order_id' => $id]
+        );
+    $order->serial_numbers_purchase()->delete();
+
+    $order->update($request->order );
+
+    $order->order_details()->delete();
+
+    $o = '';
+
+    foreach (collect($request->order_detail) as $product) {
+
+                # code...
+
+                // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+
+                $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+
+                $order_detail =  $order->order_details()->updateOrCreate( [ "product_id"=> $o['product_id'] ], $o);
+
+
+                $serials = collect($product)->only(['serials'])->all();
+
+
+
+                foreach ( $serials['serials'] as $s ) {
+
+                    # code...
+
+                    $order_detail->serial_numbers_purchase()->updateOrCreate([ "number" => $s["number"] ], $s);
+
+                }
+
+
+                
+
+                // $order_detail->serial_numbers()->createMany($s['serials']);
+
+
+
+                // $serials[] = collect($product)->only(['serials'])->all();
+
+            }
+
+            // return $o;
+
+
+            $order = O::find($id);
+
+            $order->updated_by = Auth::id();
+
+            $order->save();
+
+            return $order->order_details; 
 
 
     }
@@ -886,18 +941,10 @@ class Order extends Controller
 
         // return O::find($order_id)->getTotal();
 
-
-
         O::with(['address', 'client' , 'created_by' , 'updated_by' , 'order_details', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('id', '=' , $order_id)->chunk( 200 , function($result) use (&$order_info){
-
-            
-
             foreach ($result as $order) {
 
                 # code...
-
-
-
                 $order['id_customized'] =  'HCC-' . $order->id;
 
 
