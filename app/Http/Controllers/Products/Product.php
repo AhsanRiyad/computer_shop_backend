@@ -32,7 +32,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 
 
-class Serial_number extends JsonResource
+class Serial_numberIn extends JsonResource
 
 {
 
@@ -145,7 +145,7 @@ class Product extends Controller
         // return $serials_purchase;
         // return Serial_number::collection( $serials_purchase );
 
-        return response(['products' => $products , 'serials' => Serial_number::collection( $serials_purchase )] , 200 );
+        return response(['products' => $products , 'serials' => Serial_numberIn::collection( $serials_purchase )] , 200 );
 
 
 
