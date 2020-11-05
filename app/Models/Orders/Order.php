@@ -18,7 +18,8 @@ class Order extends Model
 
     protected $fillable  = ['id' , 'status' , 'type' , 'correction_status' , 'reference' , 'date' , 'notes' , 'discount' , 'client_id'];
 
-    protected $casts = [ 'client_id' => 'integer'  ];
+    protected $casts = ['client_id' => 'integer'];
+
 
     public function address()
 
@@ -146,7 +147,7 @@ class Order extends Model
 
     }
 
-
+	
 
     public function order_return()
 
@@ -199,7 +200,7 @@ class Order extends Model
 
         return ( $this->getSubTotal() - ($this->getSubTotal() * $this->discount ) / 100);
 
-
+        
 
         // return strval($this->getSubTotal ;
 
@@ -255,7 +256,7 @@ class Order extends Model
 
         // $t =  (double) $this->getTotal();
 
-
+    
 
         // return $t;
 
@@ -283,7 +284,7 @@ class Order extends Model
 
         // $t =  (double) $this->getTotal();
 
-
+    
 
         // return $t;
 
@@ -296,3 +297,4 @@ class Order extends Model
 
 
 }
+

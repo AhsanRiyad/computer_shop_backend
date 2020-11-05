@@ -31,6 +31,22 @@ use DB;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 
+class ProductResource extends JsonResource{
+    public function toArray($request){
+        $all =  parent::toArray($request);
+
+        // $all['purchased'] = $this->purchased();
+
+        // $all['sold'] = $this->sold();
+
+        // $all['inStock'] = $this->inStock();
+
+        $all['quantity'] = 1;
+
+        return $all;
+    }
+}
+
 
 class Serial_number extends JsonResource
 
@@ -99,9 +115,11 @@ class Product extends Controller
         /*$products = C::with(['brand', 'category', 'created_by'])->get();*/
 
 
+        // return 'get it';
 
-        return CR::collection(C::with(['brand', 'category', 'created_by', 'order_detail'])->get());
+        // return response(C::with(['brand', 'category', 'created_by', 'order_detail'])->get());
 
+        return ProductResource::collection(C::with(['brand', 'category', 'created_by', 'order_detail'])->get());
 
 
     }

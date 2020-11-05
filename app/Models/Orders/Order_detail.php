@@ -20,7 +20,7 @@ class Order_detail extends Model
 
 
 
-    protected $casts = [ 'quantity' => 'integer', 'price' => 'double'  ];
+    protected $casts = [ 'quantity' => 'integer', 'price' => 'double' , ];
 
 
 
@@ -52,7 +52,7 @@ class Order_detail extends Model
 
     }
 
-
+    
 
     public function serial_numbers()
 
@@ -88,10 +88,11 @@ class Order_detail extends Model
 
     {
 
-        return $this->price * $this->quantity;
+        return $this->price * $this.quantity;
 
     }
 
 
 
 }
+

@@ -82,8 +82,6 @@ class Order extends Controller
 
                 # code...
 
-
-
                 $order['id_customized'] =  'HCC-' . $order->id;
 
 
@@ -107,10 +105,6 @@ class Order extends Controller
                 $order['received'] = $order->received();
 
                 $order['created'] = $order->created_by();
-
-                
-
-
 
                 $order_info[] = $order;
 
@@ -618,115 +612,13 @@ class Order extends Controller
      */
 
     public function update(Request $request, $id)
-
     {
 
-
-
-
-
-
-
-        DB::beginTransaction();
-
-
-
-        try {
-
-
-
-            $order = O::find($id);
-
-            //delete all serial number related to the order
-
-            // $order->serial_numbers()->delete();
-
-            // return 0;
-
-            $address = $order->address()->updateOrCreate( [ 'mobile' => $request->address['mobile'] ], $request->address);
-
-            /* collect($order->order_detail)->each( function( $item , $key ){
-
-                $item->serial_numbers()->delete();
-
-            }); */
-
-            $order->serial_numbers_purchase()->delete();
-
-            $order->update($request->order );
-
-            $order->order_details()->delete();
-
-
-
-            foreach (collect($request->order_detail) as $product) {
-
-                # code...
-
-                // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-
-                $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-
-                $order_detail =  $order->order_details()->updateOrCreate( [ "product_id"=> $o['product_id'] ], $o);
-
-                $serials = collect($product)->only(['serials'])->all();
-
-
-
-                foreach ( $serials['serials'] as $s ) {
-
-                    # code...
-
-                    $order_detail->serial_numbers_purchase()->updateOrCreate([ "number" => $s["number"] ], $s);
-
-                }
-
-
-
-                // $order_detail->serial_numbers()->createMany($s['serials']);
-
-
-
-                // $serials[] = collect($product)->only(['serials'])->all();
-
-            }
-
-            // return $order_detail;
-
-            $order->refresh();
-
-            $order->updated_by = Auth::id();
-
-            $order->save();
-
-            DB::commit();
-
-            return $order; 
-
-
-
-
-
-            // all good
-
-        } catch (\Exception $e) {
-
-            DB::rollback();
-
-            // something went wrong
-
-        }
-
-
-
-
-
-
-
-
-
-
-
+    // return $request;
+    return $request->address;
+    $order = O::find($id);
+    $address = $order->address()->updateOrCreate( [ 'mobile' => $request->address['mobile'] ], $request->address);
+        return $order;
 
 
     }
