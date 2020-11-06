@@ -449,7 +449,7 @@ class Order extends Controller
         //
         $order['order_info'] = O::find($order_id);
         $pdf = PDF::loadView('invoice.invoice' , $order );
-        $pdf->save('storage/users_info.pdf');
+        // $pdf->save('storage/users_info.pdf');
         return $pdf->stream('users_info.pdf');
     }
 
