@@ -213,7 +213,8 @@ class Order extends Controller
             if (count($s) > 0) return response( $s , 403 );
             
             $order = O::create($request->order);
-            $address = $order->address()->create($request->address);
+            $order->address()->delete();
+            $address = $order->address()->create( $request->address);
             // $address = O::create($request->address);
             foreach (collect($request->order_detail) as $product) {
                 # code...
@@ -231,6 +232,7 @@ class Order extends Controller
             return $order;
             // all good
         } catch (\Exception $e) {
+            response($e , 403);
             DB::rollback();
             // something went wrong
         }
