@@ -9,7 +9,7 @@ class Product extends Model
 {
     //
     protected $guarded = ['id'];
-    protected $casts = [ "having_serial" => 'boolean'  ];
+    protected $casts = [ "having_serial" => 'boolean', 'brand_id' => 'integer' , 'category_id' => 'integer' ];
 
     public function category()
     {
