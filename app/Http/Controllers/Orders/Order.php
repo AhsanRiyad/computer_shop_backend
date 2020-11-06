@@ -79,7 +79,7 @@ class Order extends Controller
         $order_info= [];
         // return O::find(1)->getTotal();
 
-        O::with(['address', 'client' , 'created_by' ,'order_details', 'created_by', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase', 'serial_numbers_sell.order_detail' ])->where('type', '=' ,'sell')->chunk( 200 , function($result) use (&$order_info){
+        O::with(['address', 'client' , 'created_by' , 'updated_by' ,'order_details', 'created_by', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase', 'serial_numbers_sell.order_detail' ])->where('type', '=' ,'sell')->chunk( 200 , function($result) use (&$order_info){
             
             foreach ($result as $order) {
                 # code...
@@ -226,8 +226,9 @@ class Order extends Controller
                 // $serials[] = collect($product)->only(['serials'])->all();
             }
             // return $order_detail;
-            // $order->refresh();
-
+            $order->refresh();
+            $order->created_by = Auth::id();
+            $order->save();
             DB::commit();
             return $order;
             // all good
@@ -369,7 +370,8 @@ class Order extends Controller
                 //delete all serial number related to the order
                 // $order->serial_numbers()->delete();
                 // return 0;
-                $address = $order->address()->updateOrCreate( [ 'mobile' => $request->address['mobile'] ], $request->address);
+                $order->address()->delete();
+                $address = $order->address()->create( $request->address);
                 /* collect($order->order_detail)->each( function( $item , $key ){
                     $item->serial_numbers()->delete();
                 }); */
@@ -395,12 +397,15 @@ class Order extends Controller
                 }
                 // return $order_detail;
                 $order->refresh();
+                $order->updated_by = Auth::id();
+                $order->save();
                 DB::commit();
                 return $order; 
 
 
             // all good
         } catch (\Exception $e) {
+            response($e , 403);
             DB::rollback();
             // something went wrong
         }
