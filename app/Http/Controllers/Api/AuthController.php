@@ -33,7 +33,7 @@ class AuthController extends Controller
         
 
         if (!auth()->attempt($loginData)) {
-            return response(["msg" => "invalid user"]);
+            return response(["msg" => "invalid user"] , 401);
         }
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
         return response(['user' => auth()->user(), 'accessToken' => $accessToken]);
