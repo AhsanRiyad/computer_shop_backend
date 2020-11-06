@@ -20,6 +20,10 @@ class Order extends Model
     {
         return $this->belongsTo('App\User', 'created_by', 'id');
     }
+    public function updated_by()
+    {
+        return $this->belongsTo('App\User', 'updated_by', 'id');
+    }
 
     public function client()
     {

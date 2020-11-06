@@ -12,6 +12,7 @@ use App\Models\Products\Serial_purchase;
 use App\Http\Resources\Orders\Order as R;
 use Illuminate\Support\Facades\DB;
 use PDF;
+use Illuminate\Support\Facades\Auth;
 
 
 class Order extends Controller
@@ -36,7 +37,7 @@ class Order extends Controller
         $order_info= [];
         // return O::find(1)->getTotal();
 
-        O::with(['address', 'client' , 'created_by' ,'order_details', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('type', '=' ,'purchase')->chunk( 200 , function($result) use (&$order_info){
+        O::with(['address', 'client' , 'created_by', 'updated_by' ,'order_details', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('type', '=' ,'purchase')->chunk( 200 , function($result) use (&$order_info){
             
             foreach ($result as $order) {
                 # code...
@@ -49,6 +50,7 @@ class Order extends Controller
                 $order['paid'] = $order->paid();
                 $order['received'] = $order->received();
                 $order['created'] = $order->created_by();
+                $order['updated'] = $order->updated_by();
                 
 
                 $order_info[] = $order;
@@ -150,8 +152,11 @@ class Order extends Controller
                 $order_detail->serial_numbers_purchase()->createMany($s['serials']);
                 // $serials[] = collect($product)->only(['serials'])->all();
             }
+
+            $order->refresh();
+            $order->created_by = Auth::id();;
+            $order->save();
             // return $order_detail;
-            // $order->refresh();
             DB::commit();
             return $order;
             // all good
@@ -308,8 +313,9 @@ class Order extends Controller
 
                 // $serials[] = collect($product)->only(['serials'])->all();
             }
-            // return $order_detail;
             $order->refresh();
+            $order->updated_by = Auth::id();
+            $order->save();
             DB::commit();
             return $order; 
 
