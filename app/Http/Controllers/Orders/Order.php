@@ -278,9 +278,6 @@ class Order extends Controller
      */
     public function update(Request $request, $id)
     {
-
-
-
         DB::beginTransaction();
 
         try {
@@ -289,7 +286,8 @@ class Order extends Controller
             //delete all serial number related to the order
             // $order->serial_numbers()->delete();
             // return 0;
-            $address = $order->address()->updateOrCreate( [ 'mobile' => $request->address['mobile'] ], $request->address);
+            $order->address()->delete();
+            $address = $order->address()->create( $request->address);
             /* collect($order->order_detail)->each( function( $item , $key ){
                 $item->serial_numbers()->delete();
             }); */
@@ -322,6 +320,7 @@ class Order extends Controller
 
             // all good
         } catch (\Exception $e) {
+            response($e , 403);
             DB::rollback();
             // something went wrong
         }
