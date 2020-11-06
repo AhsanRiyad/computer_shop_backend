@@ -28,7 +28,7 @@ class Kernel extends HttpKernel
 
 
         //my build middleware
-        \App\Http\Middleware\CORS::class,
+        // \App\Http\Middleware\CORS::class,
     ];
 
     /**

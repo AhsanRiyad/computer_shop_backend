@@ -9,7 +9,7 @@ class Order extends Model
     //
     protected $guarded = ['id'];
 
-    protected $casts = [ 'client_id' => 'integer' ];
+    protected $casts = [ 'client_id' => 'integer', 'date' => 'timestamp' ];
 
     public function address()
     {

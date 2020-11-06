@@ -157,6 +157,7 @@ class Order extends Controller
             // all good
         } catch (\Exception $e) {
             DB::rollback();
+            return response($e , 403);
             // something went wrong
         }
 
