@@ -1,9 +1,7 @@
 <?php
 
 
-
 namespace App\Http\Controllers\Products;
-
 
 
 use App\Http\Controllers\Controller;
@@ -100,7 +98,7 @@ class Product extends Controller
 
 
 
-        return CR::collection(C::with(['brand', 'category', 'created_by', 'order_detail'])->get());
+        return CR::collection(C::with(['brand', 'category', 'created_by', 'order_detail'])->paginate(10));
 
 
 

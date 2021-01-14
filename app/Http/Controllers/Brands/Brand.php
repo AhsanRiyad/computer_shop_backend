@@ -18,7 +18,7 @@ class Brand extends Controller
     public function index()
     {
         //
-        return BR::collection(B::with(['created_by'])->get());
+        return BR::collection(B::with(['created_by'])->paginate(10));
     }
 
     /**

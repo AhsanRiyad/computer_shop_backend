@@ -39,7 +39,7 @@ class Client extends Controller
     public function index()
     {
         //
-        return CR::collection(C::with(['created_by'])->get());
+        return CR::collection(C::with(['created_by'])->paginate(10));
     }
 
     public function index_seller()

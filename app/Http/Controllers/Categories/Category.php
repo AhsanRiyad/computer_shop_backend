@@ -30,7 +30,7 @@ class Category extends Controller
     public function index()
     {
         //
-        return CR::collection(C::with(['created_by'])->get());
+        return CR::collection(C::with(['created_by'])->paginate(10));
     }
 
     /**
