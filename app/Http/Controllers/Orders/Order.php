@@ -48,7 +48,7 @@ class Order extends Controller
         // dd(R::collection($orders));
         // $order_info['meta'] = R::collection($orders)['meta'];
         foreach ($orders as $order) {
-            $order['id_customized'] =  'HCC-' . $order->id;
+            $order['id_customized'] = 'HCC-' . $order->id_customized;
             $order['total'] = $order->getTotal();
             $order['balance'] = $order->balance();
             $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount();
@@ -139,7 +139,7 @@ class Order extends Controller
         // dd(R::collection($orders));
         // $order_info['meta'] = R::collection($orders)['meta'];
         foreach ($orders as $order) {
-            $order['id_customized'] =  'HCC-' . $order->id;
+            $order['id_customized'] = 'HCC-'. $order->id_customized;
             $order['total'] = $order->getTotal();
             $order['balance'] = $order->balance();
             $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount();
@@ -190,13 +190,12 @@ class Order extends Controller
         
         // return $request;
 
-
         DB::beginTransaction();
 
         try {
-
             $s = Serial_purchase::whereIn('number', $request->serials)->get();
             if (count($s) > 0) return response( $s , 403 );
+
 
             $order = O::create($request->order);
             $address = $order->address()->create($request->address);
@@ -213,9 +212,12 @@ class Order extends Controller
 
             $order->refresh();
             $order->created_by = Auth::id();;
+            $order->id_customized = date('Y') . (1000000000 + $order->id);
             $order->save();
             // return $order_detail;
             DB::commit();
+
+            // $order->id_customized = ''
             return $order;
             // all good
         } catch (\Exception $e) {
@@ -286,6 +288,7 @@ class Order extends Controller
             // return $order_detail;
             $order->refresh();
             $order->created_by = Auth::id();
+            $order->id_customized = date('Y') . (1000000000 + $order->id);
             $order->save();
             DB::commit();
             return $order;
