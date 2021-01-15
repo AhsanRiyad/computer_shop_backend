@@ -41,6 +41,7 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'cost' => $this->cost,
             'price' => $this->price,
+            'inStock' => $this->inStock(),
             'quantity' => 1,
             'having_serial' => $this->having_serial,
         ];
@@ -166,8 +167,19 @@ class Product extends Controller
         // return 'ok';
 
         // $products =  CR::collection(C::with(['brand', 'category', 'created_by'])->get());
-        $products = ProductResource::collection(C::get(['name', 'id', 'price', 'cost', 'having_serial'
+        $products = ProductResource::collection(C::get([  'name', 'id', 'price', 'cost', 'having_serial'
             ]));
+
+
+        $collection = collect($products);
+
+        $filtered = $collection->filter(function ($value, $key) {
+            return $value['inStock'] > 0;
+        });
+
+       
+        $products =  $filtered->all();
+
 
         // return $products;
 
