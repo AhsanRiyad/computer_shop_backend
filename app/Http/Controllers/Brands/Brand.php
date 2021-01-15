@@ -16,10 +16,14 @@ class Brand extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $req)
     {
         //
-        return BR::collection(B::with(['created_by'])->paginate(10));
+        if ($req->q == '') {
+            return BR::collection(B::with(['created_by'])->paginate(10));
+        } else {
+            return $this->search($req);
+        }
     }
 
     public function dropdown()

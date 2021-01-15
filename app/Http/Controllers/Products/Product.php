@@ -97,13 +97,22 @@ class Product extends Controller
 
      */
 
-    public function index()
+    public function index(Request $req)
     {
         //
         // return response( CR::collection(C::all()) ) ;
         /*$products = C::with(['brand', 'category', 'created_by'])->get();*/
         // return CR::collection(C::with(['brand', 'category', 'created_by', 'order_detail'])->paginate(10));
-        return CR::collection(C::with(['brand', 'category', 'created_by'])->orderBy('id' , 'desc')->paginate(10));
+
+        if ($req->q == ''
+        ) {
+            return CR::collection(C::with(['brand', 'category', 'created_by'])->orderBy('id', 'desc')->paginate(10));
+        } else {
+            return $this->search($req);
+        }
+
+
+        
     }
 
     public function dropdown()

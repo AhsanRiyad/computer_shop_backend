@@ -81,7 +81,7 @@ Route::group([], function () {
         Route::get('search/purchase', 'Orders\Order@searchPurchase');
         Route::get('search/sell', 'Orders\Order@searchSell');
         Route::get('search/product', 'Products\Product@search');
-
+        Route::get('search/transaction', 'Transactions\Transaction@search');
 
 
         //dropdown

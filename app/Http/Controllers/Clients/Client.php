@@ -35,10 +35,14 @@ class Client extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $req)
     {
         //
-        return CR::collection(C::with(['created_by'])->paginate(10));
+        if ($req->q == '') {
+            return CR::collection(C::with(['created_by'])->paginate(10));
+        } else {
+            return $this->search($req);
+        }
     }
 
     public function index_seller()
@@ -72,7 +76,6 @@ class Client extends Controller
         };
         // return $req->q;
     }
-
 
     /**
      * Show the form for creating a new resource.

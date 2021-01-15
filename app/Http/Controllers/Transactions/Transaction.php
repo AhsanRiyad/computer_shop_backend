@@ -17,18 +17,23 @@ class Transaction extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $req)
     {
         //
-        return CR::collection( C::with(['client'])->orderBy('id' , 'desc')->paginate(10) );
+        // return $req->q;
+        if($req->q == '' ){
+            return CR::collection( C::with(['client'])->orderBy('id' , 'desc')->paginate(10) );
+        }else{
+            return $this->search($req);
+        }
     }
 
     public function search(Request $req)
     {
         // return $req->search;
 
-        if (C::where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->count() > 0) {
-            return CR::collection(C::with(['created_by'])->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->paginate(10));
+        if (C::where('id', 'like', '%' . $req->q . '%')->orWhere('order_id', 'like', '%' . $req->q . '%')->count() > 0) {
+            return CR::collection(C::with(['client'])->where('id', 'like', '%' . $req->q . '%')->orWhere('order_id', 'like', '%' . $req->q . '%')->paginate(10));
         } else {
             return  json_encode(new SampleEmpty([]));
         };
