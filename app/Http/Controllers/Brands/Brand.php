@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Brands\Brand as B;
 use App\Http\Resources\Brands\Brand as BR;
 use DB;
+use App\Http\Others\SampleEmpty;
 
 class Brand extends Controller
 {
@@ -25,6 +26,20 @@ class Brand extends Controller
     {
         //
         return BR::collection(B::get(['name', 'id']));
+    }
+
+
+    public function search(Request $req)
+    {
+        // return $req->search;
+
+        if (B::where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->count() > 0) {
+            return BR::collection(B::with(['created_by'])->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->paginate(10));
+        }else {
+            return  json_encode(new SampleEmpty([]));
+        };
+
+        // return $req->q;
     }
 
     /**

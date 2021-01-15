@@ -74,6 +74,15 @@ Route::group([], function () {
 
         //test
         
+        //search
+        Route::get('search/category', 'Categories\Category@search');
+        Route::get('search/brand', 'Brands\Brand@search');
+        Route::get('search/client', 'Clients\Client@search');
+        Route::get('search/purchase', 'Orders\Order@searchPurchase');
+        Route::get('search/sell', 'Orders\Order@searchSell');
+
+
+
         //dropdown
         Route::get('dropdown/category', 'Categories\Category@index');
         Route::get('dropdown/brand', 'Brands\Brand@dropdown');

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Clients\Client as C;
 use App\Http\Resources\Clients\Client as CR;
+use App\Http\Others\SampleEmpty;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -52,12 +53,26 @@ class Client extends Controller
         return CR::collection(C::where('type' , '=' , 'customer')->get(['id' , 'name']));
     }
 
-
     public function index_client()
     {
         //
         return ClientResource::collection(C::all());
     }
+
+
+    public function search(Request $req)
+    {
+        // return $req->search;
+        if (C::where('id', 'like', '%' . $req->q . '%')->count() > 0) {
+            return CR::collection(C::with(['created_by'])->where('id', 'like', '%' . $req->q . '%')->paginate(10));
+        } else if (C::where('name', 'like', '%' . $req->q . '%')->count() > 0) {
+            return CR::collection(C::with(['created_by'])->where('name', 'like', '%' . $req->q . '%')->paginate(10));
+        } else {
+            return  json_encode(new SampleEmpty([]));
+        };
+        // return $req->q;
+    }
+
 
     /**
      * Show the form for creating a new resource.

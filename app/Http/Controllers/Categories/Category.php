@@ -9,6 +9,8 @@ use App\Http\Resources\Categories\Category as CR;
 use Illuminate\Http\Response;
 use PDF;
 use DB;
+use App\Http\Others\SampleEmpty;
+
 
 class Category extends Controller
 {
@@ -37,6 +39,18 @@ class Category extends Controller
     {
         //
         return CR::collection(C::get(['name', 'id']));
+    }
+
+    public function search(Request $req){
+        // return $req->search;
+
+        if (C::where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->count() > 0) {
+            return CR::collection(C::with(['created_by'])->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->paginate(10));
+        } else {
+            return  json_encode(new SampleEmpty([]));
+        };
+
+        // return $req->q;
     }
 
     /**

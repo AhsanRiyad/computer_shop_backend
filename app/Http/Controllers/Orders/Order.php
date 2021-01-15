@@ -14,6 +14,25 @@ use Illuminate\Support\Facades\DB;
 use PDF;
 use Illuminate\Support\Facades\Auth;
 
+class SampleEmpty
+{
+    // Properties
+    public  $data;
+    function __construct($data)
+    {
+        // $this->data = $data;
+        $this->data =  [  'order' => [] , 'meta' => [ 'total' => 0 ]  ];
+    }
+    // Methods
+    /*  function set_name($name)
+    {
+        $this->name = $name;
+    }
+    function get_name()
+    {
+        return $this->name;
+    } */
+}
 
 class Order extends Controller
 {
@@ -87,6 +106,174 @@ class Order extends Controller
         });
         return R::collection( collect($order_info)->reverse()); */
     }
+
+    public function searchPurchase(Request $req)
+    {
+        // return $req->search;
+
+        $searchResultsByClient =  O::where([['type', '=', 'purchase']])->whereHas('client', function ($query) use (&$req) {
+            return $query->where([['name', 'like', '%' . $req->q . '%'],]);
+        });
+
+        $searchResultsById =  O::where([['type', '=', 'purchase'], ['id_customized', 'like', '%' . $req->q . '%']]);
+
+        if ($searchResultsById->count() > 0) {
+            return $this->searchResultsPurchase($searchResultsById);
+        } else if ($searchResultsByClient->count() > 0) {
+            return $this->searchResultsPurchase($searchResultsByClient);
+        } else {
+            return  json_encode(new SampleEmpty([]));
+        };
+/* 
+        return O::whereHas('client', function ($query) use (&$req) {
+            return $query->where('name','like', '%' . $req->q . '%');
+        })->orWhere('id_customized', 'like', '%' . $req->q . '%')->count(); */
+
+/* 
+        return O::with(['client' => function($q)  use (&$req){
+            $q->where('name' ,'like', '%' . 'noora' . '%');
+        }])->paginate(10); */
+
+
+        // return $req->q;
+    }
+
+    public function searchSell(Request $req)
+    {
+        // return $req->search;
+
+        $searchResultsByClient =  O::where([['type' , '=' , 'sell']])->whereHas('client', function ($query) use (&$req) {
+            return $query->where([['name', 'like', '%' . $req->q . '%'],]);
+        });
+
+        $searchResultsById =  O::where([['type' , '=' , 'sell'], ['id_customized', 'like', '%' . $req->q . '%']]);
+
+        if($searchResultsById->count() > 0){
+            return $this->searchResultsSell($searchResultsById);
+        }
+        else if ($searchResultsByClient->count() > 0) {
+            return $this->searchResultsSell($searchResultsByClient);
+        } else {
+            return  json_encode(new SampleEmpty([]));
+        };
+        /* 
+        return O::whereHas('client', function ($query) use (&$req) {
+            return $query->where('name','like', '%' . $req->q . '%');
+        })->orWhere('id_customized', 'like', '%' . $req->q . '%')->count(); */
+
+        /* 
+        return O::with(['client' => function($q)  use (&$req){
+            $q->where('name' ,'like', '%' . 'noora' . '%');
+        }])->paginate(10); */
+
+        // return $req->q;
+    }
+
+    public function searchResultsPurchase($searchResults){
+        $order_info = [];
+        // return O::find(1)->getTotal();
+
+        $orders = $searchResults->with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell'])->orderBy('id', 'desc')->paginate(10);
+
+        // $a = R::collection($orders);
+        // var_dump($a);
+        // return $orders['total'];
+        // return R::collection($orders);
+        // dd(R::collection($orders));
+        // $order_info['meta'] = R::collection($orders)['meta'];
+        foreach ($orders as $order) {
+            $order['id_customized'] = 'HCC-' . $order->id_customized;
+            $order['total'] = $order->getTotal();
+            $order['balance'] = $order->balance();
+            $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount();
+            $order['subtotal'] = $order->getSubTotal();
+            $order['paid'] = $order->paid();
+            $order['received'] = $order->received();
+            $order['created'] = $order->created_by();
+            $order['updated'] = $order->updated_by();
+
+            $order_info['order'][] = $order;
+        }
+        $order_info['meta']['total'] = $searchResults->count();
+        return R::collection(collect($order_info)->reverse());
+        // $b['meta'] = 10;
+        // return $b;
+        /* O::with(['address', 'client' , 'created_by', 'updated_by' ,'order_details', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('type', '=' ,'purchase')->chunk( 200 , function($result) use (&$order_info){
+            
+            foreach ($result as $order) {
+                # code...
+
+                $order['id_customized'] =  'HCC-' . $order->id;
+                $order['total'] = $order->getTotal();
+                $order['balance'] = $order->balance();
+                $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount() ;
+                $order['subtotal'] = $order->getSubTotal();
+                $order['paid'] = $order->paid();
+                $order['received'] = $order->received();
+                $order['created'] = $order->created_by();
+                $order['updated'] = $order->updated_by();
+                
+
+                $order_info[] = $order;
+            }
+
+        });
+        return R::collection( collect($order_info)->reverse()); */
+    }
+
+    public function searchResultsSell($searchResults){
+        $order_info = [];
+        // return O::find(1)->getTotal();
+
+        $orders = $searchResults->with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_sell.order_detail', 'serial_numbers_purchase'])->orderBy('id', 'desc')->paginate(10);
+
+        // $a = R::collection($orders);
+        // var_dump($a);
+        // return $orders['total'];
+        // return R::collection($orders);
+        // dd(R::collection($orders));
+        // $order_info['meta'] = R::collection($orders)['meta'];
+        foreach ($orders as $order) {
+            $order['id_customized'] = 'HCC-' . $order->id_customized;
+            $order['total'] = $order->getTotal();
+            $order['balance'] = $order->balance();
+            $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount();
+            $order['subtotal'] = $order->getSubTotal();
+            $order['paid'] = $order->paid();
+            $order['received'] = $order->received();
+            $order['created'] = $order->created_by();
+            $order['updated'] = $order->updated_by();
+
+            $order_info['order'][] = $order;
+        }
+        $order_info['meta']['total'] = $searchResults->count();
+        return R::collection(collect($order_info)->reverse());
+        // $b['meta'] = 10;
+        // return $b;
+        /* O::with(['address', 'client' , 'created_by', 'updated_by' ,'order_details', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('type', '=' ,'purchase')->chunk( 200 , function($result) use (&$order_info){
+            
+            foreach ($result as $order) {
+                # code...
+
+                $order['id_customized'] =  'HCC-' . $order->id;
+                $order['total'] = $order->getTotal();
+                $order['balance'] = $order->balance();
+                $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount() ;
+                $order['subtotal'] = $order->getSubTotal();
+                $order['paid'] = $order->paid();
+                $order['received'] = $order->received();
+                $order['created'] = $order->created_by();
+                $order['updated'] = $order->updated_by();
+                
+
+                $order_info[] = $order;
+            }
+
+        });
+        return R::collection( collect($order_info)->reverse()); */
+    }
+
+
 /**
      * Display a listing of the resource.
      *
