@@ -19,7 +19,7 @@ class Transaction extends Controller
     public function index()
     {
         //
-        return CR::collection( C::with(['client'])->paginate(10) );
+        return CR::collection( C::with(['client'])->orderBy('id' , 'desc')->paginate(10) );
     }
 
     /**
