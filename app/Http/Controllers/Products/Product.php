@@ -75,7 +75,7 @@ class Serial_numberIn extends JsonResource
 
             'number' => $this->number,
 
-            'product_id' => $this->order_detail['product_id'],
+            'product_id' => (int) $this->order_detail['product_id'],
 
             'status' => 'Purchase'
 
