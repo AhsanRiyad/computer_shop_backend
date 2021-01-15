@@ -9,6 +9,28 @@ use App\Models\Products\Serial_number as S;
 use App\Models\Products\Serial_purchase;
 use App\Http\Resources\Products\Serial_number as R;
 
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class SerialResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        // $client =  parent::toArray($request);
+        return [
+            'number' => $this->number,
+            'id' => $this->id,
+            'order_detail_id' => $this->order_detail_id,
+            'product_id' => $this->order_detail['product_id']
+        ];
+    }
+}
+
 
 class Serial_number extends Controller
 {
@@ -21,10 +43,10 @@ class Serial_number extends Controller
     {
         //
         // return R::collection( S::with(['product'])->get() );
-        return Serial_purchase::with(['product', 'order_detail' ])->get() ;
+        // return Serial_purchase::with(['product', 'order_detail' ])->get() ;
 
-
-       /* return S::with(['product', 'order_detail_purchase' ,'order_detail'])->has( 'order_detail.order.type' , '=' , 'purchase' ) ;*/
+        return SerialResource::collection(Serial_purchase::all());
+    //    return S::with(['product', 'order_detail_purchase' ,'order_detail'])->has( 'order_detail.order.type' , '=' , 'purchase' ) ;
     }
 
     /**
