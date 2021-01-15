@@ -9,6 +9,8 @@ class Order_detail extends Model
     //
     protected $guarded = ['id'];
 
+    protected $casts = ['product_id' => 'integer',];
+
     public function order()
     {
         return $this->belongsTo('App\Models\Orders\Order', 'order_id', 'id');
