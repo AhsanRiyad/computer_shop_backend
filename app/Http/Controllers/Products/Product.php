@@ -23,6 +23,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 use DB;
 
+use App\Http\Others\SampleEmpty;
 
 class ProductResource extends JsonResource
 {
@@ -118,6 +119,19 @@ class Product extends Controller
 
     }
 
+
+    public function search(Request $req)
+    {
+        // return $req->search;
+
+        if (C::where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->count() > 0) {
+            return CR::collection(C::with(['created_by'])->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->paginate(10));
+        } else {
+            return  json_encode(new SampleEmpty([]));
+        };
+
+        // return $req->q;
+    }
 
 
     /**

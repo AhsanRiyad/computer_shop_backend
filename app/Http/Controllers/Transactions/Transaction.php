@@ -8,6 +8,7 @@ use App\Models\Transactions\Transaction as C;
 use App\Models\Orders\Order;
 use App\Models\Clients\Client;
 use App\Http\Resources\Transactions\Transaction as CR;
+use App\Http\Others\SampleEmpty;
 
 class Transaction extends Controller
 {
@@ -20,6 +21,19 @@ class Transaction extends Controller
     {
         //
         return CR::collection( C::with(['client'])->orderBy('id' , 'desc')->paginate(10) );
+    }
+
+    public function search(Request $req)
+    {
+        // return $req->search;
+
+        if (C::where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->count() > 0) {
+            return CR::collection(C::with(['created_by'])->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->paginate(10));
+        } else {
+            return  json_encode(new SampleEmpty([]));
+        };
+
+        // return $req->q;
     }
 
     /**
