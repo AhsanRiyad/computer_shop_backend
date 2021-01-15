@@ -72,6 +72,7 @@ class Order extends Controller
                 $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount();
                 $order['subtotal'] = $order->getSubTotal();
                 $order['paid'] = $order->paid();
+                // $order['date'] = date('d-m-Y', strtotime($order->date));
                 $order['received'] = $order->received();
                 $order['created'] = $order->created_by();
                 $order['updated'] = $order->updated_by();
@@ -393,7 +394,6 @@ class Order extends Controller
             $s = Serial_purchase::whereIn('number', $request->serials)->get();
             if (count($s) > 0) return response( $s , 403 );
 
-
             $order = O::create($request->order);
             $address = $order->address()->create($request->address);
             // $address = O::create($request->address);
@@ -422,12 +422,6 @@ class Order extends Controller
             return response($e , 403);
             // something went wrong
         }
-
-
-
-
-
-
 
         // return $s['serials'];
 
@@ -553,6 +547,7 @@ class Order extends Controller
                 $item->serial_numbers()->delete();
             }); */
             $order->serial_numbers_purchase()->delete();
+            // return $request->order;
             $order->update($request->order );
             $order->order_details()->delete();
 
