@@ -33,6 +33,12 @@ class Category extends Controller
         return CR::collection(C::with(['created_by'])->paginate(10));
     }
 
+    public function dropdown()
+    {
+        //
+        return CR::collection(C::get(['name', 'id']));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

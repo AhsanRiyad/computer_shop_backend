@@ -21,6 +21,12 @@ class Brand extends Controller
         return BR::collection(B::with(['created_by'])->paginate(10));
     }
 
+    public function dropdown()
+    {
+        //
+        return BR::collection(B::get(['name', 'id']));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

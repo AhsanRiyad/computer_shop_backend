@@ -76,14 +76,13 @@ Route::group([], function () {
         
         //dropdown
         Route::get('dropdown/category', 'Categories\Category@index');
-        Route::get('dropdown/brand', 'Brands\Brand@index');
-        Route::get('dropdown/product', 'Products\Product@index');
+        Route::get('dropdown/brand', 'Brands\Brand@dropdown');
+        Route::get('dropdown/product', 'Products\Product@dropdown');
         Route::get('dropdown/seller', 'Clients\Client@index_seller');
         Route::get('dropdown/customer', 'Clients\Client@index_customer');
         Route::get('dropdown/client', 'Clients\Client@index_client');
 
         Route::get('dropdown/product_n_serial', 'Products\Product@index_product_n_serial');
-
 
         //serials
         Route::get('serial', 'Products\Serial_number@index');
@@ -172,7 +171,6 @@ Route::group([], function () {
         Route::get('transaction/order/{order_id}', 'Transactions\Transaction@show_by_order');
         Route::post('transaction/order/{order_id}', 'Transactions\Transaction@store_by_order');
         Route::put('transaction/order/{order_id}/{transaction_id}', 'Transactions\Transaction@update_by_order');
-
 
 
         Route::get('transactions/client/{client_id}', 'Transactions\Transaction@show_by_client');

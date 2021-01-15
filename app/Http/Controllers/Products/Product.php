@@ -19,19 +19,35 @@ use App\Models\Products\Serial_sell;
 use App\Http\Resources\Products\Product as CR;
 
 
+use Illuminate\Http\Resources\Json\JsonResource;
 
 use DB;
 
 
-
+class ProductResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        // $client =  parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'cost' => $this->cost,
+            'price' => $this->price,
+            'quantity' => 1,
+            'having_serial' => $this->having_serial,
+        ];
+    }
+}
 //
 
-use Illuminate\Http\Resources\Json\JsonResource;
-
-
-
 class Serial_numberIn extends JsonResource
-
 {
 
     /**
@@ -68,14 +84,8 @@ class Serial_numberIn extends JsonResource
 
 }
 
-
-
-
-
 class Product extends Controller
-
 {
-
     /**
 
      * Display a listing of the resource.
@@ -87,20 +97,24 @@ class Product extends Controller
      */
 
     public function index()
-
     {
+        //
+        // return response( CR::collection(C::all()) ) ;
+        /*$products = C::with(['brand', 'category', 'created_by'])->get();*/
+        // return CR::collection(C::with(['brand', 'category', 'created_by', 'order_detail'])->paginate(10));
+        return CR::collection(C::with(['brand', 'category', 'created_by'])->orderBy('id' , 'desc')->paginate(10));
+    }
 
+    public function dropdown()
+    {
         //
 
         // return response( CR::collection(C::all()) ) ;
 
         /*$products = C::with(['brand', 'category', 'created_by'])->get();*/
 
-
-
-        return CR::collection(C::with(['brand', 'category', 'created_by', 'order_detail'])->paginate(10));
-
-
+        // return CR::collection(C::with(['brand', 'category', 'created_by', 'order_detail'])->paginate(10));
+        return ProductResource::collection(C::get(['name' , 'id', 'price' , 'cost', 'having_serial']));
 
     }
 
@@ -128,7 +142,9 @@ class Product extends Controller
 
         // return 'ok';
 
-        $products =  CR::collection(C::with(['brand', 'category', 'created_by'])->get());
+        // $products =  CR::collection(C::with(['brand', 'category', 'created_by'])->get());
+        $products = ProductResource::collection(C::get(['name', 'id', 'price', 'cost', 'having_serial'
+            ]));
 
         // return $products;
 

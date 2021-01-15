@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Clients\Client as C;
 use App\Http\Resources\Clients\Client as CR;
 
-
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ClientResource extends JsonResource
@@ -28,7 +27,6 @@ class ClientResource extends JsonResource
     }
 }
 
-
 class Client extends Controller
 {
     /**
@@ -45,13 +43,13 @@ class Client extends Controller
     public function index_seller()
     {
         //
-        return CR::collection(C::where('type' , '=' , 'seller')->get());
+        return CR::collection(C::where('type' , '=' , 'seller')->get(['name' , 'id']));
     }
 
     public function index_customer()
     {
         //
-        return CR::collection(C::where('type' , '=' , 'customer')->get());
+        return CR::collection(C::where('type' , '=' , 'customer')->get(['id' , 'name']));
     }
 
 

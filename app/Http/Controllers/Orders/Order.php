@@ -39,7 +39,7 @@ class Order extends Controller
         $order_info= [];
         // return O::find(1)->getTotal();
 
-         $orders = O::with(['address', 'client' , 'created_by', 'updated_by' ,'order_details', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('type', '=' ,'purchase')->paginate(10);
+         $orders = O::with(['address', 'client' , 'created_by', 'updated_by' ,'order_details', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('type', '=' ,'purchase')->orderBy('id', 'desc')->paginate(10);
 
         // $a = R::collection($orders);
         // var_dump($a);
