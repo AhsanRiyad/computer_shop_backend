@@ -24,7 +24,7 @@ class SerialResource extends JsonResource
         // $client =  parent::toArray($request);
         return [
             'number' => $this->number,
-            'id' => $this->id,
+            // 'id' => $this->id,
             'order_detail_id' => $this->order_detail_id,
             'product_id' => $this->order_detail['product_id']
         ];
