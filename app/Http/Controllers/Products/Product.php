@@ -177,8 +177,14 @@ class Product extends Controller
             return $value['inStock'] > 0;
         });
 
-       
+        $filteredProducts = [] ; 
         $products =  $filtered->all();
+
+        foreach($products as $p ){
+            if($p['inStock'] > 0){
+                $filteredProducts [] = $p;
+            }
+        }
 
 
         // return $products;
@@ -194,7 +200,7 @@ class Product extends Controller
         // return $serials_purchase;
         // return Serial_number::collection( $serials_purchase );
 
-        return response(['products' => $products , 'serials' => Serial_numberIn::collection( $serials_purchase )] , 200 );
+        return response(['products' => $filteredProducts , 'serials' => Serial_numberIn::collection( $serials_purchase )] , 200 );
 
 
 
