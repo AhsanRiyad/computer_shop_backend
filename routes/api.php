@@ -85,7 +85,7 @@ Route::group([], function () {
 
 
         //dropdown
-        Route::get('dropdown/category', 'Categories\Category@index');
+        Route::get('dropdown/category', 'Categories\Category@dropdown');
         Route::get('dropdown/brand', 'Brands\Brand@dropdown');
         Route::get('dropdown/product', 'Products\Product@dropdown');
         Route::get('dropdown/seller', 'Clients\Client@index_seller');
