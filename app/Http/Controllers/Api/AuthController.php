@@ -12,7 +12,7 @@ class AuthController extends Controller
     {
         $validatedData =  $request->validate([
             "name" => "required|max:55",
-            "email" => "email|required",
+            "email" => "required",
             "password" => "required|max:100"
             // "password" => "required|confirmed"
         ]);
@@ -27,7 +27,7 @@ class AuthController extends Controller
     public function signin(Request $request)
     {
         $loginData =  $request->validate([
-            "email" => "email|required",
+            "email" => "required",
             "password" => "required|max:100"
         ]);
         
