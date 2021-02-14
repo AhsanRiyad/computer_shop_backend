@@ -133,7 +133,7 @@ hr.dottedGrey{
 
   width: 33.33%;
 
-  line-height: .6px;
+  line-height: .9px;
 
   margin-top: 60px;
 
@@ -155,7 +155,7 @@ hr.dottedGrey{
 
   margin-top: 40px;
 
-  line-height: .4px;
+  line-height: .9px;
 
 }
 
@@ -169,7 +169,7 @@ hr.dottedGrey{
 
   margin-top: 40px;
 
-  line-height: .4px;
+  line-height: .9px;
 
 }
 
@@ -197,7 +197,7 @@ hr.dottedGrey{
 
   /*font-size: 50px;*/
 
-  line-height: .6;
+  line-height: .9;
 
   float: left;
 
@@ -211,7 +211,7 @@ hr.dottedGrey{
 
 .info-item-2{
 
-  line-height: .6;
+  line-height: .9;
 
   float: left;
 
@@ -223,7 +223,7 @@ hr.dottedGrey{
 
 .info-item-3{
 
-  line-height: .6;
+  line-height: .9;
 
   text-align: right;
 
@@ -263,7 +263,7 @@ hr.dottedGrey{
 
   margin-left: 20px;
 
-  line-height: .6;
+  line-height: .9;
 
   float: left;
 
@@ -273,7 +273,7 @@ hr.dottedGrey{
 
 .tableHeader-item-2{
 
-  line-height: .6;
+  line-height: .9;
 
   text-align: right;
 
@@ -285,7 +285,7 @@ hr.dottedGrey{
 
 .tableHeader-item-3{
 
-  line-height: .6;
+  line-height: .9;
 
   float: left;
 
@@ -297,7 +297,7 @@ hr.dottedGrey{
 
 .tableHeader-item-4{
 
-  line-height: .6;
+  line-height: .9;
 
   text-align: right;
 
@@ -329,7 +329,7 @@ hr.dottedGrey{
 
   margin-left: 20px;
 
-  line-height: .6;
+  line-height: .9;
 
   float: left;
 
@@ -339,7 +339,7 @@ hr.dottedGrey{
 
 .tableBody-item-2{
 
-  line-height: .6;
+  line-height: .9;
 
   text-align: right;
 
@@ -351,7 +351,7 @@ hr.dottedGrey{
 
 .tableBody-item-3{
 
-  line-height: .6;
+  line-height: .9;
 
   float: left;
 
@@ -363,7 +363,7 @@ hr.dottedGrey{
 
 .tableBody-item-4{
 
-  line-height: .6;
+  line-height: .9;
 
   text-align: right;
 
@@ -407,7 +407,7 @@ hr.dottedGrey{
 
   margin-left: 20px;
 
-  line-height: .6;
+  line-height: .9;
 
   float: left;
 
@@ -419,7 +419,7 @@ hr.dottedGrey{
 
 .summary-item-2{
 
-  line-height: .6;
+  line-height: .9;
 
   text-align: right;
 
@@ -433,7 +433,7 @@ hr.dottedGrey{
 
   color: black;
 
-  line-height: .6;
+  line-height: .9;
 
   float: right;
 
@@ -462,7 +462,7 @@ margin-top:20px;
 
   text-align: center;
 
-  line-height: .6;
+  line-height: .9;
 
 }
 
