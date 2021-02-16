@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Reports;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Reports\Report as R;
+use App\Models\Orders\Order;
+
+
 
 class Report extends Controller
 {
@@ -16,6 +20,44 @@ class Report extends Controller
     {
         //
     }
+
+    public function daily_sales(Request $req){
+        // return 'ok';
+
+        // ?date=
+        //?fromDate=11&toDate=111
+        $date = date('y-m-d');
+        if( $req->date != '') {
+            $date = $req->date;
+        } ;
+
+        $Purchase =  Order::whereDate('date' ,'=' ,$date)->where('type' , 'purchase')->get();
+        $Sell =  Order::whereDate('date' ,'=' ,$date)->where('type' , 'sell')->get();
+
+        $subtotalPurchase = 0;
+        $totalDiscountPurchase = 0;
+        $subtotalSell = 0;
+        $totalDiscountSell = 0;
+
+        foreach( $Purchase as $O ){
+            $subtotalPurchase +=  $O->getTotal();
+            $totalDiscountPurchase +=  $O->discounts();
+        }
+
+        foreach( $Sell as $O ){
+            $subtotalSell +=  $O->getTotal();
+            $totalDiscountSell +=  $O->discounts();
+        }
+
+        return [
+         'subtotalPurchase' => sprintf( "%.2f" , $subtotalPurchase ),
+         'totalDiscountPurchase' => sprintf( "%.2f" , $totalDiscountPurchase ), 
+         'totalPurchase' =>  sprintf( "%.2f" , ($subtotalPurchase - $totalDiscountPurchase) ),
+         'subtotalSell' => sprintf( "%.2f" , $subtotalSell ),
+         'totalDiscountSell' => sprintf( "%.2f" , $totalDiscountSell ), 
+         'totalSell' =>  sprintf( "%.2f" , ($subtotalSell - $totalDiscountSell) ),
+         ];
+    } 
 
     /**
      * Show the form for creating a new resource.

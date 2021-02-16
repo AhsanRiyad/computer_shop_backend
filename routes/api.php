@@ -188,6 +188,12 @@ Route::group([], function () {
 
         //bulk create
         Route::post('transactions', 'Transactions\Transaction@create');
+        
+
+        //Reports
+        Route::get('daily_sales', 'Reports\Report@daily_sales');
+
+    
     });
 });
 

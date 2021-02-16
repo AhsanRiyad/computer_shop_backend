@@ -92,6 +92,14 @@ class Order extends Model
         return  $this->discount . " %";
     }
 
+
+
+    public function discounts()
+    {
+        // return  $this->coupon->istk ? $this->coupon->tk . ' AED' : $this->coupon->percentage. " %"  ;
+        return  ( ($this->getSubTotal() *  $this->discount) /100 ) ;
+    }
+
     public function getTotal()
     {
         /* return $this->getDiscount() == "" ? $this->getSubTotal() : $this->coupon->istk ? $this->getSubTotal() - $this->coupon->tk : ""; */
@@ -141,6 +149,10 @@ class Order extends Model
         // return $t;
     }
 
+
+    public function daily_sales(){
+        return $this->where('date' , '11')->get();
+    }
 
 
 }
