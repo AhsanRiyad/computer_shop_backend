@@ -30,6 +30,11 @@ class Report extends Controller
         $date = date('y-m-d');
         $fromDate = '';
         $toDate = '';
+
+        if( $req->date != '') {
+            $date = $req->date;
+        }
+
         if( $req->fromDate != '') {
             $fromDate = $req->fromDate;
             $toDate = $req->toDate;
@@ -41,9 +46,7 @@ class Report extends Controller
             $Sell =  Order::whereDate('date' ,'=' ,$date)->where('type' , 'sell')->get();
         }
 
-        if( $req->date != '') {
-            $date = $req->date;
-        }
+       
 
         $subtotalPurchase = 0;
         $totalDiscountPurchase = 0;
@@ -70,23 +73,26 @@ class Report extends Controller
          ];
     } 
 
-    public function productReports(Request $req, $product_id){
-        $date = '';
+    public function productReports(Request $req, $product_id){   
+        
+        // $Order_detail = Order_detail::chunk(100);
+        $Order_detail = Order_detail::cursor();
+
         $quantityPurchase = 0;
         $quantitySell = 0;
         $amountPurchase = 0;
         $amountSell = 0;
         $avgPurchaseCost = 0;
         $avgSellingPrice = 0;
-        foreach( Order_detail::cursor() as $Order_detail ){
-            // $date = $Order_detail->order->date;
-            if($Order_detail->product_id == $product_id){
-                if($Order_detail->order->type == 'purchase'){
-                    $quantityPurchase  += $Order_detail->quantity;
-                    $amountPurchase  += $Order_detail->quantity * $Order_detail->price;
+        foreach( $Order_detail as $od ){
+            // $date = $od->order->date;
+            if($od->product_id == $product_id){
+                if($od->order->type == 'purchase'){
+                    $quantityPurchase  += $od->quantity;
+                    $amountPurchase  += $od->quantity * $od->price;
                 }else{
-                    $quantitySell  += $Order_detail->quantity;
-                    $amountSell  += $Order_detail->quantity * $Order_detail->price;
+                    $quantitySell  += $od->quantity;
+                    $amountSell  += $od->quantity * $od->price;
                 }
             }
         };
@@ -99,7 +105,7 @@ class Report extends Controller
             'avgPurchaseCost' => sprintf( "%.2f" , $amountPurchase / ($quantityPurchase == 0 ? 1 : $quantityPurchase) ),
         ];
         
-    } 
+    }
 
 
     /**
