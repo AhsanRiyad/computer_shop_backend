@@ -26,13 +26,24 @@ class Report extends Controller
 
         // ?date=
         //?fromDate=11&toDate=111
+        // daily_sales?fromDate=2021-2-15&toDate=2021-4-2
         $date = date('y-m-d');
+        $fromDate = '';
+        $toDate = '';
+        if( $req->fromDate != '') {
+            $fromDate = $req->fromDate;
+            $toDate = $req->toDate;
+
+            $Purchase =  Order::whereDate('date' ,'>=' ,$fromDate)->whereDate('date' ,'<=' ,$toDate)->where('type' , 'purchase')->get();
+            $Sell =  Order::whereDate('date' ,'>=' ,$fromDate)->whereDate('date' ,'<=' ,$toDate)->where('type' , 'sell')->get();
+        }else{
+            $Purchase =  Order::whereDate('date' ,'=' ,$date)->where('type' , 'purchase')->get();
+            $Sell =  Order::whereDate('date' ,'=' ,$date)->where('type' , 'sell')->get();
+        }
+
         if( $req->date != '') {
             $date = $req->date;
-        } ;
-
-        $Purchase =  Order::whereDate('date' ,'=' ,$date)->where('type' , 'purchase')->get();
-        $Sell =  Order::whereDate('date' ,'=' ,$date)->where('type' , 'sell')->get();
+        }
 
         $subtotalPurchase = 0;
         $totalDiscountPurchase = 0;
