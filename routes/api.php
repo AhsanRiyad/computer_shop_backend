@@ -191,9 +191,10 @@ Route::group([], function () {
         
 
         //Reports
-        Route::get('daily_sales', 'Reports\Report@daily_sales');
+        Route::get('overallReports', 'Reports\Report@overallReports');
+        Route::get('productReports/{product_id}', 'Reports\Report@productReports');
 
-    
+        
     });
 });
 

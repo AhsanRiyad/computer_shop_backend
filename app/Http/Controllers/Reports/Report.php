@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Reports\Report as R;
 use App\Models\Orders\Order;
+use App\Models\Orders\Order_detail;
 
 
 
@@ -21,11 +22,10 @@ class Report extends Controller
         //
     }
 
-    public function daily_sales(Request $req){
+    public function overallReports(Request $req){
         // return 'ok';
 
-        // ?date=
-        //?fromDate=11&toDate=111
+        // ?date=2021-4-2
         // daily_sales?fromDate=2021-2-15&toDate=2021-4-2
         $date = date('y-m-d');
         $fromDate = '';
@@ -69,6 +69,38 @@ class Report extends Controller
          'totalSell' =>  sprintf( "%.2f" , ($subtotalSell - $totalDiscountSell) ),
          ];
     } 
+
+    public function productReports(Request $req, $product_id){
+        $date = '';
+        $quantityPurchase = 0;
+        $quantitySell = 0;
+        $amountPurchase = 0;
+        $amountSell = 0;
+        $avgPurchaseCost = 0;
+        $avgSellingPrice = 0;
+        foreach( Order_detail::cursor() as $Order_detail ){
+            // $date = $Order_detail->order->date;
+            if($Order_detail->product_id == $product_id){
+                if($Order_detail->order->type == 'purchase'){
+                    $quantityPurchase  += $Order_detail->quantity;
+                    $amountPurchase  += $Order_detail->quantity * $Order_detail->price;
+                }else{
+                    $quantitySell  += $Order_detail->quantity;
+                    $amountSell  += $Order_detail->quantity * $Order_detail->price;
+                }
+            }
+        };
+        return [ 
+            'quantityPurchase' => sprintf( "%.2f" , $quantityPurchase ),
+            'quantitySell' => sprintf( "%.2f" , $quantitySell ),
+            'amountPurchase' => sprintf( "%.2f" , $amountPurchase ),
+            'amountSell' => sprintf( "%.2f" , $amountSell ),
+            'avgSellingPrice' => sprintf( "%.2f" , $amountSell / ($quantitySell == 0 ? 1 : $quantitySell) ),
+            'avgPurchaseCost' => sprintf( "%.2f" , $amountPurchase / ($quantityPurchase == 0 ? 1 : $quantityPurchase) ),
+        ];
+        
+    } 
+
 
     /**
      * Show the form for creating a new resource.
