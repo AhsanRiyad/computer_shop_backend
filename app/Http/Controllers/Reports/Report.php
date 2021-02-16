@@ -76,7 +76,29 @@ class Report extends Controller
     public function productReports(Request $req, $product_id){   
         
         // $Order_detail = Order_detail::chunk(100);
-        $Order_detail = Order_detail::cursor();
+        // $Order_detail = Order_detail::cursor();
+
+        // return date('y-m-d');
+
+        $Order_detail =  Order_detail::whereHas('order', function ($query) use (&$req) {
+            
+            $date = date('y-m-d');
+            $fromDate = '';
+            $toDate = '';
+
+            if( $req->date != '') {
+                $date = $req->date;
+            }
+            if( $req->fromDate != '') {
+                $fromDate = $req->fromDate;
+                $toDate = $req->toDate;
+                return $query->whereDate('date' ,'>=' ,$fromDate)->whereDate('date' ,'<=' ,$toDate);
+
+            }else{
+                return $query->whereDate('date' ,'=' ,$date);
+            }
+            
+        })->cursor();
 
         $quantityPurchase = 0;
         $quantitySell = 0;
