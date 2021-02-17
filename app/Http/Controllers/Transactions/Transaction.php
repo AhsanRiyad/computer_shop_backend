@@ -142,7 +142,7 @@ class Transaction extends Controller
     public function show_by_order($order_id)
     {
         //
-        return new CR( Order::find($order_id)->Transactions );
+        return new CR( Order::find($order_id)->Transactions()->paginate(10) );
     }
 
     /**
@@ -194,8 +194,6 @@ class Transaction extends Controller
     public function update_by_order(Request $request, $order_id, $transaction_id)
     {
         //
-
-
         $transaction =  C::find($transaction_id);
         $transaction->update($request->all());
         return response( $transaction->refresh(), 200 );
