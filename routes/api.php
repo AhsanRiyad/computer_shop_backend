@@ -193,6 +193,7 @@ Route::group([], function () {
         //Reports
         Route::get('overallReports', 'Reports\Report@overallReports');
         Route::get('productReports/{product_id}', 'Reports\Report@productReports');
+        Route::get('categoryReports/{category_id}', 'Reports\Report@categoryReports');
 
         
     });

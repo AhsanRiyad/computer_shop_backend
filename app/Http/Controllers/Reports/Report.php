@@ -130,6 +130,51 @@ class Report extends Controller
     }
 
 
+    public function categoryReports(Request $req, $product_id){   
+        
+        // $Order_detail = Order_detail::chunk(100);
+        // $Order_detail = Order_detail::cursor();
+
+        // return date('y-m-d');
+        // $Order_detail = Order_detail::whereHas('products' , function ($query) use (&$req){
+        //     if($query->category_id == 1){
+        //         return $query;
+        //     };
+        // })->get();
+        // return $Order_detail;
+        // return Order_detail::first()->products->category_id;
+        
+        // $Order_detail = Order_detail::whereHas('products' , function ($query) use (&$req){
+        //     dd($query->category());
+        // })->get();
+
+        // $Order_detail = Order_detail::
+
+        // $Order_detail = Order_detail::chunk(200, function ($flights) {
+        //     foreach ($flights as $flight) {
+        //         //
+        //     }
+        // });
+
+        $Order_detail = Order_detail::cursor()->filter(function($item){
+            if( $item->products->category_id == 1) return $item;
+        })->values();
+
+        return $Order_detail;
+        // foreach( $Order_detail as $od ){
+        //     // $date = $od->order->date;
+        //     dd($od->products->category_id);
+        // };
+
+
+
+        // $Order_detail = Order_detail::whereHas('products' , function(){
+
+        // })
+
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
