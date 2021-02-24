@@ -130,7 +130,7 @@ class Report extends Controller
     }
 
 
-    public function categoryReports(Request $req, $product_id){   
+    public function categoryReports(Request $req, $category_id){   
         
         // $Order_detail = Order_detail::chunk(100);
         // $Order_detail = Order_detail::cursor();
@@ -156,11 +156,65 @@ class Report extends Controller
         //     }
         // });
 
-        $Order_detail = Order_detail::cursor()->filter(function($item){
-            if( $item->products->category_id == 1) return $item;
-        })->values();
 
-        return $Order_detail;
+        $Order_detail =  Order_detail::whereHas('order', function ($query) use (&$req) {
+            
+            $date = date('y-m-d');
+            $fromDate = '';
+            $toDate = '';
+
+            if( $req->date != '') {
+                $date = $req->date;
+            }
+            if( $req->fromDate != '') {
+                $fromDate = $req->fromDate;
+                $toDate = $req->toDate;
+                return $query->whereDate('date' ,'>=' ,$fromDate)->whereDate('date' ,'<=' ,$toDate);
+
+            }else{
+                return $query->whereDate('date' ,'=' ,$date);
+            }
+            
+        })->cursor();
+
+        
+
+        $Order_detailFiltered = $Order_detail->filter(function($item) use (&$req){
+            
+            if( $item->products->category_id == $req->category_id) return $item;
+
+
+        })->values();
+       
+        $quantityPurchase = 0;
+        $quantitySell = 0;
+        $amountPurchase = 0;
+        $amountSell = 0;
+        $avgPurchaseCost = 0;
+        $avgSellingPrice = 0;
+
+        foreach($Order_detailFiltered as $od){
+            
+                if($od->order->type == 'purchase'){
+                    $quantityPurchase  += $od->quantity;
+                    $amountPurchase  += $od->quantity * $od->price;
+                }else{
+                    $quantitySell  += $od->quantity;
+                    $amountSell  += $od->quantity * $od->price;
+                }
+            
+        }
+        return [ 
+            'quantityPurchase' => sprintf( "%.2f" , $quantityPurchase ),
+            'quantitySell' => sprintf( "%.2f" , $quantitySell ),
+            'amountPurchase' => sprintf( "%.2f" , $amountPurchase ),
+            'amountSell' => sprintf( "%.2f" , $amountSell ),
+            'avgSellingPrice' => sprintf( "%.2f" , $amountSell / ($quantitySell == 0 ? 1 : $quantitySell) ),
+            'avgPurchaseCost' => sprintf( "%.2f" , $amountPurchase / ($quantityPurchase == 0 ? 1 : $quantityPurchase) ),
+        ];
+
+
+        // return $Order_detailFiltered;
         // foreach( $Order_detail as $od ){
         //     // $date = $od->order->date;
         //     dd($od->products->category_id);
