@@ -31,11 +31,11 @@ class Report extends Controller
         $fromDate = '';
         $toDate = '';
 
-        if( $req->date != '') {
-            $date = $req->date;
+        if( $req->fromDate != '') {
+            $date = $req->fromDate;
         }
 
-        if( $req->fromDate != '') {
+        if( $req->toDate != '') {
             $fromDate = $req->fromDate;
             $toDate = $req->toDate;
 
@@ -202,7 +202,6 @@ class Report extends Controller
                     $quantitySell  += $od->quantity;
                     $amountSell  += $od->quantity * $od->price;
                 }
-            
         }
         return [ 
             'quantityPurchase' => sprintf( "%.2f" , $quantityPurchase ),
