@@ -46,8 +46,6 @@ class Report extends Controller
             $Sell =  Order::whereDate('date' ,'=' ,$date)->where('type' , 'sell')->get();
         }
 
-       
-
         $subtotalPurchase = 0;
         $totalDiscountPurchase = 0;
         $subtotalSell = 0;
