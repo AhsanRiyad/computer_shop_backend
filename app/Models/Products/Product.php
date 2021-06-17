@@ -4,9 +4,11 @@ namespace App\Models\Products;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
+    use SoftDeletes;
     //
     protected $guarded = ['id'];
     protected $casts = [ "having_serial" => 'boolean', 'brand_id' => 'integer' , 'category_id' => 'integer' ];

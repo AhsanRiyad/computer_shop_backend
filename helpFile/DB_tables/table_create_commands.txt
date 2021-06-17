@@ -15,3 +15,4 @@ php artisan make:migration create_order_return_details_table --create=order_retu
 php artisan make:migration create_serial_numbers_table --create=serial_numbers
 php artisan make:migration create_transactions_table --create=transactions
 php artisan make:migration create_refunds_table --create=refunds
+php artisan make:migration create_branches_table --create=branches

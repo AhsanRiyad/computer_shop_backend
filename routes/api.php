@@ -61,7 +61,6 @@ Route::group([], function () {
         // return auth()->user();
         // return auth()->check();
 
-
     });
 
 
