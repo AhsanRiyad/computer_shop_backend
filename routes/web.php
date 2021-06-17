@@ -16,8 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
-
 		//category
         Route::get('inventory/category', 'Categories\Category@index');
         Route::get('inventory/category/{id}', 'Categories\Category@show');
@@ -30,5 +28,4 @@ Route::get('/', function () {
         //test controller
         Route::get('test', 'Categories\Category@test');
         Route::post('test', 'Categories\Category@test');
-
 

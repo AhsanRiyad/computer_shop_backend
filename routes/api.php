@@ -142,7 +142,6 @@ Route::group([], function () {
         Route::get('clients/seller', 'Clients\Client@index_seller');
         Route::get('clients/customer', 'Clients\Client@index_customer');
 
-
         Route::get('client/{id}', 'Clients\Client@show');
         Route::post('client', 'Clients\Client@store');
         Route::put('client/{id}', 'Clients\Client@update');
@@ -163,7 +162,6 @@ Route::group([], function () {
         //bulk create
         Route::post('orders', 'Orders\Order@create');
 
-
         //sell
         Route::get('sell', 'Orders\Order@index_sell');
         Route::post('sell', 'Orders\Order@store_sell');
@@ -176,19 +174,16 @@ Route::group([], function () {
         Route::post('transaction', 'Transactions\Transaction@store');
         Route::put('transaction/{id}', 'Transactions\Transaction@update');
         Route::delete('transaction/{id}', 'Transactions\Transaction@destroy');
-
         
         Route::get('transaction/order/{order_id}', 'Transactions\Transaction@show_by_order');
         Route::post('transaction/order/{order_id}', 'Transactions\Transaction@store_by_order');
         Route::put('transaction/order/{order_id}/{transaction_id}', 'Transactions\Transaction@update_by_order');
-
 
         Route::get('transactions/client/{client_id}', 'Transactions\Transaction@show_by_client');
         Route::post('transaction/client/{client_id}', 'Transactions\Transaction@store_by_client');
 
         //bulk create
         Route::post('transactions', 'Transactions\Transaction@create');
-        
 
         //Reports
         Route::get('overallReports', 'Reports\Report@overallReports');
