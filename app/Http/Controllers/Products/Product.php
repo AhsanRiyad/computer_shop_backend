@@ -111,9 +111,6 @@ class Product extends Controller
         } else {
             return $this->search($req);
         }
-
-
-        
     }
 
     public function dropdown()
@@ -186,14 +183,9 @@ class Product extends Controller
             }
         }
 
-
         // return $products;
-
-
         // $serials_sell = Serial_sell::all();
-
         // $serials_numbers_sell = collect($serials_sell)->pluck('number');
-
         // $serials_purchase = Serial_purchase::whereNotIn('number', $serials_numbers_sell )->get();
 
         $serials_purchase = Serial_purchase::whereNotIn('number', Serial_sell::select('number')->get() )->get();
@@ -201,25 +193,15 @@ class Product extends Controller
         // return Serial_number::collection( $serials_purchase );
 
         return response(['products' => $filteredProducts , 'serials' => Serial_numberIn::collection( $serials_purchase )] , 200 );
-
-
-
     }
 
-
-
     /**
-
      * Show the form for creating a new resource.
-
      *
-
      * @return \Illuminate\Http\Response
-
      */
 
     public function create(Request $request)
-
     {
 
         //
@@ -230,8 +212,6 @@ class Product extends Controller
 
         }*/
 
-
-
         //bulk create
 
         /*DB::table('products')->insert(
@@ -240,44 +220,28 @@ class Product extends Controller
 
         );*/
 
-
-
         //bulk update
 
         foreach ($request->all() as $p) {
-
             # code...
 
             C::updateOrCreate( [ 'id' => $p['id'] ], $p);
-
         }
-
         return $request;
 
     }
 
-
-
     /**
-
      * Store a newly created resource in storage.
-
      *
-
      * @param  \Illuminate\Http\Request  $request
-
      * @return \Illuminate\Http\Response
-
      */
 
     public function store(Request $request)
-
     {
-
         //
-
         // return $request;
-
         return C::create($request->all());
 
         // return 'ok';
@@ -302,8 +266,6 @@ class Product extends Controller
 
     }
 
-
-
     /**
 
      * Display the specified resource.
@@ -317,13 +279,14 @@ class Product extends Controller
      */
 
     public function show($id)
-
     {
-
         //
-
-        return new CR(C::find($id));
-
+        $product = C::find($id);
+        if($product == ''){
+            return [];
+        }else{
+            return new CR($product);
+        }
     }
 
 
