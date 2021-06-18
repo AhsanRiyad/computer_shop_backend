@@ -23,16 +23,15 @@ class CreateProductsTable extends Migration
             $table->foreign('updated_by')->references('id')->on('users');
             $table->softDeletes();
 
+           
 
             $table->string('name')->nullable();
-            $table->string('unit')->nullable();
             $table->text('description')->nullable();
             $table->integer('alert_quantity')->nullable();
             $table->integer('warranty')->nullable();
             $table->double('cost', 8  , 2)->nullable();
             $table->double('price', 8  , 2)->nullable();
             $table->boolean('having_serial')->nullable();
-
 
             $table->bigInteger('brand_id')->unsigned()->nullable();
             $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');

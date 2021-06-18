@@ -28,6 +28,11 @@ class Product extends Model
         return $this->belongsToMany('App\Models\Branches\Branch');
     }
 
+    public function unit()
+    {
+        return $this->hasOne('App\Models\Unit\Unit');
+    }
+
     public function created_by()
     {
         return $this->belongsTo('App\User', 'created_by', 'id');
@@ -80,11 +85,8 @@ class Product extends Model
         return collect($orders)->where('type' , 'sell')->sum( DB::raw('quantity') );
     }
 
-
     public function inStock()
     {
-        
-
         return $this->purchased() - $this->sold();
     }
 

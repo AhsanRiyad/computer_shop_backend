@@ -203,32 +203,24 @@ class Product extends Controller
 
     public function create(Request $request)
     {
-
         //
-
         /*foreach ($request->all() as $value) {
-
             C::Create($value);
-
         }*/
 
         //bulk create
 
         /*DB::table('products')->insert(
-
             $request->all()
-
         );*/
 
         //bulk update
 
         foreach ($request->all() as $p) {
             # code...
-
             C::updateOrCreate( [ 'id' => $p['id'] ], $p);
         }
         return $request;
-
     }
 
     /**
