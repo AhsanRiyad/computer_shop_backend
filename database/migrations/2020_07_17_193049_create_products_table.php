@@ -23,8 +23,6 @@ class CreateProductsTable extends Migration
             $table->foreign('updated_by')->references('id')->on('users');
             $table->softDeletes();
 
-           
-
             $table->string('name')->nullable();
             $table->text('description')->nullable();
             $table->integer('alert_quantity')->nullable();
