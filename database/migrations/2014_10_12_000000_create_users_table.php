@@ -21,7 +21,6 @@ class CreateUsersTable extends Migration
             $table->softDeletes();
             $table->timestamp('email_verified_at')->nullable();
 
-
             $table->string('password');
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();

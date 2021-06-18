@@ -1,3 +1,5 @@
 php artisan passport:install --force
 
 php artisan key:generate
+
+php artisan make:migration create_employees_table
