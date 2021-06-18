@@ -49,7 +49,6 @@ Route::group([], function () {
     Route::post('signin', 'Api\AuthController@signin');
     Route::post('signup', 'Api\AuthController@signup');
     
-    
     Route::get('test', function(){
         // return request()->url();
         /* return request()->path();
@@ -87,6 +86,7 @@ Route::group([], function () {
         Route::get('dropdown/category', 'Categories\Category@dropdown');
         Route::get('dropdown/brand', 'Brands\Brand@dropdown');
         Route::get('dropdown/product', 'Products\Product@dropdown');
+        Route::get('dropdown/branch', 'Branches\Branch@dropdown');
         Route::get('dropdown/seller', 'Clients\Client@index_seller');
         Route::get('dropdown/customer', 'Clients\Client@index_customer');
         Route::get('dropdown/client', 'Clients\Client@index_client');
@@ -107,6 +107,14 @@ Route::group([], function () {
         //bulk create
         Route::post('categories', 'Categories\Category@create');
 
+
+        //branch
+        Route::get('branch', 'Branches\Branch@index');
+        Route::get('branch/{id}', 'Branches\Branch@index');
+        Route::get('branch/{id}', 'Branches\Branch@show');
+        Route::post('branch', 'Branches\Branch@store');
+        Route::put('branch/{id}', 'Branches\Branch@update');
+        Route::delete('branch/{id}', 'Branches\Branch@destroy');
 
         //brand
         Route::get('brand', 'Brands\Brand@index');

@@ -21,7 +21,9 @@ class CreateSalariesTable extends Migration
             $table->foreign('created_by')->references('id')->on('users');
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->foreign('updated_by')->references('id')->on('users');
-            
+            $table->softDeletes();
+
+
             $table->integer('month')->nullable();
             $table->integer('year')->nullable();
 

@@ -22,6 +22,11 @@ class Product extends Model
     {
         return $this->belongsTo('App\Models\Brands\Brand', 'brand_id', 'id');
     }
+    
+    public function branch()
+    {
+        return $this->belongsToMany('App\Models\Branches\Branch');
+    }
 
     public function created_by()
     {
@@ -35,7 +40,7 @@ class Product extends Model
 
     public function serial_numbers()
     {
-        return $this->hasMany('App\Models\Products\Serial_number', 'product_id');
+        return $this->hasMany('App\Models\Products\Serial_number');
     }
 
     public function warranty_exchange_detail()
@@ -48,11 +53,9 @@ class Product extends Model
         return $this->hasMany('App\Models\Warranties\Warranty_detail', 'product_id');
     }
 
-
     public function purchased()
     {
         // return $this->order_detail->sum(DB::raw( 'quantity' ));
-
         $orders = [];
 
         foreach ( $this->order_detail as $order) {

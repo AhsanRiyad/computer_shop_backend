@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Brands;
+namespace App\Http\Controllers\Branches;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Brands\Brand as B;
-use App\Http\Resources\Brands\Brand as BR;
+use App\Models\Branches\Branch as B;
+use App\Http\Resources\Branches\Branch as BR;
 use DB;
 use App\Http\Others\SampleEmpty;
 
-class Brand extends Controller
+class Branch extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -32,17 +32,10 @@ class Brand extends Controller
         return BR::collection(B::get(['name', 'id']));
     }
 
+
     public function search(Request $req)
     {
-        // return $req->search;
 
-        if (B::where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->count() > 0) {
-            return BR::collection(B::with(['created_by'])->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->paginate(10));
-        }else {
-            return  json_encode(new SampleEmpty([]));
-        };
-
-        // return $req->q;
     }
 
     /**
@@ -52,15 +45,7 @@ class Brand extends Controller
      */
     public function create(Request $request)
     {
-        //
-        DB::table('brands')->insert(
-            $request->all()
-        );
-        return $request;
-
-        /*foreach ($request->all() as $value) {
-            B::Create($value);
-        }*/
+        
     }
 
     /**
@@ -71,17 +56,8 @@ class Brand extends Controller
      */
     public function store(Request $request)
     {
-        //
         B::create($request->all());
         return new BR($request->all());
-
-        // $product->save($parameters);
-
-        // return $request;
-        // $a = new P;
-        // $a->name = $request->name;
-        // return $a->save();
-        // return $user;
     }
 
     /**
@@ -116,10 +92,8 @@ class Brand extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-        // C::where('id' , $id)->update($request->all()));
-        if ( B::where('id' , $id)->update( $request->all() ) )  {
-            return new BR( B::find($id) );
+        if (B::where('id', $id)->update($request->all())) {
+            return new BR(B::find($id));
         };
         abort(403, 'Not found');
     }

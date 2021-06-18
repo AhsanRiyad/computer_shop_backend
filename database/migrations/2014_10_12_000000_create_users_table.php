@@ -18,7 +18,10 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('type')->default('admin')->nullable();
             $table->string('email')->unique();
+            $table->softDeletes();
             $table->timestamp('email_verified_at')->nullable();
+
+
             $table->string('password');
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();

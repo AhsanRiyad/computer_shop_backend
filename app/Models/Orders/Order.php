@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Models\Orders;
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+
 class Order extends Model
 {
     //
@@ -16,10 +16,16 @@ class Order extends Model
         return $this->hasOne('App\Models\Addresses\Address', 'order_id');
     }
 
+    public function branch()
+    {
+        return $this->belongsToMany('App\Models\Branches\Branch','branch_id', 'id');
+    }
+
     public function created_by()
     {
         return $this->belongsTo('App\User', 'created_by', 'id');
     }
+    
     public function updated_by()
     {
         return $this->belongsTo('App\User', 'updated_by', 'id');
@@ -41,7 +47,6 @@ class Order extends Model
         return $this->hasMany('App\Models\Orders\Order_detail', 'order_id')->with(['products' , 'serial_numbers_purchase', 'serial_numbers_sell']);
     }
 
-
     public function serial_numbers()
     {
         /*return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail')->with(['product']);*/
@@ -55,7 +60,6 @@ class Order extends Model
 
         return $this->hasManyThrough('App\Models\Products\Serial_purchase', 'App\Models\Orders\Order_detail', 'order_id' , 'order_detail_id', 'id' , 'id');
     }
-
 
     public function serial_numbers_sell()
     {
@@ -79,20 +83,16 @@ class Order extends Model
         return $this->hasMany('App\Models\Orders\Order_return', 'order_id');
     }
 
-
     public function getSubTotal()
     {
         return $this->order_details()->sum(DB::raw('quantity * price'));
     }
-
 
     public function getDiscount()
     {
         // return  $this->coupon->istk ? $this->coupon->tk . ' AED' : $this->coupon->percentage. " %"  ;
         return  $this->discount . " %";
     }
-
-
 
     public function discounts()
     {
@@ -110,10 +110,8 @@ class Order extends Model
     public function paid()
     {
         /* return $this->getDiscount() == "" ? $this->getSubTotal() : $this->coupon->istk ? $this->getSubTotal() - $this->coupon->tk : ""; */
-
         return ( $this->transactions->where('is_debit', '=', true)->sum(DB::raw( 'tk' )) );
     }
-
 
     public function received()
     {
@@ -127,9 +125,6 @@ class Order extends Model
         /* return $this->getDiscount() == "" ? $this->getSubTotal() : $this->coupon->istk ? $this->getSubTotal() - $this->coupon->tk : ""; */
 
         return  round( (   $this->getTotal() -  ( $this->paid() - $this->received() )  ) , 2 );
-
-
-
         // $t =  (double) $this->getTotal();
     
         // return $t;
@@ -139,20 +134,13 @@ class Order extends Model
     public function balance_sell()
     {
         /* return $this->getDiscount() == "" ? $this->getSubTotal() : $this->coupon->istk ? $this->getSubTotal() - $this->coupon->tk : ""; */
-
         return  round( (   $this->getTotal() -  ( $this->received() - $this->paid() )  ) , 2 );
-
-
-
         // $t =  (double) $this->getTotal();
     
         // return $t;
     }
 
-
     public function daily_sales(){
         return $this->where('date' , '11')->get();
     }
-
-
 }

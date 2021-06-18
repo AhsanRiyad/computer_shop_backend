@@ -14,6 +14,12 @@ class Client extends Model
         return $this->hasMany('App\Models\Orders\Order', 'client_id');
     }
 
+    public function branch()
+    {
+        return $this->belongsToMany('App\Models\Branches\Branch');
+    }
+
+
     public function transactions()
     {
         return $this->hasMany('App\Models\Transactions\Transaction', 'client_id');
