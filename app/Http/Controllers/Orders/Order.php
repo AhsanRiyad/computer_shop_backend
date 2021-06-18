@@ -374,7 +374,7 @@ class Order extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(OV $request)
+    public function store1(OV $request)
     {
         //
         // C::create($request->all());
@@ -431,6 +431,26 @@ class Order extends Controller
         // $a->name = $request->name;
         // return $a->save();
         // return $user;
+    }  
+
+    public function store(OV $request)
+    {
+        // return $request;
+        // return 'storing orders';
+
+        // hint 1
+        // if( $request->mobile != '' && $request->contact_person != '' && $request->address != ''){
+        //     return 'save';
+        // }else{
+        //     return 'no save';
+        // }
+
+        // hint 2
+        // return $request->products[0]['quantity'];
+
+        // hint 3
+        // return $request->products[0]['serials'];
+
     }  
 
      /**
@@ -580,16 +600,7 @@ class Order extends Controller
             DB::rollback();
             // something went wrong
         }
-
-
-
-
-
-
     }
-
-
-
      /**
      * Store a newly created resource in storage.
      *
@@ -611,14 +622,9 @@ class Order extends Controller
         // return $request;
         // $s = S::whereIn('number', $request->serials)->get();
         // if (count($s) > 0) return response( $s , 403 );
-
-
         DB::beginTransaction();
-
         try {
-
-
-                    // return $request;
+                // return $request;
                 $order = O::find($id);
                 //delete all serial number related to the order
                 // $order->serial_numbers()->delete();
@@ -662,14 +668,6 @@ class Order extends Controller
             DB::rollback();
             // something went wrong
         }
-
-
-
-
-
-
-        
-
         // return $s['serials'];
 
         // $product->save($parameters);
@@ -679,13 +677,6 @@ class Order extends Controller
         // return $a->save();
         // return $user;
     }
-
-
-
-
-
-
-
 
     /**
      * Remove the specified resource from storage.

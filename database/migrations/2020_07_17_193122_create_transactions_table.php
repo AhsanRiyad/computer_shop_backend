@@ -35,8 +35,6 @@ class CreateTransactionsTable extends Migration
             $table->double('tk' , 8 , 2)->nullable();
             $table->string('date')->nullable();
 
-       
-
             $table->string('status')->nullable();
             
             $table->string('reference')->nullable();

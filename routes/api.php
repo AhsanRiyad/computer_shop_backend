@@ -91,12 +91,12 @@ Route::group([], function () {
         Route::get('dropdown/customer', 'Clients\Client@index_customer');
         Route::get('dropdown/client', 'Clients\Client@index_client');
         Route::get('dropdown/unit', 'Unit\Unit@dropdown');
+        Route::get('dropdown/bank', 'Banks\Bank@dropdown');
 
         Route::get('dropdown/product_n_serial', 'Products\Product@index_product_n_serial');
 
         //serials
         Route::get('serial', 'Products\Serial_number@index');
-
 
         //category
         Route::get('category', 'Categories\Category@index');
@@ -115,6 +115,15 @@ Route::group([], function () {
         Route::post('branch', 'Branches\Branch@store');
         Route::put('branch/{id}', 'Branches\Branch@update');
         Route::delete('branch/{id}', 'Branches\Branch@destroy');
+
+        //bank
+        Route::get('bank', 'Banks\Bank@index');
+        Route::get('bank/{id}', 'Banks\Bank@index');
+        Route::get('bank/{id}', 'Banks\Bank@show');
+        Route::post('bank', 'Banks\Bank@store');
+        Route::put('bank/{id}', 'Banks\Bank@update');
+        Route::delete('bank/{id}', 'Banks\Bank@destroy');
+
 
         //unit
         Route::get('unit', 'Units\Unit@index');
