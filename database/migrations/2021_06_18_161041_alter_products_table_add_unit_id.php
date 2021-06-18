@@ -17,7 +17,7 @@ class AlterProductsTableAddUnitId extends Migration
         Schema::table('products', function (Blueprint $table) {
             //
             $table->bigInteger('unit_id')->unsigned()->nullable();
-            $table->foreign('unit_id')->references('id')->on('unit');
+            $table->foreign('unit_id')->references('id')->on('units');
         });
     }
 

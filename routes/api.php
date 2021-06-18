@@ -90,6 +90,7 @@ Route::group([], function () {
         Route::get('dropdown/seller', 'Clients\Client@index_seller');
         Route::get('dropdown/customer', 'Clients\Client@index_customer');
         Route::get('dropdown/client', 'Clients\Client@index_client');
+        Route::get('dropdown/unit', 'Unit\Unit@dropdown');
 
         Route::get('dropdown/product_n_serial', 'Products\Product@index_product_n_serial');
 
@@ -107,7 +108,6 @@ Route::group([], function () {
         //bulk create
         Route::post('categories', 'Categories\Category@create');
 
-
         //branch
         Route::get('branch', 'Branches\Branch@index');
         Route::get('branch/{id}', 'Branches\Branch@index');
@@ -115,6 +115,14 @@ Route::group([], function () {
         Route::post('branch', 'Branches\Branch@store');
         Route::put('branch/{id}', 'Branches\Branch@update');
         Route::delete('branch/{id}', 'Branches\Branch@destroy');
+
+        //unit
+        Route::get('unit', 'Units\Unit@index');
+        Route::get('unit/{id}', 'Units\Unit@index');
+        Route::get('unit/{id}', 'Units\Unit@show');
+        Route::post('unit', 'Units\Unit@store');
+        Route::put('unit/{id}', 'Units\Unit@update');
+        Route::delete('unit/{id}', 'Units\Unit@destroy');
 
         //brand
         Route::get('brand', 'Brands\Brand@index');
@@ -174,7 +182,6 @@ Route::group([], function () {
         Route::post('sell', 'Orders\Order@store_sell');
         Route::put('sell/{id}', 'Orders\Order@update_sell');
 
-
         //Transaction
         Route::get('transaction', 'Transactions\Transaction@index');
         Route::get('transaction/{id}', 'Transactions\Transaction@show');
@@ -196,8 +203,6 @@ Route::group([], function () {
         Route::get('overallReports', 'Reports\Report@overallReports');
         Route::get('productReports/{product_id}', 'Reports\Report@productReports');
         Route::get('categoryReports/{category_id}', 'Reports\Report@categoryReports');
-
-        
     });
 });
 
