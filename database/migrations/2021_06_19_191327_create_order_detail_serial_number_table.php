@@ -15,7 +15,11 @@ class CreateOrderDetailSerialNumberTable extends Migration
     {
         Schema::table('order_detail_serial_number', function (Blueprint $table) {
             //
+            $table->bigInteger('order_detail_id')->unsigned()->nullable();
+            $table->foreign('order_detail_id')->references('id')->on('order_detail');
             
+            $table->bigInteger('serial_id')->unsigned()->nullable();
+            $table->foreign('serial_id')->references('id')->on('serial_numbers');
         });
     }
 
@@ -28,6 +32,7 @@ class CreateOrderDetailSerialNumberTable extends Migration
     {
         Schema::table('order_detail_serial_number', function (Blueprint $table) {
             //
+            Schema::dropIfExists('order_detail_serial_number');
         });
     }
 }
