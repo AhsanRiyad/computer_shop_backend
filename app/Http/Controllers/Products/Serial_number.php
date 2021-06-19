@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
 use App\Models\Products\Serial_number as S;
 use App\Models\Products\Serial_purchase;
 use App\Http\Resources\Products\Serial_number as R;
-
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SerialResource extends JsonResource

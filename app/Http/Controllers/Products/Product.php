@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Controllers\Products;
-
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,37 +9,14 @@ use App\Models\Products\Serial_number as S;
 use App\Models\Products\Serial_purchase;
 use App\Models\Products\Serial_sell;
 use App\Http\Resources\Products\Product as CR;
-use Illuminate\Http\Resources\Json\JsonResource;
 use DB;
 use App\Http\Others\SampleEmpty;
-
-class ProductResource extends JsonResource
-{
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function toArray($request)
-    {
-        // $client =  parent::toArray($request);
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'cost' => $this->cost,
-            'price' => $this->price,
-            'inStock' => $this->inStock(),
-            'quantity' => 1,
-            'having_serial' => $this->having_serial,
-        ];
-    }
-}
+use App\Http\Resources\Products\ProductResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 //
 
 class Serial_numberIn extends JsonResource
 {
-
     /**
 
      * Transform the resource into an array.
@@ -55,9 +30,7 @@ class Serial_numberIn extends JsonResource
      */
 
     public function toArray($request)
-
     {
-
         return [
 
             'id' => $this->id,
@@ -108,17 +81,14 @@ class Product extends Controller
         return ProductResource::collection(C::get(['name' , 'id', 'price' , 'cost', 'having_serial']));
     }
 
-
     public function search(Request $req)
     {
         // return $req->search;
-
         if (C::where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->count() > 0) {
             return CR::collection(C::with(['created_by'])->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->paginate(10));
         } else {
             return  json_encode(new SampleEmpty([]));
         };
-
         // return $req->q;
     }
 
@@ -134,7 +104,6 @@ class Product extends Controller
      */
 
     public function index_product_n_serial()
-
     {
 
         //

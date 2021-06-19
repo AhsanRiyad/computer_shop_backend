@@ -22,13 +22,11 @@ class CreateOrdersTable extends Migration
             $table->foreign('updated_by')->references('id')->on('users');
             $table->softDeletes();
 
-
             $table->string('status')->nullable();
             $table->string('correction_status')->nullable();
-            $table->string('type')->nullable();
+            $table->boolean('type')->nullable();
             $table->string('reference')->nullable();
             $table->integer('discount')->nullable();
-
 
             $table->text('notes')->nullable();
 
@@ -36,7 +34,6 @@ class CreateOrdersTable extends Migration
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
 
         });
-
         DB::statement('ALTER TABLE orders AUTO_INCREMENT = 10000;');
     }
 

@@ -14,6 +14,7 @@ use App\Http\Resources\Orders\Order as R;
 use Illuminate\Support\Facades\DB;
 use PDF;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\Products\ProductResource;
 
 class SampleEmpty
 {
@@ -437,7 +438,31 @@ class Order extends Controller
 
     public function orderReqiredData(){
         // return 'this is the required data';
-        return Product::all();
+        // return Product::get([
+        //     'name', 'id', 'price', 'cost', 'having_serial'
+        // ]);
+        $products =
+        ProductResource::collection(Product::get([
+            'name', 'id', 'price', 'cost', 'having_serial'
+        ]));
+
+        $collection = collect($products);
+
+        $filtered = $collection->filter(function ($value, $key) {
+            return $value['inStock'] > 0;
+        });
+
+        $filteredProducts = [];
+        $products =  $filtered->all();
+
+        foreach ($products as $p) {
+            if ($p['inStock'] > 0) {
+                $filteredProducts[] = $p;
+            }
+        }
+
+        return $filteredProducts;
+
     }
 
     public function store(OV $request)
