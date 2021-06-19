@@ -79,7 +79,6 @@ class Order extends Controller
                 $order['created'] = $order->created_by();
                 $order['updated'] = $order->updated_by();
 
-
                 $order_info['order'][] = $order;
             }
             $order_info['meta']['total'] = O::where('type', '=', 'purchase')->count();
@@ -104,7 +103,6 @@ class Order extends Controller
                 $order['received'] = $order->received();
                 $order['created'] = $order->created_by();
                 $order['updated'] = $order->updated_by();
-                
 
                 $order_info[] = $order;
             }
@@ -130,16 +128,15 @@ class Order extends Controller
         } else {
             return  json_encode(new SampleEmpty([]));
         };
-/* 
-        return O::whereHas('client', function ($query) use (&$req) {
-            return $query->where('name','like', '%' . $req->q . '%');
-        })->orWhere('id_customized', 'like', '%' . $req->q . '%')->count(); */
+        /* 
+            return O::whereHas('client', function ($query) use (&$req) {
+                return $query->where('name','like', '%' . $req->q . '%');
+            })->orWhere('id_customized', 'like', '%' . $req->q . '%')->count(); */
 
-/* 
+        /* 
         return O::with(['client' => function($q)  use (&$req){
             $q->where('name' ,'like', '%' . 'noora' . '%');
         }])->paginate(10); */
-
 
         // return $req->q;
     }
@@ -218,7 +215,6 @@ class Order extends Controller
                 $order['received'] = $order->received();
                 $order['created'] = $order->created_by();
                 $order['updated'] = $order->updated_by();
-                
 
                 $order_info[] = $order;
             }
@@ -270,17 +266,14 @@ class Order extends Controller
                 $order['received'] = $order->received();
                 $order['created'] = $order->created_by();
                 $order['updated'] = $order->updated_by();
-                
 
                 $order_info[] = $order;
             }
-
         });
         return R::collection( collect($order_info)->reverse()); */
     }
 
-
-/**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -293,7 +286,7 @@ class Order extends Controller
         //  return $menu->serial_numbers; 
         //  return $menu->products; 
         //  return $menu->order_details; 
-        // return $menu;
+        //  return $menu;
 
         /*
         return R::collection( O::with(['address', 'client' , 'order_details'])->get() );*/
@@ -343,7 +336,6 @@ class Order extends Controller
                 $order['created'] = $order->created_by();
                 $order['updated'] = $order->updated_by();
 
-
                 $order_info['order'][] = $order;
             }
             $order_info['meta']['total'] = O::where('type', '=', 'sell')->count();
@@ -351,10 +343,6 @@ class Order extends Controller
         } else {
             return $this->searchSell($req);
         }
-
-
-        
-        
     }
 
     /**
@@ -482,13 +470,25 @@ class Order extends Controller
 
         // hint 3
         // return $request->products[0]['serials'];
-        
-        foreach ($request->products as $value) {
-            return $value;
-        }
 
-        
+        // $order =  O::create([
+        //     'date' => $request->date,
+        //     'type' => $request->type,
+        //     'discount' => $request->discount,
+        //     'reference' => $request->reference,
+        //     'correction_status' => $request->correction_status,
+        //     'client_id' => $request->client_id,
+        //     'branch_id' => $request->branch_id,
+        // ]);
 
+        $order =  O::create($request->order);
+        
+        
+        // foreach ($request->products as $value) {
+        //      return $value;
+        // }
+
+        return $order;
 
         // return 'ok';
 
@@ -519,7 +519,6 @@ class Order extends Controller
         DB::beginTransaction();
 
         try {
-            
 
            $s = Serial_sell::whereIn('number', $request->serials)->get();
             if (count($s) > 0) return response( $s , 403 );
