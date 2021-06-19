@@ -28,7 +28,7 @@ class Order_detail extends Model
     
     public function serial_numbers()
     {
-        return $this->hasMany('App\Models\Products\Serial_number', 'order_detail_id');
+        return $this->belongsToMany('App\Models\Products\Serial_number');
     }
 
     public function serial_numbers_purchase()
