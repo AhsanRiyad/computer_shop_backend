@@ -16,7 +16,7 @@ class Serial_number extends Model
     
     public function order_detail()
     {
-        return $this->belongsTo('App\Models\Orders\Order_detail', 'order_detail_id', 'id');
+        return $this->belongsToMany('App\Models\Orders\Order_detail', 'order_detail_id', 'id');
     }
 
     public function order_return_detail()
