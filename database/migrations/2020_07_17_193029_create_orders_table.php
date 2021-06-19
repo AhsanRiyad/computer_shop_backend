@@ -24,6 +24,8 @@ class CreateOrdersTable extends Migration
 
             $table->string('status')->nullable();
             $table->string('correction_status')->nullable();
+            
+            //type purchase = 0, sell = 1
             $table->boolean('type')->nullable();
             $table->string('reference')->nullable();
             $table->integer('discount')->nullable();
