@@ -461,8 +461,6 @@ class Order extends Controller
         // hint 1
         // if( $request->mobile != '' && $request->contact_person != '' && $request->address != ''){
         //     return 'save';
-        // }else{
-        //     return 'no save';
         // }
 
         // hint 2
@@ -482,8 +480,10 @@ class Order extends Controller
         // ]);
 
         $order =  O::create($request->order);
-        
-        
+        if( $request->mobile != '' || $request->contact_person != '' || $request->address != ''){
+            $order->address()->create($request->address);
+        }
+
         // foreach ($request->products as $value) {
         //      return $value;
         // }
