@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Orders\Order as O;
 use App\Http\Requests\Orders\Order as OV;
-use App\Models\Products\Serial_number as S;
+use App\Models\Products\Serial_number;
 use App\Models\Products\Serial_sell;
 use App\Models\Products\Product;
 use App\Models\Products\Serial_purchase;
@@ -483,6 +483,17 @@ class Order extends Controller
         if( $request->mobile != '' || $request->contact_person != '' || $request->address != ''){
             $order->address()->create($request->address);
         }
+
+        foreach (collect($request->order_detail) as $product) {
+            # code...
+            // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+            $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+            $order_detail =  $order->order_details()->create($o);
+            $s = collect($product)->only(['serials'])->all();
+            $order_detail->serial_numbers()->createMany([['number' => 123]]);
+            // $serials[] = collect($product)->only(['serials'])->all();
+        }
+
 
         // foreach ($request->products as $value) {
         //      return $value;

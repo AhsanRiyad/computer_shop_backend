@@ -21,11 +21,12 @@ class CreateSerialNumbersTable extends Migration
             $table->foreign('created_by')->references('id')->on('users');
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->foreign('updated_by')->references('id')->on('users');
-            
+            $table->bigInteger('order_detail_id')->unsigned()->nullable();
+            $table->foreign('order_detail_id')->references('id')->on('order_details');
+
             $table->string('number')->nullable();
             /*$table->foreign('warranty_exchange_detail_id')->references('id')->on('warranty_exchange_details')->onDelete('cascade');*/
 
-            $table->string('status')->nullable();
         });
     }
 
