@@ -175,6 +175,7 @@ Route::group([], function () {
 
         //Order
         Route::get('order', 'Orders\Order@index');
+        Route::get('orderReqiredData', 'Orders\Order@orderReqiredData');
         Route::get('order/{id}', 'Orders\Order@show');
         Route::post('order', 'Orders\Order@store');
         Route::put('order/{id}', 'Orders\Order@update');

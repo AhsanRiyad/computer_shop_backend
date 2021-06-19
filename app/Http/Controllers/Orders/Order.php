@@ -8,6 +8,7 @@ use App\Models\Orders\Order as O;
 use App\Http\Requests\Orders\Order as OV;
 use App\Models\Products\Serial_number as S;
 use App\Models\Products\Serial_sell;
+use App\Models\Products\Product;
 use App\Models\Products\Serial_purchase;
 use App\Http\Resources\Orders\Order as R;
 use Illuminate\Support\Facades\DB;
@@ -428,10 +429,16 @@ class Order extends Controller
         // $product->save($parameters);
         // return $request;
         // $a = new P;
+
         // $a->name = $request->name;
         // return $a->save();
         // return $user;
     }  
+
+    public function orderReqiredData(){
+        // return 'this is the required data';
+        return Product::all();
+    }
 
     public function store(OV $request)
     {
@@ -450,6 +457,15 @@ class Order extends Controller
 
         // hint 3
         // return $request->products[0]['serials'];
+        
+        foreach ($request->products as $value) {
+            return $value;
+        }
+
+        
+
+
+        // return 'ok';
 
     }  
 

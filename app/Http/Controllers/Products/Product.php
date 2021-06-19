@@ -5,24 +5,14 @@ namespace App\Http\Controllers\Products;
 
 
 use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
-
 use App\Models\Products\Product as C;
-
 use App\Models\Products\Serial_number as S;
-
 use App\Models\Products\Serial_purchase;
-
 use App\Models\Products\Serial_sell;
-
 use App\Http\Resources\Products\Product as CR;
-
-
 use Illuminate\Http\Resources\Json\JsonResource;
-
 use DB;
-
 use App\Http\Others\SampleEmpty;
 
 class ProductResource extends JsonResource
@@ -89,13 +79,9 @@ class Serial_numberIn extends JsonResource
 class Product extends Controller
 {
     /**
-
      * Display a listing of the resource.
-
      *
-
      * @return \Illuminate\Http\Response
-
      */
 
     public function index(Request $req)
@@ -116,14 +102,10 @@ class Product extends Controller
     public function dropdown()
     {
         //
-
         // return response( CR::collection(C::all()) ) ;
-
         /*$products = C::with(['brand', 'category', 'created_by'])->get();*/
-
         // return CR::collection(C::with(['brand', 'category', 'created_by', 'order_detail'])->paginate(10));
         return ProductResource::collection(C::get(['name' , 'id', 'price' , 'cost', 'having_serial']));
-
     }
 
 
