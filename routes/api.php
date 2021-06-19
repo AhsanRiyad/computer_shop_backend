@@ -26,23 +26,24 @@ Route::post('/login', 'Api\AuthController@login'); */
 
 // /api/auth/
 
-/* Route::group([
-    'prefix' => 'auth'
-], function () {
-    
-    Route::post('login', 'Api\AuthController@login');
-    Route::post('signup', 'Api\AuthController@signup');
-
+/* 
     Route::group([
-        'middleware' => 'auth:api'
+        'prefix' => 'auth'
     ], function () {
         
-        Route::get('logout', 'Api\AuthController@logout');
-        Route::get('user', 'Api\AuthController@user');
+        Route::post('login', 'Api\AuthController@login');
+        Route::post('signup', 'Api\AuthController@signup');
 
-        Route::get('products', 'Products\Products@index');
+        Route::group([
+            'middleware' => 'auth:api'
+        ], function () {
+            
+            Route::get('logout', 'Api\AuthController@logout');
+            Route::get('user', 'Api\AuthController@user');
+
+            Route::get('products', 'Products\Products@index');
+        });
     });
-});
  */
 Route::group([], function () {
 
@@ -175,11 +176,13 @@ Route::group([], function () {
 
         //Order
         Route::get('order', 'Orders\Order@index');
+        Route::get('order/test', 'Orders\Order@test');
         Route::get('orderReqiredData', 'Orders\Order@orderReqiredData');
         Route::get('order/{id}', 'Orders\Order@show');
         Route::post('order', 'Orders\Order@store');
         Route::put('order/{id}', 'Orders\Order@update');
         Route::delete('order/{id}', 'Orders\Order@destroy');
+
 
         //print invoice
         Route::post('order/invoice/{order_id}', 'Orders\Order@printInvoice');

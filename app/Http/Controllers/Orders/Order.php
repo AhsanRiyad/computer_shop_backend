@@ -448,9 +448,22 @@ class Order extends Controller
                 $filteredProducts[] = $p;
             }
         }
-
         return $filteredProducts;
+    }
 
+    public function test(Request $request){
+        // $s = Serial_number::first();
+        // return $s;
+        $s = [];
+        Serial_number::chunk(200, function ($numbers) use (&$s) {
+            foreach ($numbers as $number) {
+                //
+                if($number->order_detail->order->type == 0){
+                    $s[] = [ 'number' => $number->number , 'product_id' => $number->order_detail->product_id ];
+                }
+            }
+        });
+        return $s;
     }
 
     public function store(OV $request)
@@ -478,33 +491,42 @@ class Order extends Controller
         //     'client_id' => $request->client_id,
         //     'branch_id' => $request->branch_id,
         // ]);
+        DB::beginTransaction();
+        try{
+            $order =  O::create($request->order);
+            if ($request->mobile != '' || $request->contact_person != '' || $request->address != '') {
+                $order->address()->create($request->address);
+            }
+            foreach (collect($request->order_detail) as $product) {
+                # code...
+                // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+                $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+                $order_detail =  $order->order_details()->create($o);
+                // $s = collect($product)->only(['serials'])->all();
 
-        $order =  O::create($request->order);
-        if( $request->mobile != '' || $request->contact_person != '' || $request->address != ''){
-            $order->address()->create($request->address);
+                foreach ($product['serials'] as $p) {
+                    # code...
+                    $order_detail->serial_numbers()->create([ 'number' => $p]);
+                }
+
+                // $order_detail->serial_numbers()->createMany([['number' => 123]]);
+                // $serials[] = collect($product)->only(['serials'])->all();
+            }
+            DB::commit();
+            return $order;
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response($e, 403);
+            // something went wrong
         }
-
-        foreach (collect($request->order_detail) as $product) {
-            # code...
-            // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-            $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-            $order_detail =  $order->order_details()->create($o);
-            $s = collect($product)->only(['serials'])->all();
-            $order_detail->serial_numbers()->createMany([['number' => 123]]);
-            // $serials[] = collect($product)->only(['serials'])->all();
-        }
-
-
         // foreach ($request->products as $value) {
         //      return $value;
         // }
 
-        return $order;
+        
 
         // return 'ok';
-
     }  
-
      /**
      * Store a newly created resource in storage.
      *
