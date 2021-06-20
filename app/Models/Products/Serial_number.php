@@ -8,15 +8,21 @@ class Serial_number extends Model
 {
     //
     protected $guarded = ['id'];
+    protected $table = 'serial_numbers';
 
     public function product()
     {
         return $this->belongsTo('App\Models\Products\Product', 'product_id', 'id');
     }
-    
+
+    // public function order_detail()
+    // {
+    //     return $this->belongsToMany('App\Models\Orders\Order_detail', 'order_detail_serial_number' , 'serial_id' , 'order_detail_id');
+    // }
+
     public function order_detail()
     {
-        return $this->belongsToMany('App\Models\Orders\Order_detail', 'order_detail_serial_number' , 'serial_id' , 'order_detail_id');
+        return $this->belongsTo('App\Models\Orders\Order_detail',);
     }
 
     public function order_return_detail()

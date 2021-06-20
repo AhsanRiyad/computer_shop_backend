@@ -454,16 +454,23 @@ class Order extends Controller
     public function test(Request $request){
         // $s = Serial_number::first();
         // return $s;
-        $s = [];
-        Serial_number::chunk(200, function ($numbers) use (&$s) {
+        $purchase = [];
+        $sell = [];
+
+        $serial =  Serial_number::first();
+        return $serial->order_detail;
+
+        Serial_number::chunk(200, function ($numbers) use (&$purchase, &$sell) {
             foreach ($numbers as $number) {
                 //
-                if($number->order_detail->order->type == 0){
-                    $s[] = [ 'number' => $number->number , 'product_id' => $number->order_detail->product_id ];
-                }
+                // if($number->order_detail->order->type == 0){
+                //     $purchase[] = [ 'number' => $number->number, 'product_id' => $number->order_detail->product_id ];
+                // }else{
+                //     $sell[] = [ 'number' => $number->number, 'product_id' => $number->order_detail->product_id ];
+                // }
             }
         });
-        return $s;
+        return $purchase;
     }
 
     public function store(OV $request)

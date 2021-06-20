@@ -25,11 +25,15 @@ class Order_detail extends Model
     {
         return $this->belongsTo('App\Models\Products\Product', 'product_id', 'id');
     }
-    
+
     public function serial_numbers()
     {
-        return $this->belongsToMany('App\Models\Products\Serial_number', 'order_detail_serial_number',  'order_detail_id','serial_id' );
+        return $this->hasMany('App\Models\Products\Serial_number');
     }
+    // public function serial_numbers()
+    // {
+    //     return $this->belongsToMany('App\Models\Products\Serial_number', 'order_detail_serial_number',  'order_detail_id','serial_id' );
+    // }
 
     public function serial_numbers_purchase()
     {
