@@ -456,21 +456,19 @@ class Order extends Controller
         // return $s;
         $purchase = [];
         $sell = [];
-
-        $serial =  Serial_number::first();
-        return $serial->order_detail;
-
+        // $serial =  Serial_number::first();
+        // return $serial->order_detail->order->type;
         Serial_number::chunk(200, function ($numbers) use (&$purchase, &$sell) {
             foreach ($numbers as $number) {
-                //
-                // if($number->order_detail->order->type == 0){
-                //     $purchase[] = [ 'number' => $number->number, 'product_id' => $number->order_detail->product_id ];
-                // }else{
-                //     $sell[] = [ 'number' => $number->number, 'product_id' => $number->order_detail->product_id ];
-                // }
+                
+                if($number->order_detail->order->type == 0 && $number->order_detail->order->branch_id == 1  ){
+                    $purchase[] = [ 'number' => $number->number, 'product_id' => $number->order_detail->product_id ];
+                }else if($number->order_detail->order->type == 1 && $number->order_detail->order->branch_id == 1){
+                    $sell[] = [ 'number' => $number->number, 'product_id' => $number->order_detail->product_id ];
+                }
             }
         });
-        return $purchase;
+        return ['purchase' => $purchase , 'sell' => $purchase ];
     }
 
     public function store(OV $request)
@@ -513,7 +511,7 @@ class Order extends Controller
 
                 foreach ($product['serials'] as $p) {
                     # code...
-                    $order_detail->serial_numbers()->create([ 'number' => $p]);
+                    $order_detail->serial_numbers()->create([ 'number' => $p ]);
                 }
 
                 // $order_detail->serial_numbers()->createMany([['number' => 123]]);
