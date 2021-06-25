@@ -635,10 +635,51 @@ class Order extends Controller
 
     public function update(Request $request, $id)
     {
-        $order = O::find($id);
-        $order->address()->delete();
-        $address = $order->address()->create($request->address);
-        return $order;
+
+        // return $request;
+
+        DB::beginTransaction();
+        try {
+            //code...
+            $order = O::find($id);
+
+            $order->address()->delete();
+            if ($request->address['name'] != '' || $request->address['mobile'] != '' || $request->address['address'] != '') {
+                $order->address()->create($request->address);
+            }
+            $order->serial_numbers()->delete();
+
+            $order->update($request->order);
+            $order->order_details()->delete();
+
+            foreach (collect($request->order_detail) as $product) {
+                # code...
+                // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+                $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+                $order_detail =  $order->order_details()->updateOrCreate(["product_id" => $o['product_id']], $o);
+                // $serials = collect($product)->only(['serials'])->all();
+
+                foreach ($product['serials'] as $p) {
+                    # code...
+                    $order_detail->serial_numbers()->create(['number' => $p]);
+                }
+
+                // $order_detail->serial_numbers()->createMany($s['serials']);
+
+                // $serials[] = collect($product)->only(['serials'])->all();
+            }
+            $order->refresh();
+            $order->updated_by = Auth::id();
+            $order->date = $request->order['date'];
+            $order->save();
+            DB::commit();
+            return $order;
+        } catch (\Exception $e) {
+            //throw $th;
+            DB::rollback();
+            return response($e, 403);
+        }
+      
         // return $id;
     }
 
