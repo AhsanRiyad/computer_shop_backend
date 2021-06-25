@@ -4,8 +4,12 @@ namespace App\Models\Orders;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Order extends Model
 {
+
+    use SoftDeletes;
     //
     protected $guarded = ['id'];
 

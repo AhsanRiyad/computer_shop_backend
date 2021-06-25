@@ -59,7 +59,7 @@ class Order extends Controller
             $order_info = [];
             // return O::find(1)->getTotal();
 
-            $orders = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell'])->where('type', '=', 'purchase')->orderBy('id', 'desc')->paginate(10);
+            $orders = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell'])->where('type', '=', 0)->orderBy('id', 'desc')->paginate(10);
 
             // $a = R::collection($orders);
             // var_dump($a);
@@ -174,16 +174,9 @@ class Order extends Controller
 
     public function searchResultsPurchase($searchResults){
         $order_info = [];
-        // return O::find(1)->getTotal();
 
         $orders = $searchResults->with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell'])->orderBy('id', 'desc')->paginate(10);
 
-        // $a = R::collection($orders);
-        // var_dump($a);
-        // return $orders['total'];
-        // return R::collection($orders);
-        // dd(R::collection($orders));
-        // $order_info['meta'] = R::collection($orders)['meta'];
         foreach ($orders as $order) {
             $order['id_customized'] = 'HCC-' . $order->id_customized;
             $order['total'] = $order->getTotal();
@@ -199,28 +192,6 @@ class Order extends Controller
         }
         $order_info['meta']['total'] = $searchResults->count();
         return R::collection(collect($order_info)->reverse());
-        // $b['meta'] = 10;
-        // return $b;
-        /* O::with(['address', 'client' , 'created_by', 'updated_by' ,'order_details', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('type', '=' ,'purchase')->chunk( 200 , function($result) use (&$order_info){
-            
-            foreach ($result as $order) {
-                # code...
-
-                $order['id_customized'] =  'HCC-' . $order->id;
-                $order['total'] = $order->getTotal();
-                $order['balance'] = $order->balance();
-                $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount() ;
-                $order['subtotal'] = $order->getSubTotal();
-                $order['paid'] = $order->paid();
-                $order['received'] = $order->received();
-                $order['created'] = $order->created_by();
-                $order['updated'] = $order->updated_by();
-
-                $order_info[] = $order;
-            }
-
-        });
-        return R::collection( collect($order_info)->reverse()); */
     }
 
     public function searchResultsSell($searchResults){
@@ -317,7 +288,7 @@ class Order extends Controller
             $order_info = [];
             // return O::find(1)->getTotal();
 
-            $orders = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell.order_detail'])->where('type', '=', 'sell')->paginate(10);
+            $orders = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell.order_detail'])->where('type', '=', 1)->paginate(10);
 
             // $a = R::collection($orders);
             // var_dump($a);
@@ -358,72 +329,7 @@ class Order extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store1(OV $request)
-    {
-        //
-        // C::create($request->all());
-        // return new CR($request->all());
-        // return new CR($request->order_detail);
-        // $order = new O;
-        // for updated
-        // return $request->serials;
-        //check if serials already used
-        // return $request->order;
-        
-        // return $request;
-
-        DB::beginTransaction();
-
-        try {
-            $s = Serial_purchase::whereIn('number', $request->serials)->get();
-            if (count($s) > 0) return response( $s , 403 );
-
-            $order = O::create($request->order);
-            $address = $order->address()->create($request->address);
-            // $address = O::create($request->address);
-            foreach (collect($request->order_detail) as $product) {
-                # code...
-                // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-                $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-                $order_detail =  $order->order_details()->create($o);
-                $s = collect($product)->only(['serials'])->all();
-                $order_detail->serial_numbers_purchase()->createMany($s['serials']);
-                // $serials[] = collect($product)->only(['serials'])->all();
-            }
-
-            $order->refresh();
-            $order->created_by = Auth::id();;
-            $order->id_customized = date('Y') . (1000000000 + $order->id);
-            $order->save();
-            // return $order_detail;
-            DB::commit();
-
-            // $order->id_customized = ''
-            return $order;
-            // all good
-        } catch (\Exception $e) {
-            DB::rollback();
-            return response($e , 403);
-            // something went wrong
-        }
-
-        // return $s['serials'];
-
-        // $product->save($parameters);
-        // return $request;
-        // $a = new P;
-
-        // $a->name = $request->name;
-        // return $a->save();
-        // return $user;
-    }  
-
+ 
     public function orderReqiredData(){
         // return 'this is the required data';
         // return Product::get([
@@ -551,25 +457,7 @@ class Order extends Controller
         return new R(O::find($id));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-
+  
     public function store(OV $request)
     {
 
@@ -679,60 +567,7 @@ class Order extends Controller
             DB::rollback();
             return response($e, 403);
         }
-      
         // return $id;
-    }
-
-
-    public function update1(Request $request, $id)
-    {
-        DB::beginTransaction();
-
-        try {
-
-            $order = O::find($id);
-            // delete all serial number related to the order
-            // $order->serial_numbers()->delete();
-            // return 0;
-            $order->address()->delete();
-            $address = $order->address()->create( $request->address);
-            /* collect($order->order_detail)->each( function( $item , $key ){
-                $item->serial_numbers()->delete();
-            }); */
-            $order->serial_numbers_purchase()->delete();
-            // return $request->order;
-            $order->update($request->order );
-            $order->order_details()->delete();
-
-            foreach (collect($request->order_detail) as $product) {
-                # code...
-                // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-                $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-                $order_detail =  $order->order_details()->updateOrCreate( [ "product_id"=> $o['product_id'] ], $o);
-                $serials = collect($product)->only(['serials'])->all();
-
-                foreach ( $serials['serials'] as $s ) {
-                    # code...
-                    $order_detail->serial_numbers_purchase()->updateOrCreate([ "number" => $s["number"] ], $s);
-                }
-
-                // $order_detail->serial_numbers()->createMany($s['serials']);
-
-                // $serials[] = collect($product)->only(['serials'])->all();
-            }
-            $order->refresh();
-            $order->updated_by = Auth::id();
-            $order->save();
-            DB::commit();
-            return $order; 
-
-
-            // all good
-        } catch (\Exception $e) {
-            response($e , 403);
-            DB::rollback();
-            // something went wrong
-        }
     }
      /**
      * Store a newly created resource in storage.
