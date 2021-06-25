@@ -471,67 +471,7 @@ class Order extends Controller
         return ['purchase' => $purchase , 'sell' => $purchase ];
     }
 
-    public function store(OV $request)
-    {
-        // return $request;
-        // return 'storing orders';
 
-        // hint 1
-        // if( $request->mobile != '' && $request->contact_person != '' && $request->address != ''){
-        //     return 'save';
-        // }
-
-        // hint 2
-        // return $request->products[0]['quantity'];
-
-        // hint 3
-        // return $request->products[0]['serials'];
-
-        // $order =  O::create([
-        //     'date' => $request->date,
-        //     'type' => $request->type,
-        //     'discount' => $request->discount,
-        //     'reference' => $request->reference,
-        //     'correction_status' => $request->correction_status,
-        //     'client_id' => $request->client_id,
-        //     'branch_id' => $request->branch_id,
-        // ]);
-        DB::beginTransaction();
-        try{
-            $order =  O::create($request->order);
-            if ($request->mobile != '' || $request->contact_person != '' || $request->address != '') {
-                $order->address()->create($request->address);
-            }
-            foreach (collect($request->order_detail) as $product) {
-                # code...
-                // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-                $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
-                $order_detail =  $order->order_details()->create($o);
-                // $s = collect($product)->only(['serials'])->all();
-
-                foreach ($product['serials'] as $p) {
-                    # code...
-                    $order_detail->serial_numbers()->create([ 'number' => $p ]);
-                }
-
-                // $order_detail->serial_numbers()->createMany([['number' => 123]]);
-                // $serials[] = collect($product)->only(['serials'])->all();
-            }
-            DB::commit();
-            return $order;
-        } catch (\Exception $e) {
-            DB::rollback();
-            return response($e, 403);
-            // something went wrong
-        }
-        // foreach ($request->products as $value) {
-        //      return $value;
-        // }
-
-        
-
-        // return 'ok';
-    }  
      /**
      * Store a newly created resource in storage.
      *
@@ -629,14 +569,88 @@ class Order extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function store(OV $request)
+    {
+
+        // return $request;
+        // return 'storing orders';
+
+        // hint 1
+        // if( $request->mobile != '' && $request->contact_person != '' && $request->address != ''){
+        //     return 'save';
+        // }
+
+        // hint 2
+        // return $request->products[0]['quantity'];
+
+        // hint 3
+        // return $request->products[0]['serials'];
+
+        // $order =  O::create([
+        //     'date' => $request->date,
+        //     'type' => $request->type,
+        //     'discount' => $request->discount,
+        //     'reference' => $request->reference,
+        //     'correction_status' => $request->correction_status,
+        //     'client_id' => $request->client_id,
+        //     'branch_id' => $request->branch_id,
+        // ]);
+        DB::beginTransaction();
+        try {
+            $order =  O::create($request->order);
+            if ($request->address['name'] != '' || $request->address['mobile'] != '' || $request->address['address'] != '') {
+                $order->address()->create($request->address);
+            }
+            foreach (collect($request->order_detail) as $product) {
+                # code...
+                // $order_detail[] = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+                $o = collect($product)->only(['product_id', 'quantity', 'price'])->all();
+                $order_detail =  $order->order_details()->create($o);
+                // $s = collect($product)->only(['serials'])->all();
+
+                foreach ($product['serials'] as $p) {
+                    # code...
+                    $order_detail->serial_numbers()->create(['number' => $p]);
+                }
+
+                // $order_detail->serial_numbers()->createMany([['number' => 123]]);
+                // $serials[] = collect($product)->only(['serials'])->all();
+            }
+            DB::commit();
+            return $order;
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response($e, 403);
+            // something went wrong
+        }
+        // foreach ($request->products as $value) {
+        //      return $value;
+        // }
+
+
+
+        // return 'ok';
+    }  
+
     public function update(Request $request, $id)
+    {
+        $order = O::find($id);
+        $order->address()->delete();
+        $address = $order->address()->create($request->address);
+        return $order;
+        // return $id;
+    }
+
+
+    public function update1(Request $request, $id)
     {
         DB::beginTransaction();
 
         try {
 
             $order = O::find($id);
-            //delete all serial number related to the order
+            // delete all serial number related to the order
             // $order->serial_numbers()->delete();
             // return 0;
             $order->address()->delete();
@@ -704,7 +718,7 @@ class Order extends Controller
         try {
                 // return $request;
                 $order = O::find($id);
-                //delete all serial number related to the order
+                // delete all serial number related to the order
                 // $order->serial_numbers()->delete();
                 // return 0;
                 $order->address()->delete();
