@@ -131,7 +131,8 @@ class Order extends Controller
         /* 
             return O::whereHas('client', function ($query) use (&$req) {
                 return $query->where('name','like', '%' . $req->q . '%');
-            })->orWhere('id_customized', 'like', '%' . $req->q . '%')->count(); */
+            })->orWhere('id_customized', 'like', '%' . $req->q . '%')->count(); 
+        */
 
         /* 
         return O::with(['client' => function($q)  use (&$req){
@@ -516,10 +517,8 @@ class Order extends Controller
         //      return $value;
         // }
 
-
-
         // return 'ok';
-    }  
+    } 
 
     public function update(Request $request, $id)
     {

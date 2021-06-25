@@ -174,6 +174,7 @@ Route::group([], function () {
         //bulk create
         Route::post('clients', 'Clients\Client@create');
 
+        
         //Order
         Route::get('order', 'Orders\Order@index');
         Route::get('order/test', 'Orders\Order@test');
@@ -192,8 +193,7 @@ Route::group([], function () {
 
         //sell
         Route::get('sell', 'Orders\Order@index_sell');
-        Route::post('sell', 'Orders\Order@store_sell');
-        Route::put('sell/{id}', 'Orders\Order@update_sell');
+ 
 
         //Transaction
         Route::get('transaction', 'Transactions\Transaction@index');
