@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Models\Microcredit\Dps;
+namespace App\Models\Microcredit\Loans;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Dps extends Model
+
+class Loan extends Model
 {
     //
     use SoftDeletes;
@@ -20,12 +21,12 @@ class Dps extends Model
         return $this->belongsTo('App\Models\Microcredit\Members\Member', 'member_id', 'id');
     }
 
-    public function nominee()
+    public function grantor()
     {
-        return $this->belongsTo('App\Models\Microcredit\Nominee\Nominee', 'nominee_id', 'id');
+        return $this->belongsTo('App\Models\Microcredit\Grantors\Grantor', 'grantor_id', 'id');
     }
 
-    public function collect()
+    public function collector()
     {
         return $this->belongsTo('App\Models\Microcredit\Employees\Employee', 'collect_id', 'id');
     }
