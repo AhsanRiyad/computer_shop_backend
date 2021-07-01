@@ -16,6 +16,11 @@ class Member extends Model
         return $this->hasMany('App\Models\Microcredit\TransactionMicrocredit', 'member_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id', 'id');
+    }
+
     public function dps()
     {
         return $this->hasMany('App\Models\Microcredit\Dps\Dps', 'member_id');

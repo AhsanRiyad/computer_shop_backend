@@ -227,6 +227,37 @@ Route::group([], function () {
         Route::put('member/{id}', 'Microcredit\Members\Member@update');
         Route::delete('member/{id}', 'Microcredit\Members\Member@destroy');
 
+        
+        //Loan
+        Route::get('loan', 'Microcredit\Loans\Loan@index');
+        Route::get('loan/{id}', 'Microcredit\Loans\Loan@show');
+        Route::post('loan', 'Microcredit\Loans\Loan@store');
+        Route::put('loan/{id}', 'Microcredit\Loans\Loan@update');
+        Route::delete('loan/{id}', 'Microcredit\Loans\Loan@destroy');
+
+
+        //Grantors
+        Route::get('grantor', 'Microcredit\Grantors\Grantor@index');
+        Route::get('grantor/{id}', 'Microcredit\Grantors\Grantor@show');
+        Route::post('grantor', 'Microcredit\Grantors\Grantor@store');
+        Route::put('grantor/{id}', 'Microcredit\Grantors\Grantor@update');
+        Route::delete('grantor/{id}', 'Microcredit\Grantors\Grantor@destroy');
+
+
+        //nominee
+        Route::get('nominee', 'Microcredit\Nominee\Nominee@index');
+        Route::get('nominee/{id}', 'Microcredit\Nominee\Nominee@show');
+        Route::post('nominee', 'Microcredit\Nominee\Nominee@store');
+        Route::put('nominee/{id}', 'Microcredit\Nominee\Nominee@update');
+        Route::delete('nominee/{id}', 'Microcredit\Nominee\Nominee@destroy');
+
+        //nominee
+        Route::get('employee', 'Employees\Employee@index');
+        Route::get('employee/{id}', 'Employees\Employee@show');
+        Route::post('employee', 'Employees\Employee@store');
+        Route::put('employee/{id}', 'Employees\Employee@update');
+        Route::delete('employee/{id}', 'Employees\Employee@destroy');
+
     });
 });
 

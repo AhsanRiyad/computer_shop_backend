@@ -8,7 +8,7 @@ use App\Http\Others\SampleEmpty;
 use App\Models\Microcredit\Members\Member as B;
 use App\Http\Resources\Microcredit\Members\Member as BR;
 use DB;
-
+use App\User;
 
 class Member extends Controller
 {
@@ -33,19 +33,6 @@ class Member extends Controller
     {
         //
         return BR::collection(B::get(['name', 'id']));
-    }
-
-    public function search(Request $req)
-    {
-        // return $req->search;
-
-        if (B::where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->count() > 0) {
-            return BR::collection(B::with(['created_by'])->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->paginate(10));
-        } else {
-            return  json_encode(new SampleEmpty([]));
-        };
-
-        // return $req->q;
     }
 
     /**
@@ -75,6 +62,8 @@ class Member extends Controller
     public function store(Request $request)
     {
         //
+        
+
         B::create($request->all());
         return new BR($request->all());
 

@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Brands;
+namespace App\Http\Controllers\Employees;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Brands\Brand as B;
-use App\Http\Resources\Brands\Brand as BR;
+use App\Models\Employees\Employee as B;
+use App\Http\Resources\Employees\Employee as BR;
 use DB;
 use App\Http\Others\SampleEmpty;
 use App\User;
 
-class Brand extends Controller
+class Employee extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -73,8 +73,18 @@ class Brand extends Controller
     public function store(Request $request)
     {
         //
-        B::create($request->all());
-        return new BR($request->all());
+        $validatedData =  $request->validate([
+            "name" => "required|max:55",
+            "email" => "required",
+            "password" => "required|max:100"
+            // "password" => "required|confirmed"
+        ]);
+
+        $validatedData["password"] = bcrypt($validatedData["password"]);
+        $User = User::create($validatedData);
+
+        $employee =  $User->employees()->create($request->all());
+        return new BR($employee);
 
         // $product->save($parameters);
 
@@ -119,10 +129,22 @@ class Brand extends Controller
     {
         //
         // C::where('id' , $id)->update($request->all()));
-        if ( B::where('id' , $id)->update( $request->all() ) )  {
-            return new BR( B::find($id) );
-        };
-        abort(403, 'Not found');
+        // if ( B::where('id' , $id)->update( $request->all() ) )  {
+        //     return new BR( B::find($id) );
+        // };
+
+        // $employee = B::find($id);
+        // return $employee;
+
+        $employee = B::find($id);
+        if(isset($employee)){
+            $employee->update(["salary" => $request->salary]);
+            $employee->user()->update(["name" => $request->name, "email" => $request->email, "password" => $request->password]);
+            return new BR(B::find($id));
+        }else{
+            abort(403, 'Not found');
+        }
+        // abort(403, 'Not found');
     }
 
     /**

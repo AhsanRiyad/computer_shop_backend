@@ -23,8 +23,8 @@ class CreateLoansTable extends Migration
             $table->foreign('updated_by')->references('id')->on('users');
             $table->softDeletes();
 
-            $table->bigInteger('grantor')->unsigned()->nullable();
-            $table->foreign('grantor')->references('id')->on('grantors');
+            $table->bigInteger('grantor_id')->unsigned()->nullable();
+            $table->foreign('grantor_id')->references('id')->on('grantors');
 
             $table->bigInteger('collector_id')->unsigned()->nullable();
             $table->foreign('collector_id')->references('id')->on('employees');

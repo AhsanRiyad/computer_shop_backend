@@ -10,7 +10,7 @@ class Loan extends Model
 {
     //
     use SoftDeletes;
-
+    protected $guarded = ['id'];
     public function transactionMicrocredit()
     {
         return $this->morphMany('App\Models\Microcredit\TransactionMicrocredit\TransactionMicrocredit', 'transactionable');

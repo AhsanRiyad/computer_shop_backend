@@ -16,6 +16,7 @@ class AuthController extends Controller
             "password" => "required|max:100"
             // "password" => "required|confirmed"
         ]);
+        
         $validatedData["password"] = bcrypt($validatedData["password"]);
         $User = User::create($validatedData);
 
