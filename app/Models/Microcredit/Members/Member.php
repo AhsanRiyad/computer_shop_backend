@@ -9,6 +9,7 @@ class Member extends Model
 {
     //
     use SoftDeletes;
+    protected $guarded = ['id'];
 
     public function transactionMicrocredit()
     {

@@ -216,6 +216,17 @@ Route::group([], function () {
         Route::get('overallReports', 'Reports\Report@overallReports');
         Route::get('productReports/{product_id}', 'Reports\Report@productReports');
         Route::get('categoryReports/{category_id}', 'Reports\Report@categoryReports');
+
+
+        //Microcredit
+
+        //Member
+        Route::get('member', 'Microcredit\Members\Member@index');
+        Route::get('member/{id}', 'Microcredit\Members\Member@show');
+        Route::post('member', 'Microcredit\Members\Member@store');
+        Route::put('member/{id}', 'Microcredit\Members\Member@update');
+        Route::delete('member/{id}', 'Microcredit\Members\Member@destroy');
+
     });
 });
 
