@@ -10,7 +10,7 @@ use App\Http\Resources\Microcredit\Grantors\Grantor as BR;
 use DB;
 
 
-class Grantors extends Controller
+class Grantor extends Controller
 {
     //
     //
