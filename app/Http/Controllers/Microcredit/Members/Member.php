@@ -4,16 +4,13 @@ namespace App\Http\Controllers\Microcredit\Members;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Others\SampleEmpty;
 use App\Models\Microcredit\Members\Member as B;
 use App\Http\Resources\Microcredit\Members\Member as BR;
 use DB;
-use App\User;
 
 class Member extends Controller
 {
     //
-
     /**
      * Display a listing of the resource.
      *
@@ -62,8 +59,6 @@ class Member extends Controller
     public function store(Request $request)
     {
         //
-        
-
         B::create($request->all());
         return new BR($request->all());
 

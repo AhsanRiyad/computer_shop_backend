@@ -24,6 +24,7 @@ class CreateNomineeTable extends Migration
             $table->softDeletes();
 
             $table->string('name')->nullable();
+            $table->string('relation')->nullable();
             $table->date('dob')->nullable();
             $table->string('nid')->nullable();
             $table->integer('percentage')->nullable();

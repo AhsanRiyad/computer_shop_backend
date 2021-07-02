@@ -234,6 +234,14 @@ Route::group([], function () {
         Route::post('loan', 'Microcredit\Loans\Loan@store');
         Route::put('loan/{id}', 'Microcredit\Loans\Loan@update');
         Route::delete('loan/{id}', 'Microcredit\Loans\Loan@destroy');
+        
+
+        //Loan
+        Route::get('dps', 'Microcredit\Dps\Dps@index');
+        Route::get('dps/{id}', 'Microcredit\Dps\Dps@show');
+        Route::post('dps', 'Microcredit\Dps\Dps@store');
+        Route::put('dps/{id}', 'Microcredit\Dps\Dps@update');
+        Route::delete('dps/{id}', 'Microcredit\Dps\Dps@destroy');
 
 
         //Grantors
@@ -250,6 +258,7 @@ Route::group([], function () {
         Route::post('nominee', 'Microcredit\Nominee\Nominee@store');
         Route::put('nominee/{id}', 'Microcredit\Nominee\Nominee@update');
         Route::delete('nominee/{id}', 'Microcredit\Nominee\Nominee@destroy');
+
 
         //nominee
         Route::get('employee', 'Employees\Employee@index');

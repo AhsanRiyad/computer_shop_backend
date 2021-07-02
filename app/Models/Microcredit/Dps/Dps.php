@@ -22,9 +22,9 @@ class Dps extends Model
 
     public function nominee()
     {
-        return $this->belongsTo('App\Models\Microcredit\Nominee\Nominee', 'nominee_id', 'id');
+        return $this->morphOne('App\Models\Microcredit\Nominee\Nominee', 'nomineeable');
     }
-
+    
     public function collect()
     {
         return $this->belongsTo('App\Models\Microcredit\Employees\Employee', 'collect_id', 'id');

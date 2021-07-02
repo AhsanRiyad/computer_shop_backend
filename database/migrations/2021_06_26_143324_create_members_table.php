@@ -28,12 +28,6 @@ class CreateMembersTable extends Migration
             $table->string('address')->nullable();
             $table->string('photo')->nullable();
             $table->string('admission_fee')->nullable();
-            $table->string('guardian')->nullable();
-            $table->string('guardian_mobile')->nullable();
-            $table->string('nominee')->nullable();
-            $table->string('nominee_nid')->nullable();
-            $table->string('nominee_relation')->nullable();
-            $table->date('nominee_dob')->nullable();
             $table->string('nid')->nullable();
         });
     }
