@@ -9,6 +9,9 @@ class Dps extends Model
 {
     //
     use SoftDeletes;
+    protected $table = 'dps';
+    protected $guarded = ['id'];
+
 
     public function transactionMicrocredit()
     {
@@ -22,11 +25,11 @@ class Dps extends Model
 
     public function nominee()
     {
-        return $this->morphOne('App\Models\Microcredit\Nominee\Nominee', 'nomineeable');
+        return $this->belongsTo('App\Models\Microcredit\Nominee\Nominee', 'nominee_id' , 'id');
     }
     
-    public function collect()
+    public function collector()
     {
-        return $this->belongsTo('App\Models\Microcredit\Employees\Employee', 'collect_id', 'id');
+        return $this->belongsTo('App\Models\Microcredit\Employees\Employee', 'collector_id', 'id');
     }
 }

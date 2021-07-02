@@ -219,7 +219,6 @@ Route::group([], function () {
 
 
         //Microcredit
-
         //Member
         Route::get('member', 'Microcredit\Members\Member@index');
         Route::get('member/{id}', 'Microcredit\Members\Member@show');
@@ -236,7 +235,7 @@ Route::group([], function () {
         Route::delete('loan/{id}', 'Microcredit\Loans\Loan@destroy');
         
 
-        //Loan
+        //dps
         Route::get('dps', 'Microcredit\Dps\Dps@index');
         Route::get('dps/{id}', 'Microcredit\Dps\Dps@show');
         Route::post('dps', 'Microcredit\Dps\Dps@store');
