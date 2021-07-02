@@ -9,6 +9,7 @@ class Nominee extends Model
     //
     use SoftDeletes;
     protected $guarded = ['id'];
+    protected $table = "nominee";
 
     public function dps()
     {

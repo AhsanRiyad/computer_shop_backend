@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Microcredit\Members;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Microcredit\Members\Member as B;
+use App\Models\Microcredit\Nominee\Nominee;
 use App\Http\Resources\Microcredit\Members\Member as BR;
 use DB;
 
@@ -59,16 +60,10 @@ class Member extends Controller
     public function store(Request $request)
     {
         //
-        B::create($request->all());
-        return new BR($request->all());
-
-        // $product->save($parameters);
-
-        // return $request;
-        // $a = new P;
-        // $a->name = $request->name;
-        // return $a->save();
-        // return $user;
+        $member = B::create($request->member);
+        $member->nominee()->associate(Nominee::create($request->nominee));
+        $member->save();
+        return $member->refresh();
     }
 
     /**

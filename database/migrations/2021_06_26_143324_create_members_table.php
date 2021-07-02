@@ -26,6 +26,7 @@ class CreateMembersTable extends Migration
             $table->string('name')->nullable();
             $table->date('dob')->nullable();
             $table->string('address')->nullable();
+            $table->string('mobile')->nullable();
             $table->string('photo')->nullable();
             $table->string('admission_fee')->nullable();
             $table->string('nid')->nullable();

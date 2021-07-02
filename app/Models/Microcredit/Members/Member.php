@@ -21,10 +21,9 @@ class Member extends Model
         return $this->belongsTo('App\User', 'user_id', 'id');
     }
 
-
     public function nominee()
     {
-        return $this->morphOne('App\Models\Microcredit\Nominee\Nominee', 'nomineeable');
+        return $this->belongsTo('App\Models\Microcredit\Nominee\Nominee', 'nominee_id', 'id');
     }
 
     public function dps()
