@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Others\SampleEmpty;
 use App\Models\Microcredit\Loans\Loan as B;
+use App\Models\Microcredit\Grantors\Grantor;
 use App\Http\Resources\Microcredit\Loans\Loan as BR;
 use DB;
 
@@ -65,16 +66,10 @@ class Loan extends Controller
     public function store(Request $request)
     {
         //
-        B::create($request->all());
-        return new BR($request->all());
-
-        // $product->save($parameters);
-
-        // return $request;
-        // $a = new P;
-        // $a->name = $request->name;
-        // return $a->save();
-        // return $user;
+        $loan = B::create($request->loan);
+        $loan->grantor()->associate(Grantor::create($request->grantor));
+        $loan->save();
+        return $loan->refresh();
     }
 
     /**
@@ -111,12 +106,21 @@ class Loan extends Controller
     {
         //
         // C::where('id' , $id)->update($request->all()));
-        if (B::where('id', $id)->update($request->all())) {
-            return new BR(B::find($id));
-        };
-        abort(403, 'Not found');
+        $loan = B::find($id);
+        if(isset($loan)){
+            $loan->update($request->loan);
+            // return $member->grantor;
+            if (isset($loan->grantor)) {
+                $loan->grantor()->update($request->grantor);
+            } else {
+                $loan->grantor()->associate(Grantor::create($request->grantor));
+                $loan->save();
+            }
+            return $loan->refresh();
+        }else{
+            abort(403, 'Not found');
+        }
     }
-
     /**
      * Remove the specified resource from storage.
      *

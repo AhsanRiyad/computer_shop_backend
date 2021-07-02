@@ -62,7 +62,7 @@ class Member extends Controller
         //
         $member = B::create($request->member);
         $member->nominee()->associate(Nominee::create($request->nominee));
-        $member->save();
+       
         return $member->refresh();
     }
 
@@ -104,17 +104,20 @@ class Member extends Controller
         //     return new BR(B::find($id));
         // };
         // abort(403, 'Not found');
-
         $member = B::find($id);
-        $member->update($request->member);
-        // return $member->nominee;
-        if(isset($member->nominee)){
-            $member->nominee()->update($request->nominee);
+        if(isset($member)){
+            $member->update($request->member);
+            // return $member->nominee;
+            if (isset($member->nominee)) {
+                $member->nominee()->update($request->nominee);
+            } else {
+                $member->nominee()->associate(Nominee::create($request->nominee));
+                $member->save();
+            }
+            return $member->refresh();
         }else{
-            $member->nominee()->associate(Nominee::create($request->nominee));
-            $member->save();
+            abort(403, 'Not found');
         }
-        return $member->refresh();
     }
 
     /**

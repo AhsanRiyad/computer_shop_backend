@@ -25,6 +25,8 @@ class CreateGrantorsTable extends Migration
             $table->string('name')->nullable();
             $table->date('dob')->nullable();
             $table->string('nid')->nullable();
+            $table->string('relation')->nullable();
+            $table->string('mobile')->nullable();
         });
     }
 
