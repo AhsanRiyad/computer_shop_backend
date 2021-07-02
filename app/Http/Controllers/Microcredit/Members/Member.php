@@ -100,10 +100,21 @@ class Member extends Controller
     {
         //
         // C::where('id' , $id)->update($request->all()));
-        if (B::where('id', $id)->update($request->all())) {
-            return new BR(B::find($id));
-        };
-        abort(403, 'Not found');
+        // if (B::where('id', $id)->update($request->all())) {
+        //     return new BR(B::find($id));
+        // };
+        // abort(403, 'Not found');
+
+        $member = B::find($id);
+        $member->update($request->member);
+        // return $member->nominee;
+        if(isset($member->nominee)){
+            $member->nominee()->update($request->nominee);
+        }else{
+            $member->nominee()->associate(Nominee::create($request->nominee));
+            $member->save();
+        }
+        return $member->refresh();
     }
 
     /**
