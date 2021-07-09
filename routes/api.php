@@ -243,6 +243,14 @@ Route::group([], function () {
         Route::delete('dps/{id}', 'Microcredit\Dps\Dps@destroy');
 
 
+        //fixedDeposit
+        Route::get('fixedDeposit', 'Microcredit\FixedDeposit\FixedDeposit@index');
+        Route::get('fixedDeposit/{id}', 'Microcredit\FixedDeposit\FixedDeposit@show');
+        Route::post('fixedDeposit', 'Microcredit\FixedDeposit\FixedDeposit@store');
+        Route::put('fixedDeposit/{id}', 'Microcredit\FixedDeposit\FixedDeposit@update');
+        Route::delete('fixedDeposit/{id}', 'Microcredit\FixedDeposit\FixedDeposit@destroy');
+
+
         //Grantors
         Route::get('grantor', 'Microcredit\Grantors\Grantor@index');
         Route::get('grantor/{id}', 'Microcredit\Grantors\Grantor@show');

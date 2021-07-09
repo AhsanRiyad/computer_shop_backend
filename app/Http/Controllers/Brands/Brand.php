@@ -119,6 +119,8 @@ class Brand extends Controller
     {
         //
         // C::where('id' , $id)->update($request->all()));
+        // return B::find($id);
+
         if ( B::where('id' , $id)->update( $request->all() ) )  {
             return new BR( B::find($id) );
         };
