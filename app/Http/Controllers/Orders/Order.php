@@ -45,17 +45,17 @@ class Order extends Controller
      */
     public function index(Request $req)
     {
-        // return $req->page;
-        //
+        //  return $req->page;
+        //  
         //  $menu = O::find(2);
         //  return $menu->serial_numbers; 
         //  return $menu->products; 
         //  return $menu->order_details; 
-        // return $menu;
+        //  return $menu;
 
         if ($req->q == '') {
             /*
-        return R::collection( O::with(['address', 'client' , 'order_details'])->get() );*/
+            return R::collection( O::with(['address', 'client' , 'order_details'])->get() );*/
             $order_info = [];
             // return O::find(1)->getTotal();
 
@@ -82,6 +82,8 @@ class Order extends Controller
                 $order_info['order'][] = $order;
             }
             $order_info['meta']['total'] = O::where('type', '=', 'purchase')->count();
+            $order_info['meta']['from'] =  isset($req->page) && $req->page > 0 ? $req->page * 10 : 0 ;
+            $order_info['meta']['to'] =  isset($req->page) && $req->page > 0 ? 10 : ($req->page * 10)+10 ;
             return R::collection(collect($order_info)->reverse());
         } else {
             return $this->searchPurchase($req);
@@ -435,9 +437,7 @@ class Order extends Controller
             // something went wrong
         }
 
-
         // return $s['serials'];
-
         // $product->save($parameters);
         // return $request;
         // $a = new P;
@@ -457,7 +457,6 @@ class Order extends Controller
         //
         return new R(O::find($id));
     }
-
   
     public function store(OV $request)
     {
@@ -485,10 +484,13 @@ class Order extends Controller
         //     'client_id' => $request->client_id,
         //     'branch_id' => $request->branch_id,
         // ]);
+
+        // return $request->address;
+
         DB::beginTransaction();
         try {
             $order =  O::create($request->order);
-            if ($request->address['name'] != '' || $request->address['mobile'] != '' || $request->address['address'] != '') {
+            if (  isset($request->address['name']) ||  isset($request->address['mobile']) ||  isset($request->address['address'])) {
                 $order->address()->create($request->address);
             }
             foreach (collect($request->order_detail) as $product) {
@@ -498,9 +500,11 @@ class Order extends Controller
                 $order_detail =  $order->order_details()->create($o);
                 // $s = collect($product)->only(['serials'])->all();
 
-                foreach ($product['serials'] as $p) {
-                    # code...
-                    $order_detail->serial_numbers()->create(['number' => $p]);
+                if(isset($product['serials'])){
+                    foreach ($product['serials'] as $p) {
+                        # code...
+                        $order_detail->serial_numbers()->create(['number' => $p]);
+                    }
                 }
 
                 // $order_detail->serial_numbers()->createMany([['number' => 123]]);

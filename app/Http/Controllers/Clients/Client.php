@@ -45,6 +45,20 @@ class Client extends Controller
         }
     }
 
+    public function getAllSeller()
+    {
+        //
+        return CR::collection(C::where('type', '=', 'seller')->with(['created_by'])->paginate(10));
+        
+    }
+
+    public function getAllCustomer()
+    {
+        //
+        return CR::collection(C::where('type', '=', 'customer')->with(['created_by'])->paginate(10));
+        
+    }
+
     public function index_seller()
     {
         //

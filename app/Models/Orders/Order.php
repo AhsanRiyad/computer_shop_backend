@@ -108,7 +108,7 @@ class Order extends Model
     {
         /* return $this->getDiscount() == "" ? $this->getSubTotal() : $this->coupon->istk ? $this->getSubTotal() - $this->coupon->tk : ""; */
 
-        return ( $this->getSubTotal() - ($this->getSubTotal() * $this->discount ) / 100);
+        return round( ( $this->getSubTotal() - ($this->getSubTotal() * $this->discount ) / 100) , 2 );
     }
 
     public function paid()
