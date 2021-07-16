@@ -304,6 +304,7 @@ class Order extends Controller
                 $order['id_customized'] = 'HCC-' . $order->id_customized;
                 $order['total'] = $order->getTotal();
                 $order['balance'] = $order->balance();
+                $order['discountInteger'] = $order->discount;
                 $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount();
                 $order['subtotal'] = $order->getSubTotal();
                 $order['paid'] = $order->paid();
