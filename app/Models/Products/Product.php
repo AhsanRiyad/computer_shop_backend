@@ -69,7 +69,7 @@ class Product extends Model
             $orders[] = $order;
         }
 
-        return collect($orders)->where('type' , 'purchase')->sum( DB::raw('quantity') );
+        return collect($orders)->where('type' , 0)->sum( DB::raw('quantity') );
     }
 
     public function sold()
@@ -82,7 +82,7 @@ class Product extends Model
             $orders[] = $order;
     }
 
-        return collect($orders)->where('type' , 'sell')->sum( DB::raw('quantity') );
+        return collect($orders)->where('type' , 1)->sum( DB::raw('quantity') );
     }
 
     public function inStock()

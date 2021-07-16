@@ -71,6 +71,7 @@ class Order extends Controller
                 $order['id_customized'] = 'HCC-' . $order->id_customized;
                 $order['total'] = $order->getTotal();
                 $order['balance'] = $order->balance();
+                $order['discountInteger'] = $order->discount;
                 $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount();
                 $order['subtotal'] = $order->getSubTotal();
                 $order['paid'] = $order->paid();
@@ -535,10 +536,10 @@ class Order extends Controller
             $order = O::find($id);
 
             $order->address()->delete();
-            if ($request->address['name'] != '' || $request->address['mobile'] != '' || $request->address['address'] != '') {
+            if (isset($request->address['name']) ||  isset($request->address['mobile']) ||  isset($request->address['address'])) {
                 $order->address()->create($request->address);
             }
-            $order->serial_numbers()->delete();
+            // $order->serial_numbers()->delete();
 
             $order->update($request->order);
             $order->order_details()->delete();
@@ -550,10 +551,10 @@ class Order extends Controller
                 $order_detail =  $order->order_details()->updateOrCreate(["product_id" => $o['product_id']], $o);
                 // $serials = collect($product)->only(['serials'])->all();
 
-                foreach ($product['serials'] as $p) {
-                    # code...
-                    $order_detail->serial_numbers()->create(['number' => $p]);
-                }
+                // foreach ($product['serials'] as $p) {
+                //     # code...
+                //     $order_detail->serial_numbers()->create(['number' => $p]);
+                // }
 
                 // $order_detail->serial_numbers()->createMany($s['serials']);
 
