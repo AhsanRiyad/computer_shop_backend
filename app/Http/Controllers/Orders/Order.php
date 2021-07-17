@@ -119,11 +119,11 @@ class Order extends Controller
     {
         // return $req->search;
 
-        $searchResultsByClient =  O::where([['type', '=', 'purchase']])->whereHas('client', function ($query) use (&$req) {
+        $searchResultsByClient =  O::where([['type', '=', 0]])->whereHas('client', function ($query) use (&$req) {
             return $query->where([['name', 'like', '%' . $req->q . '%'],]);
         });
 
-        $searchResultsById =  O::where([['type', '=', 'purchase'], ['id_customized', 'like', '%' . $req->q . '%']]);
+        $searchResultsById =  O::where([['type', '=', 0], ['id', 'like', '%' . $req->q . '%']]);
 
         if ($searchResultsById->count() > 0) {
             return $this->searchResultsPurchase($searchResultsById , $req);
@@ -150,17 +150,17 @@ class Order extends Controller
     {
         // return $req->search;
 
-        $searchResultsByClient =  O::where([['type' , '=' , 'sell']])->whereHas('client', function ($query) use (&$req) {
+        $searchResultsByClient =  O::where([['type' , '=' , 1]])->whereHas('client', function ($query) use (&$req) {
             return $query->where([['name', 'like', '%' . $req->q . '%'],]);
         });
 
-        $searchResultsById =  O::where([['type' , '=' , 'sell'], ['id_customized', 'like', '%' . $req->q . '%']]);
+        $searchResultsById =  O::where([['type' , '=' , 1], ['id', 'like', '%' . $req->q . '%']]);
 
         if($searchResultsById->count() > 0){
-            return $this->searchResultsSell($searchResultsById);
+            return $this->searchResultsSell($searchResultsById, $req);
         }
         else if ($searchResultsByClient->count() > 0) {
-            return $this->searchResultsSell($searchResultsByClient);
+            return $this->searchResultsSell($searchResultsByClient, $req);
         } else {
             return  json_encode(new SampleEmpty([]));
         };
@@ -202,7 +202,7 @@ class Order extends Controller
         return R::collection(collect($order_info)->reverse());
     }
 
-    public function searchResultsSell($searchResults){
+    public function searchResultsSell($searchResults, Request $req){
         $order_info = [];
         // return O::find(1)->getTotal();
 
@@ -218,6 +218,7 @@ class Order extends Controller
             $order['id_customized'] = 'HCC-' . $order->id_customized;
             $order['total'] = $order->getTotal();
             $order['balance'] = $order->balance();
+            $order['discountInteger'] = $order->discount;
             $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount();
             $order['subtotal'] = $order->getSubTotal();
             $order['paid'] = $order->paid();
@@ -227,7 +228,9 @@ class Order extends Controller
 
             $order_info['order'][] = $order;
         }
-        $order_info['meta']['total'] = $searchResults->count();
+        $order_info['meta']['total'] = O::where('type', '=', 1)->count();
+        $order_info['meta']['from'] =  isset($req->page) && $req->page >= 1 ? $req->page * 10 - 10 : 0;
+        $order_info['meta']['to'] =  $order_info['meta']['from'] + 10;
         return R::collection(collect($order_info)->reverse());
         // $b['meta'] = 10;
         // return $b;
@@ -318,7 +321,9 @@ class Order extends Controller
 
                 $order_info['order'][] = $order;
             }
-            $order_info['meta']['total'] = O::where('type', '=', 'sell')->count();
+            $order_info['meta']['total'] = O::where('type', '=', 1)->count();
+            $order_info['meta']['from'] =  isset($req->page) && $req->page >= 1 ? $req->page * 10 - 10 : 0;
+            $order_info['meta']['to'] =  $order_info['meta']['from'] + 10;
             return R::collection(collect($order_info)->reverse());
         } else {
             return $this->searchSell($req);
