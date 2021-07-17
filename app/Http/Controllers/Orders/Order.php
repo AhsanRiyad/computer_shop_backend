@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Orders\Order as O;
 use App\Http\Requests\Orders\Order as OV;
 use App\Models\Products\Serial_number;
+use App\Models\Clients\Client;
 use App\Models\Products\Serial_sell;
 use App\Models\Products\Product;
 use App\Models\Products\Serial_purchase;
@@ -681,6 +682,36 @@ class Order extends Controller
         $pdf = PDF::loadView('invoice.invoice' , $order );
         // $pdf->save('storage/users_info.pdf');
         return $pdf->stream('users_info.pdf');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function printInvoiceByInfo(Request $request)
+    {
+        //
+        // return $request->all()['order']['client_id'];
+        // return $request->all();
+        $order_info =  $request->all()['order'];
+        $order_detail =  $request->all()['order_detail'];
+        $address = $request->all()['address'];
+        $client = Client::find($request->all()['order']['client_id']);
+        
+        // return compact('order_info', 'order_detail', 'address', 'client');
+
+        $pdf = PDF::loadView('invoice.invoiceByInfo', compact('order_info' , 'order_detail' , 'address', 'client'));
+        // $pdf->save('storage/users_info.pdf');
+        return $pdf->stream('users_info.pdf');
+        // return $request->all()['order'];
+
+        // $order['order_info'] = O::find($order_id);
+        // return $order;
+        // $pdf = PDF::loadView('invoice.invoice' , $order );
+        // $pdf->save('storage/users_info.pdf');
+        // return $pdf->stream('users_info.pdf');
     }
 
 

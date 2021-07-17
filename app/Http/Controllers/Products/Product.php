@@ -71,7 +71,7 @@ class Product extends Controller
         // return response( CR::collection(C::all()) ) ;
         /*$products = C::with(['brand', 'category', 'created_by'])->get();*/
         // return CR::collection(C::with(['brand', 'category', 'created_by', 'order_detail'])->paginate(10));
-        return ProductResource::collection(C::get(['name' , 'id', 'price' , 'cost', 'having_serial'])->take(30));
+        return ProductResource::collection(C::get(['name' , 'id', 'price' , 'cost', 'description'])->take(30));
     }
 
     public function search(Request $req)

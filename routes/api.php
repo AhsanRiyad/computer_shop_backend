@@ -188,6 +188,7 @@ Route::group([], function () {
 
         //print invoice
         Route::post('order/invoice/{order_id}', 'Orders\Order@printInvoice');
+        Route::post('order/invoice', 'Orders\Order@printInvoiceByInfo');
 
         //bulk create
         Route::post('orders', 'Orders\Order@create');
