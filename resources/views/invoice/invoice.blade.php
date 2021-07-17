@@ -17,7 +17,7 @@
 
 /* :root {
 
-  --blue: #0d83dd ;
+  --blue: #047232d2 ;
 
 }
 
@@ -43,7 +43,7 @@
 
 hr{
 
-  border-top: 3px solid #0d83dd;
+  border-top: 3px solid #047232d2;
 
   margin-left: 20px;
 
@@ -87,7 +87,7 @@ hr.dottedGrey{
 
 .largeBlueText{
 
-  color: #0d83dd;
+  color: #047232d2;
 
   font-weight: bold;
 
@@ -117,7 +117,7 @@ hr.dottedGrey{
 
   height: 100px;
 
-  background: #0d83dd ;
+  background: #047232d2 ;
 
   color: white;
 
@@ -251,7 +251,7 @@ hr.dottedGrey{
 
 .tableHeader-container{
 
-  color: #0d83dd;
+  color: #047232d2;
 
   margin-top: 30px;
 
@@ -317,7 +317,7 @@ hr.dottedGrey{
 
 .tableBody-container{
 
-  color: #0d83dd;
+  color: #047232d2;
 
   margin-top: 30px;
 
@@ -395,7 +395,7 @@ hr.dottedGrey{
 
 .summary-container{
 
-  color: #0d83dd;
+  color: #047232d2;
 
   margin-top: 30px;
 
@@ -559,7 +559,7 @@ margin-top:20px;
 
       <p class="smallGreyText"> Invoice Number </p>
 
-      <p class="mediumBlackText"> HCC-{{ $order_info->id_customized }} </p>
+      <p class="mediumBlackText"> {{ $order_info->id }} </p>
 
       <p class="smallGreyText"> Date Of Issue </p>
 

@@ -673,10 +673,11 @@ class Order extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function printInvoice(Request $request, $order_id)
+    public function printInvoice( $order_id)
     {
         //
         $order['order_info'] = O::find($order_id);
+        // return $order;
         $pdf = PDF::loadView('invoice.invoice' , $order );
         // $pdf->save('storage/users_info.pdf');
         return $pdf->stream('users_info.pdf');
