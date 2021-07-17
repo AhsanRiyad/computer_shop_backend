@@ -126,9 +126,9 @@ class Order extends Controller
         $searchResultsById =  O::where([['type', '=', 'purchase'], ['id_customized', 'like', '%' . $req->q . '%']]);
 
         if ($searchResultsById->count() > 0) {
-            return $this->searchResultsPurchase($searchResultsById);
+            return $this->searchResultsPurchase($searchResultsById , $req);
         } else if ($searchResultsByClient->count() > 0) {
-            return $this->searchResultsPurchase($searchResultsByClient);
+            return $this->searchResultsPurchase($searchResultsByClient, $req);
         } else {
             return  json_encode(new SampleEmpty([]));
         };
@@ -177,7 +177,7 @@ class Order extends Controller
         // return $req->q;
     }
 
-    public function searchResultsPurchase($searchResults){
+    public function searchResultsPurchase($searchResults, Request $req){
         $order_info = [];
 
         $orders = $searchResults->with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell'])->orderBy('id', 'desc')->paginate(10);
@@ -186,6 +186,7 @@ class Order extends Controller
             $order['id_customized'] = 'HCC-' . $order->id_customized;
             $order['total'] = $order->getTotal();
             $order['balance'] = $order->balance();
+            $order['discountInteger'] = $order->discount;
             $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount();
             $order['subtotal'] = $order->getSubTotal();
             $order['paid'] = $order->paid();
@@ -196,6 +197,8 @@ class Order extends Controller
             $order_info['order'][] = $order;
         }
         $order_info['meta']['total'] = $searchResults->count();
+        $order_info['meta']['from'] =  isset($req->page) && $req->page >= 1 ? $req->page * 10 - 10 : 0;
+        $order_info['meta']['to'] =  $order_info['meta']['from'] + 10;
         return R::collection(collect($order_info)->reverse());
     }
 
