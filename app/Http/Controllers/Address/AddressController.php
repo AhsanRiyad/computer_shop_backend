@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Salary;
+namespace App\Http\Controllers\Address;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Salaries\Salary as C;
-use App\Http\Resources\Salaries\Salary as CR;
 
-class Salary extends Controller
+class AddressController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +15,6 @@ class Salary extends Controller
     public function index()
     {
         //
-        return CR::collection(C::all());
     }
 
     /**
@@ -25,12 +22,9 @@ class Salary extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
         //
-        foreach ($request->all() as $value) {
-            C::Create($value);
-        }
     }
 
     /**
@@ -42,16 +36,6 @@ class Salary extends Controller
     public function store(Request $request)
     {
         //
-        C::create($request->all());
-        return new CR($request->all());
-
-        // $product->save($parameters);
-
-        // return $request;
-        // $a = new P;
-        // $a->name = $request->name;
-        // return $a->save();
-        // return $user;
     }
 
     /**
@@ -63,7 +47,6 @@ class Salary extends Controller
     public function show($id)
     {
         //
-        return new CR(C::find($id));
     }
 
     /**
@@ -87,11 +70,6 @@ class Salary extends Controller
     public function update(Request $request, $id)
     {
         //
-        $product =  C::find($id);
-        if ($product->save($request->all())) {
-            return new CR($request->all());
-        };
-        abort(403, 'Not found');
     }
 
     /**
@@ -103,10 +81,5 @@ class Salary extends Controller
     public function destroy($id)
     {
         //
-        $menu = C::find($id);
-        if (C::destroy($id)) {
-            return new CR($menu);
-        }
-        abort(403, 'Not found');
     }
 }

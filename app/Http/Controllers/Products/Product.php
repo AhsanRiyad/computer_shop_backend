@@ -22,7 +22,7 @@ class Serial_numberIn extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    use ImageUploadTrait;
+    
 
     public function toArray($request)
     {
@@ -51,7 +51,7 @@ class Product extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
+    use ImageUploadTrait;
     public function index(Request $req)
     {
         //
@@ -179,8 +179,18 @@ class Product extends Controller
     public function store(Request $request)
     {
         //
-        // return $request;
-        return C::create($request->all());
+        $data =  $request->all();
+        // gettype($request->all());
+        
+        $data['path'] = $this->upload('products');
+        unset($data['image']);
+        // $a = [ ...$data, ...['path' => 'new path']  ];
+
+        // return array_merge($data , ['path' => 'paapaf']);
+        // return $data;
+
+        // $this->upload('qurans');
+        return C::create($data);
 
         // return 'ok';
 
@@ -272,16 +282,19 @@ class Product extends Controller
         //
 
         // $category =  C::find($id);
+        $data = $request->all();
 
         // C::where('id' , $id)->update($request->all()));
-
-        if ( C::where('id' , $id)->update( $request->all() ) )  {
-
-            return new CR( C::find($id) );
-
+        $path =  C::find($id)->path;
+        
+        if ($request->image != NULL && !isset($request->image) && !empty($request->image)) $data['path'] = $this->update_upload('new', $path);
+        unset($data['image']);
+        if (C::where('id', $id)->update($data)) {
+            return  response(C::find($id), 203);
         };
-
         abort(403, 'Not found');
+
+  
 
     }
 

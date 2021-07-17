@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models\Warranties;
+namespace App\Models\Warranty;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Warranty_exchange_detail extends Model
+class WarrantyExchangeDetailModel extends Model
 {
     //
     protected $guarded = ['id'];

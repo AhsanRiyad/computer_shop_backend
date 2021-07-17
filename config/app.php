@@ -163,6 +163,8 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
 
+        //image intervention
+        Intervention\Image\ImageServiceProvider::class,
         //dom pdf
         Barryvdh\DomPDF\ServiceProvider::class,
 
@@ -230,6 +232,10 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+
+        //image intervention aliases
+        'Image' => Intervention\Image\Facades\Image::class,
 
         //dom pdf
         'PDF' => Barryvdh\DomPDF\Facade::class,

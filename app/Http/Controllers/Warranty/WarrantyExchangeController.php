@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Warranty;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class Warranty_exchange extends Controller
+class WarrantyExchangeController extends Controller
 {
     /**
      * Display a listing of the resource.
