@@ -83,9 +83,9 @@ class Order extends Controller
 
                 $order_info['order'][] = $order;
             }
-            $order_info['meta']['total'] = O::where('type', '=', 'purchase')->count();
-            $order_info['meta']['from'] =  isset($req->page) && $req->page > 0 ? $req->page * 10 : 0 ;
-            $order_info['meta']['to'] =  isset($req->page) && $req->page > 0 ? 10 : ($req->page * 10)+10 ;
+            $order_info['meta']['total'] = O::where('type', '=', 0)->count();
+            $order_info['meta']['from'] =  isset($req->page) && $req->page >= 1 ? $req->page * 10 - 10 : 0 ;
+            $order_info['meta']['to'] =  $order_info['meta']['from'] + 10 ;
             return R::collection(collect($order_info)->reverse());
         } else {
             return $this->searchPurchase($req);
