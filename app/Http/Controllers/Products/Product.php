@@ -12,6 +12,7 @@ use App\Http\Others\SampleEmpty;
 use App\Http\Resources\Products\ProductResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 //
+use App\Http\Traits\ImageUploadTrait;
 
 class Serial_numberIn extends JsonResource
 {
@@ -21,6 +22,7 @@ class Serial_numberIn extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
+    use ImageUploadTrait;
 
     public function toArray($request)
     {
