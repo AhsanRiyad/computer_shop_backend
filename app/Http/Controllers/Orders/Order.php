@@ -302,7 +302,7 @@ class Order extends Controller
             // dd(R::collection($orders));
             // $order_info['meta'] = R::collection($orders)['meta'];
             foreach ($orders as $order) {
-                $order['id_customized'] = 'HCC-' . $order->id_customized;
+                $order['id_customized'] = 'HCC-' . $order->id;
                 $order['total'] = $order->getTotal();
                 $order['balance'] = $order->balance();
                 $order['discountInteger'] = $order->discount;
@@ -432,7 +432,7 @@ class Order extends Controller
             $order->id_customized = date('Y') . (1000000000 + $order->id);
             $order->save();
             DB::commit();
-            return $order;
+            return $this->show($order->id);
             // all good
         } catch (\Exception $e) {
             response($e , 403);
@@ -458,7 +458,21 @@ class Order extends Controller
     public function show($id)
     {
         //
-        return new R(O::find($id));
+        // return new R(O::find($id));
+
+        $order = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell.order_detail'])->where('id', '=', $id)->first();
+
+        $order['total'] = $order->getTotal();
+        $order['balance'] = $order->balance();
+        $order['discountInteger'] = $order->discount;
+        $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount();
+        $order['subtotal'] = $order->getSubTotal();
+        $order['paid'] = $order->paid();
+        $order['received'] = $order->received();
+        $order['created'] = $order->created_by();
+        $order['updated'] = $order->updated_by();
+
+        return $order;
     }
   
     public function store(OV $request)
@@ -514,7 +528,7 @@ class Order extends Controller
                 // $serials[] = collect($product)->only(['serials'])->all();
             }
             DB::commit();
-            return $order;
+            return $this->show($order->id);
         } catch (\Exception $e) {
             DB::rollback();
             return response($e, 403);
@@ -567,7 +581,7 @@ class Order extends Controller
             $order->date = $request->order['date'];
             $order->save();
             DB::commit();
-            return $order;
+            return $this->show($order->id);
         } catch (\Exception $e) {
             //throw $th;
             DB::rollback();
@@ -633,7 +647,7 @@ class Order extends Controller
                 $order->updated_by = Auth::id();
                 $order->save();
                 DB::commit();
-                return $order; 
+                return $this->show($order->id);
 
 
             // all good
