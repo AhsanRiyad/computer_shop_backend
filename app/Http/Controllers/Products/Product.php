@@ -181,8 +181,8 @@ class Product extends Controller
         //
         $data =  $request->all();
         // gettype($request->all());
-        
-        $data['path'] = $this->upload('products');
+
+        if (isset($request->image)) $data['path'] = $this->upload('products');
         unset($data['image']);
         // $a = [ ...$data, ...['path' => 'new path']  ];
 
@@ -276,26 +276,25 @@ class Product extends Controller
      */
 
     public function update(Request $request, $id)
-
     {
 
-        //
-
+        // return $request->all();
         // $category =  C::find($id);
         $data = $request->all();
 
         // C::where('id' , $id)->update($request->all()));
         $path =  C::find($id)->path;
-        
-        if ($request->image != NULL && !isset($request->image) && !empty($request->image)) $data['path'] = $this->update_upload('new', $path);
+
+        if (isset($request->image)) $data['path'] = $this->update_upload('products', $path);
         unset($data['image']);
+
+        // return $data;
+        // return $data;
+
         if (C::where('id', $id)->update($data)) {
             return  response(C::find($id), 203);
         };
         abort(403, 'Not found');
-
-  
-
     }
 
 

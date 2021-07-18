@@ -147,7 +147,7 @@ Route::group([], function () {
         Route::get('product', 'Products\Product@index');
         Route::get('product/{id}', 'Products\Product@show');
         Route::post('product', 'Products\Product@store');
-        Route::put('product/{id}', 'Products\Product@update');
+        Route::post('product/{id}', 'Products\Product@update');
         Route::delete('product/{id}', 'Products\Product@destroy');
         //bulk create
         Route::post('products', 'Products\Product@create');
