@@ -19,7 +19,7 @@ class Branch extends Model
 
     public function products()
     {
-        return $this->hasMany('App\Models\Products\Product');
+        return $this->belongsToMany('App\Models\Products\Product');
     }
 
     public function orders()

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Products\Product as C;
 use App\Models\Products\Serial_purchase;
 use App\Models\Products\Serial_sell;
+use App\Models\Branches\Branch;
 use App\Http\Resources\Products\Product as CR;
 use App\Http\Others\SampleEmpty;
 use App\Http\Resources\Products\ProductResource;
@@ -182,15 +183,20 @@ class Product extends Controller
         $data =  $request->all();
         // gettype($request->all());
 
+        // return $data['branch_id'];
+
+        $branch =  Branch::find($data['branch_id']);
+        
+
         if (isset($request->image)) $data['path'] = $this->upload('products');
         unset($data['image']);
         // $a = [ ...$data, ...['path' => 'new path']  ];
 
         // return array_merge($data , ['path' => 'paapaf']);
         // return $data;
-
+        return $branch->products()->create($data);
         // $this->upload('qurans');
-        return C::create($data);
+        // return C::create($data);
 
         // return 'ok';
 
@@ -283,15 +289,18 @@ class Product extends Controller
         $data = $request->all();
 
         // C::where('id' , $id)->update($request->all()));
-        $path =  C::find($id)->path;
-
-        if (isset($request->image)) $data['path'] = $this->update_upload('products', $path);
+        // $path =  C::find($id)->path;
+        // return $data;
+        // return $data;
         unset($data['image']);
+        $update =  C::where('id', $id)->update($data);
 
-        // return $data;
-        // return $data;
-
-        if (C::where('id', $id)->update($data)) {
+        if ($update) {
+            $p = C::find($id);
+            $path = $p->path;
+            if (isset($request->image)) $data['path'] = $this->update_upload('products', $path);
+            $p->path = $data['path'];
+            $p->save();
             return  response(C::find($id), 203);
         };
         abort(403, 'Not found');

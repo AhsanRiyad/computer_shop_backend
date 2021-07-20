@@ -26,6 +26,12 @@ class Branch extends Controller
         }
     }
 
+    public function product(Request $req)
+    {
+        //
+        return B::with(['products'])->get();
+    }
+
     public function dropdown()
     {
         //

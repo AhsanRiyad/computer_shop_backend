@@ -111,6 +111,7 @@ Route::group([], function () {
 
         //branch
         Route::get('branch', 'Branches\Branch@index');
+        Route::get('branch/product', 'Branches\Branch@product');
         Route::get('branch/{id}', 'Branches\Branch@index');
         Route::get('branch/{id}', 'Branches\Branch@show');
         Route::post('branch', 'Branches\Branch@store');
