@@ -21,6 +21,7 @@ public function toArray($request)
         'cost' => $this->cost,
         'price' => $this->price,
         'inStock' => $this->inStock(),
+        'branch_id' => $this->branch_id,
         'quantity' => 1,
         'having_serial' => $this->having_serial,
         ];

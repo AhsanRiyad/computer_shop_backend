@@ -5,7 +5,7 @@ namespace App\Models\Products;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Http\Request;
 class Product extends Model
 {
     use SoftDeletes;
@@ -26,6 +26,11 @@ class Product extends Model
     public function branch()
     {
         return $this->belongsToMany('App\Models\Branches\Branch');
+    }
+    
+    public function branch_id()
+    {
+        return $this->belongsToMany('App\Models\Branches\Branch')->wherePivot('branch_id' , 2 );
     }
 
     public function unit()

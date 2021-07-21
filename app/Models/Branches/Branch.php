@@ -24,7 +24,7 @@ class Branch extends Model
 
     public function orders()
     {
-        return $this->hasMany('App\Models\Orders\Order');
+        return $this->belongsToMany('App\Models\Orders\Order');
     }
 
     public function clients()

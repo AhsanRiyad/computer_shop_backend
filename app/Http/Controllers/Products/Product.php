@@ -53,38 +53,57 @@ class Product extends Controller
      * @return \Illuminate\Http\Response
      */
     use ImageUploadTrait;
-    public function index(Request $req)
+    public function index(Request $req , $branch_id)
     {
         //
         // return response( CR::collection(C::all()) ) ;
         /*$products = C::with(['brand', 'category', 'created_by'])->get();*/
         // return CR::collection(C::with(['brand', 'category', 'created_by', 'order_detail'])->paginate(10));
+
+        // return Branch::all();
+
+        if ( !isset($branch_id)) return response('branch not defined' , 403);
 
         if ($req->q == ''
         ) {
-            return CR::collection(C::with(['brand', 'category', 'created_by'])->orderBy('id', 'desc')->paginate(10));
+            return CR::collection(C::with(['brand', 'category', 'created_by' , 'branch'])->whereHas('branch' , function($q) use ($branch_id) {
+                $q->where('branch_id' , $branch_id);
+            })->orderBy('id', 'desc')->paginate(10));
         } else {
-            return $this->search($req);
+            return $this->search($req , $branch_id);
         }
     }
 
-    public function dropdown()
+    public function dropdown($branch_id)
     {
         //
         // return response( CR::collection(C::all()) ) ;
         /*$products = C::with(['brand', 'category', 'created_by'])->get();*/
         // return CR::collection(C::with(['brand', 'category', 'created_by', 'order_detail'])->paginate(10));
-        return ProductResource::collection(C::get(['name' , 'id', 'price' , 'cost', 'description', 'path'])->take(30));
+        // return ProductResource::collection(C::get(['name' , 'id', 'price' , 'cost', 'description', 'path'])->take(30));
+        return C::whereHas('branch', function ($q) use ($branch_id) {
+            $q->where('branch_id', $branch_id);
+        })->orderBy('id', 'desc')->get(['name', 'id', 'price', 'cost', 'description', 'path'])->take(30);
     }
 
-    public function search(Request $req)
+    public function search(Request $req, $branch_id)
     {
+        $a =  CR::collection(C::whereHas('branch', function ($q) use ($branch_id) {
+            $q->where('branch_id', $branch_id);
+        })->where(function($q) use ($req){
+            return $q->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%');
+        } )->orderBy('id', 'desc')->get());
+
+        
+        if($a->count() > 0) return $a;
+        else return  json_encode(new SampleEmpty([]));
+
         // return $req->search;
-        if (C::where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->count() > 0) {
-            return CR::collection(C::with(['created_by'])->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->paginate(10));
-        } else {
-            return  json_encode(new SampleEmpty([]));
-        };
+        // if (C::where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->count() > 0) {
+        //     return CR::collection(C::where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->paginate(10));
+        // } else {
+        //     return  json_encode(new SampleEmpty([]));
+        // };
         // return $req->q;
     }
 

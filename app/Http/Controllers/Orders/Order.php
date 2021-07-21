@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 use PDF;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\Products\ProductResource;
-
+use App\Models\Branches\Branch;
 class SampleEmpty
 {
     // Properties
@@ -420,10 +420,12 @@ class Order extends Controller
 
            $s = Serial_sell::whereIn('number', $request->serials)->get();
             if (count($s) > 0) return response( $s , 403 );
-            
-            $order = O::create($request->order);
+
+            $branch =  Branch::find($request->order['branch_id']);
+            $order =  $branch->orders()->create($request->order);
+            // $order = O::create($request->order);
             $order->address()->delete();
-            $address = $order->address()->create( $request->address);
+            $order->address()->create( $request->address);
             // $address = O::create($request->address);
             foreach (collect($request->order_detail) as $product) {
                 # code...
@@ -514,7 +516,8 @@ class Order extends Controller
 
         DB::beginTransaction();
         try {
-            $order =  O::create($request->order);
+            $branch =  Branch::find($request->order['branch_id']);
+            $order =  $branch->orders()->create($request->order);
             if (  isset($request->address['name']) ||  isset($request->address['mobile']) ||  isset($request->address['address'])) {
                 $order->address()->create($request->address);
             }

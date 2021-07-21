@@ -79,14 +79,14 @@ Route::group([], function () {
         Route::get('search/client', 'Clients\Client@search');
         Route::get('search/purchase', 'Orders\Order@searchPurchase');
         Route::get('search/sell', 'Orders\Order@searchSell');
-        Route::get('search/product', 'Products\Product@search');
+        Route::get('search/product/{branch_id}', 'Products\Product@search');
         Route::get('search/transaction', 'Transactions\Transaction@search');
 
 
         //dropdown
         Route::get('dropdown/category', 'Categories\Category@dropdown');
         Route::get('dropdown/brand', 'Brands\Brand@dropdown');
-        Route::get('dropdown/product', 'Products\Product@dropdown');
+        Route::get('dropdown/product/{branch_id}', 'Products\Product@dropdown');
         Route::get('dropdown/branch', 'Branches\Branch@dropdown');
         Route::get('dropdown/seller', 'Clients\Client@index_seller');
         Route::get('dropdown/customer', 'Clients\Client@index_customer');
@@ -145,7 +145,7 @@ Route::group([], function () {
         Route::post('brands', 'Brands\Brand@create');
 
         //product
-        Route::get('product', 'Products\Product@index');
+        Route::get('product/{branch_id}', 'Products\Product@index');
         Route::get('product/{id}', 'Products\Product@show');
         Route::post('product', 'Products\Product@store');
         Route::post('product/{id}', 'Products\Product@update');
