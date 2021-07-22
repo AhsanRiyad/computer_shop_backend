@@ -23,7 +23,6 @@ class Serial_numberIn extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    
 
     public function toArray($request)
     {
@@ -206,8 +205,11 @@ class Product extends Controller
 
         $branch =  Branch::find($data['branch_id']);
         
+        // return $request->image;
 
-        if (isset($request->image)) $data['path'] = $this->upload('products');
+        // return gettype($request->image);
+
+        if ($request->image != NULL && isset($request->image) && !empty($request->image)  ) $data['path'] = $this->upload('products');
         unset($data['image']);
         // $a = [ ...$data, ...['path' => 'new path']  ];
 
@@ -317,9 +319,11 @@ class Product extends Controller
         if ($update) {
             $p = C::find($id);
             $path = $p->path;
-            if (isset($request->image)) $data['path'] = $this->update_upload('products', $path);
-            $p->path = $data['path'];
-            $p->save();
+            if (isset($request->image)){ 
+                $data['path'] = $this->update_upload('products', $path);
+                $p->path = $data['path'];
+                $p->save();
+            }
             return  response(C::find($id), 203);
         };
         abort(403, 'Not found');

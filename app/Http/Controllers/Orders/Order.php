@@ -44,7 +44,7 @@ class Order extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $req)
+    public function index(Request $req, $branch_id)
     {
         //  return $req->page;
         //  
@@ -60,7 +60,9 @@ class Order extends Controller
             $order_info = [];
             // return O::find(1)->getTotal();
 
-            $orders = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell'])->where('type', '=', 0)->orderBy('id', 'desc')->paginate(10);
+            $orders = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell'])->where('type', '=', 0)->whereHas('branch', function ($q) use ($branch_id) {
+                $q->where('branch_id', $branch_id);
+            })->orderBy('id', 'desc')->paginate(10);
 
             // $a = R::collection($orders);
             // var_dump($a);
@@ -260,7 +262,7 @@ class Order extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index_sell(Request $req)
+    public function index_sell(Request $req, $branch_id)
     {
         //
 
@@ -299,7 +301,9 @@ class Order extends Controller
             $order_info = [];
             // return O::find(1)->getTotal();
 
-            $orders = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell.order_detail'])->where('type', '=', 1)->paginate(10);
+            $orders = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell.order_detail'])->where('type', '=', 1)->whereHas('branch', function ($q) use ($branch_id) {
+                $q->where('branch_id', $branch_id);
+            })->paginate(10);
 
             // $a = R::collection($orders);
             // var_dump($a);
@@ -487,32 +491,6 @@ class Order extends Controller
   
     public function store(OV $request)
     {
-
-        // return $request;
-        // return 'storing orders';
-
-        // hint 1
-        // if( $request->mobile != '' && $request->contact_person != '' && $request->address != ''){
-        //     return 'save';
-        // }
-
-        // hint 2
-        // return $request->products[0]['quantity'];
-
-        // hint 3
-        // return $request->products[0]['serials'];
-
-        // $order =  O::create([
-        //     'date' => $request->date,
-        //     'type' => $request->type,
-        //     'discount' => $request->discount,
-        //     'reference' => $request->reference,
-        //     'correction_status' => $request->correction_status,
-        //     'client_id' => $request->client_id,
-        //     'branch_id' => $request->branch_id,
-        // ]);
-
-        // return $request->address;
 
         DB::beginTransaction();
         try {
