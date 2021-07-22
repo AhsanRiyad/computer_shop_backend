@@ -195,7 +195,7 @@ Route::group([], function () {
         Route::post('orders', 'Orders\Order@create');
 
         //sell
-        Route::get('sell', 'Orders\Order@index_sell');
+        Route::get('sell/{branch_id}', 'Orders\Order@index_sell');
  
 
         //Transaction

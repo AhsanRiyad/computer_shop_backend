@@ -301,9 +301,9 @@ class Order extends Controller
             $order_info = [];
             // return O::find(1)->getTotal();
 
-            $orders = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell.order_detail'])->where('type', '=', 1)->whereHas('branch', function ($q) use ($branch_id) {
+            $orders = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell.order_detail'])->whereHas('branch', function ($q) use ($branch_id) {
                 $q->where('branch_id', $branch_id);
-            })->paginate(10);
+            })->where('type', '=', 1)->paginate(10);
 
             // $a = R::collection($orders);
             // var_dump($a);
