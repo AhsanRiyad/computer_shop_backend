@@ -11,6 +11,13 @@ class Member extends Model
     use SoftDeletes;
     protected $guarded = ['id'];
 
+
+    public function created_by()
+    {
+        return $this->belongsTo('App\User', 'created_by', 'id');
+    }
+
+
     public function transactionMicrocredit()
     {
         return $this->hasMany('App\Models\Microcredit\TransactionMicrocredit', 'member_id');

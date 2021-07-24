@@ -20,6 +20,8 @@ class Member extends Controller
     public function index(Request $req)
     {
         //
+
+        // return B::with(['created_by'])->paginate(10);
         if ($req->q == '') {
             return BR::collection(B::with(['created_by'])->paginate(10));
         } else {
