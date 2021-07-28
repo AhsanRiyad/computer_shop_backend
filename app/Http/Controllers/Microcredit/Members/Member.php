@@ -79,7 +79,7 @@ class Member extends Controller
     public function show($id)
     {
         //
-        return new BR(B::find($id));
+        return new BR(B::with(['nominee'])->find($id));
     }
 
     /**
