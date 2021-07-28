@@ -20,10 +20,9 @@ class Member extends Controller
     public function index(Request $req)
     {
         //
-
         // return B::with(['created_by'])->paginate(10);
         if ($req->q == '') {
-            return BR::collection(B::with(['created_by'])->paginate(10));
+            return BR::collection(B::with(['created_by', 'nominee'])->paginate(10));
         } else {
             return $this->search($req);
         }
@@ -62,8 +61,11 @@ class Member extends Controller
     public function store(Request $request)
     {
         //
+
+        // Nominee::create($request->nominee);
         $member = B::create($request->member);
         $member->nominee()->associate(Nominee::create($request->nominee));
+        $member->save();
        
         return $member->refresh();
     }
