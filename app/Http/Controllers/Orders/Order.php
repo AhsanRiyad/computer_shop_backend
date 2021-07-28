@@ -135,7 +135,7 @@ class Order extends Controller
             return  json_encode(new SampleEmpty([]));
         };
         /* 
-            return O::whereHas('client', function ($query) use (&$req) {
+            return O::('client', function ($query) use (&$req) {
                 return $query->where('name','like', '%' . $req->q . '%');
             })->orWhere('id_customized', 'like', '%' . $req->q . '%')->count(); 
         */
