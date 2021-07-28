@@ -21,7 +21,7 @@ class Employee extends Controller
     {
         //
         if ($req->q == '') {
-            return BR::collection(B::with(['created_by'])->paginate(10));
+            return BR::collection(B::with(['created_by', 'user'])->paginate(10));
         } else {
             return $this->search($req);
         }
@@ -104,7 +104,7 @@ class Employee extends Controller
     public function show($id)
     {
         //
-        return new BR(B::find($id));
+        return new BR(B::with(['user'])->find($id));
     }
 
     /**
