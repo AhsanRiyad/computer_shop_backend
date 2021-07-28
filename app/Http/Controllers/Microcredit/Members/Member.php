@@ -61,12 +61,10 @@ class Member extends Controller
     public function store(Request $request)
     {
         //
-
         // Nominee::create($request->nominee);
         $member = B::create($request->member);
         $member->nominee()->associate(Nominee::create($request->nominee));
         $member->save();
-       
         return $member->refresh();
     }
 
