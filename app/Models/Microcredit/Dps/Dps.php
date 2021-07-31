@@ -12,7 +12,6 @@ class Dps extends Model
     protected $table = 'dps';
     protected $guarded = ['id'];
 
-
     public function transactionMicrocredit()
     {
         return $this->morphMany('App\Models\Microcredit\TransactionMicrocredit\TransactionMicrocredit', 'transactionable');
@@ -23,6 +22,11 @@ class Dps extends Model
         return $this->belongsTo('App\Models\Microcredit\Members\Member', 'member_id', 'id');
     }
 
+    public function created_by()
+    {
+        return $this->belongsTo('App\User', 'created_by', 'id');
+    }
+
     public function nominee()
     {
         return $this->belongsTo('App\Models\Microcredit\Nominee\Nominee', 'nominee_id' , 'id');
@@ -30,6 +34,6 @@ class Dps extends Model
     
     public function collector()
     {
-        return $this->belongsTo('App\Models\Microcredit\Employees\Employee', 'collector_id', 'id');
+        return $this->belongsTo('App\Models\Employees\Employee', 'collector_id', 'id')->with(['user']);
     }
 }

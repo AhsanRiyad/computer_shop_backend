@@ -93,6 +93,8 @@ Route::group([], function () {
         Route::get('dropdown/client', 'Clients\Client@index_client');
         Route::get('dropdown/unit', 'Units\Unit@dropdown');
         Route::get('dropdown/bank', 'Banks\Bank@dropdown');
+        Route::get('dropdown/member', 'Microcredit\Members\Member@dropdown');
+        Route::get('dropdown/employee', 'Employees\Employee@dropdown');
 
         Route::get('dropdown/product_n_serial', 'Products\Product@index_product_n_serial');
 

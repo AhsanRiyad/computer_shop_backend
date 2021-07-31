@@ -10,6 +10,28 @@ use DB;
 use App\Http\Others\SampleEmpty;
 use App\User;
 
+
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class EmployeeDropdown extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+
+    public function toArray($request)
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->user->name
+        ];
+    }
+}
+
+
 class Employee extends Controller
 {
     /**
@@ -30,7 +52,7 @@ class Employee extends Controller
     public function dropdown()
     {
         //
-        return BR::collection(B::get(['name', 'id']));
+        return EmployeeDropdown::collection(B::all());
     }
 
     public function search(Request $req)

@@ -25,7 +25,7 @@ class Dps extends Controller
     {
         //
         if ($req->q == '') {
-            return BR::collection(B::with(['created_by'])->paginate(10));
+            return BR::collection(B::with(['member' , 'collector' ])->paginate(10));
         } else {
             return $this->search($req);
         }
@@ -36,7 +36,6 @@ class Dps extends Controller
         //
         return BR::collection(B::get(['name', 'id']));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -65,9 +64,10 @@ class Dps extends Controller
     public function store(Request $request)
     {
         //
-        $dps = B::create($request->dps);
-        $dps->nominee()->associate(Nominee::create($request->nominee));
-        $dps->save();
+        // return $request;
+        $dps = B::create($request->all());
+        // $dps->nominee()->associate(Nominee::create($request->nominee));
+        // $dps->save();
         return $dps->refresh();
     }
 
