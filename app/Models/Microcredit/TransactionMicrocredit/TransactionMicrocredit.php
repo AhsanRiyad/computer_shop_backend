@@ -9,6 +9,8 @@ class TransactionMicrocredit extends Model
     //
     use SoftDeletes;
     protected $guarded = ['id'];
+    protected $table = 'transaction_microcredit';
+
 
     public function transactionable()
     {

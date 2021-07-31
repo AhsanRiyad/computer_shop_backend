@@ -279,6 +279,11 @@ Route::group([], function () {
         Route::put('employee/{id}', 'Employees\Employee@update');
         Route::delete('employee/{id}', 'Employees\Employee@destroy');
 
+
+        //microcredit transactions
+        Route::get('transaction-microcredit', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@index');
+        Route::post('transaction-microcredit', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@store');
+
     });
 });
 

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Microcredit\TranscationMicrocredit;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Microcredit\Dps\Dps;
+use App\Http\Controllers\Controller;
+use App\Models\Microcredit\TransactionMicrocredit\TransactionMicrocredit as T;
 
 class TransactionMicrocredit extends Controller
 {
@@ -15,6 +17,8 @@ class TransactionMicrocredit extends Controller
     public function index()
     {
         //
+        $transaction = T::all();
+        return $transaction;
     }
 
     /**
@@ -25,6 +29,7 @@ class TransactionMicrocredit extends Controller
     public function create()
     {
         //
+        
     }
 
     /**
@@ -36,6 +41,10 @@ class TransactionMicrocredit extends Controller
     public function store(Request $request)
     {
         //
+        $dps =  Dps::find(1);
+        return $dps->transactionMicrocredit;
+        // return $dps->transactionMicrocredit()->create(['amount' => 100]);
+
     }
 
     /**
