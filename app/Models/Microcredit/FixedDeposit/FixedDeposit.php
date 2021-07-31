@@ -10,6 +10,9 @@ class FixedDeposit extends Model
     //
     use SoftDeletes;
 
+    protected $table = "fixed_deposit";
+    protected $guarded = ['id'];
+    protected $casts = ['member_id' => 'integer'];
     public function transactionMicrocredit()
     {
         return $this->morphMany('App\Models\Microcredit\TransactionMicrocredit\TransactionMicrocredit', 'transactionable');
@@ -25,8 +28,8 @@ class FixedDeposit extends Model
         return $this->belongsTo('App\Models\Microcredit\Nominee\Nominee', 'nominee_id', 'id');
     }
 
-    public function collect()
+    public function collector()
     {
-        return $this->belongsTo('App\Models\Microcredit\Employees\Employee', 'collect_id', 'id');
+        return $this->belongsTo('App\Models\Employees\Employee', 'collector_id', 'id')->with(['user']);
     }
 }

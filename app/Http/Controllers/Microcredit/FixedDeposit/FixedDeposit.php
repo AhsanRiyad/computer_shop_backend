@@ -5,9 +5,17 @@ namespace App\Http\Controllers\Microcredit\FixedDeposit;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\Microcredit\FixedDeposit\FixedDeposit as B;
+use App\Models\Microcredit\Nominee\Nominee;
+use App\Http\Resources\Microcredit\FixedDeposit\FixedDeposit as BR;
+use DB;
+
 class FixedDeposit extends Controller
 {
     //
+    //
+    //
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +25,7 @@ class FixedDeposit extends Controller
     {
         //
         if ($req->q == '') {
-            return BR::collection(B::with(['created_by'])->paginate(10));
+            return BR::collection(B::with(['member', 'collector'])->paginate(10));
         } else {
             return $this->search($req);
         }
@@ -28,7 +36,6 @@ class FixedDeposit extends Controller
         //
         return BR::collection(B::get(['name', 'id']));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -57,9 +64,10 @@ class FixedDeposit extends Controller
     public function store(Request $request)
     {
         //
-        $dps = B::create($request->dps);
-        $dps->nominee()->associate(Nominee::create($request->nominee));
-        $dps->save();
+        // return $request;
+        $dps = B::create($request->all());
+        // $dps->nominee()->associate(Nominee::create($request->nominee));
+        // $dps->save();
         return $dps->refresh();
     }
 
@@ -98,15 +106,7 @@ class FixedDeposit extends Controller
         //
         // C::where('id' , $id)->update($request->all()));
         $dps = B::find($id);
-        if (isset($dps)) {
-            $dps->update($request->dps);
-            // return $member->nominee;
-            if (isset($dps->nominee)) {
-                $dps->nominee()->update($request->nominee);
-            } else {
-                $dps->nominee()->associate(Nominee::create($request->nominee));
-                $dps->save();
-            }
+        if ($dps->update($request->all())) {
             return $dps->refresh();
         } else {
             abort(403, 'Not found');
