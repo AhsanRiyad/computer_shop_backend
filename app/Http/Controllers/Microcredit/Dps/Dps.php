@@ -106,15 +106,7 @@ class Dps extends Controller
         //
         // C::where('id' , $id)->update($request->all()));
         $dps = B::find($id);
-        if (isset($dps)) {
-            $dps->update($request->dps);
-            // return $member->nominee;
-            if (isset($dps->nominee)) {
-                $dps->nominee()->update($request->nominee);
-            } else {
-                $dps->nominee()->associate(Nominee::create($request->nominee));
-                $dps->save();
-            }
+        if ( $dps->update( $request->all() ) ) {
             return $dps->refresh();
         } else {
             abort(403, 'Not found');

@@ -12,6 +12,8 @@ class Dps extends Model
     protected $table = 'dps';
     protected $guarded = ['id'];
 
+    protected $casts = [ 'member_id' => 'integer' ];
+    
     public function transactionMicrocredit()
     {
         return $this->morphMany('App\Models\Microcredit\TransactionMicrocredit\TransactionMicrocredit', 'transactionable');
