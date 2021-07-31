@@ -5,15 +5,14 @@ namespace App\Http\Controllers\Microcredit\Loans;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Http\Others\SampleEmpty;
 use App\Models\Microcredit\Loans\Loan as B;
-use App\Models\Microcredit\Grantors\Grantor;
+use App\Models\Microcredit\Nominee\Nominee;
 use App\Http\Resources\Microcredit\Loans\Loan as BR;
 use DB;
 
-
 class Loan extends Controller
 {
+    //
     //
     //
 
@@ -26,7 +25,7 @@ class Loan extends Controller
     {
         //
         if ($req->q == '') {
-            return BR::collection(B::with(['created_by'])->paginate(10));
+            return BR::collection(B::with(['member', 'collector'])->paginate(10));
         } else {
             return $this->search($req);
         }
@@ -37,7 +36,6 @@ class Loan extends Controller
         //
         return BR::collection(B::get(['name', 'id']));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -66,10 +64,11 @@ class Loan extends Controller
     public function store(Request $request)
     {
         //
-        $loan = B::create($request->loan);
-        $loan->grantor()->associate(Grantor::create($request->grantor));
-        $loan->save();
-        return $loan->refresh();
+        // return $request;
+        $dps = B::create($request->all());
+        // $dps->nominee()->associate(Nominee::create($request->nominee));
+        // $dps->save();
+        return $dps->refresh();
     }
 
     /**
@@ -106,18 +105,10 @@ class Loan extends Controller
     {
         //
         // C::where('id' , $id)->update($request->all()));
-        $loan = B::find($id);
-        if(isset($loan)){
-            $loan->update($request->loan);
-            // return $member->grantor;
-            if (isset($loan->grantor)) {
-                $loan->grantor()->update($request->grantor);
-            } else {
-                $loan->grantor()->associate(Grantor::create($request->grantor));
-                $loan->save();
-            }
-            return $loan->refresh();
-        }else{
+        $dps = B::find($id);
+        if ($dps->update($request->all())) {
+            return $dps->refresh();
+        } else {
             abort(403, 'Not found');
         }
     }
