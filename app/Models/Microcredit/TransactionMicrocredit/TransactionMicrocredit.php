@@ -11,6 +11,10 @@ class TransactionMicrocredit extends Model
     protected $guarded = ['id'];
     protected $table = 'transaction_microcredit';
 
+    public function created_by()
+    {
+        return $this->belongsTo('App\User', 'created_by', 'id');
+    }
 
     public function transactionable()
     {
@@ -24,7 +28,7 @@ class TransactionMicrocredit extends Model
 
     public function employee()
     {
-        return $this->belongsTo('App\Models\Employees\Employee', 'employee_id', 'id');
+        return $this->belongsTo('App\Models\Employees\Employee', 'employee_id', 'id')->with(['user']);
     }
 
     public function bank()

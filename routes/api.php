@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Microcredit\Dps\Dps;
+use App\Http\Controllers\Microcredit\Loans\Loan;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,6 +97,8 @@ Route::group([], function () {
         Route::get('dropdown/bank', 'Banks\Bank@dropdown');
         Route::get('dropdown/member', 'Microcredit\Members\Member@dropdown');
         Route::get('dropdown/employee', 'Employees\Employee@dropdown');
+        Route::get('dropdown/dps', [Dps::class, 'dropdown']);
+        Route::get('dropdown/loan', [Loan::class, 'dropdown']);
 
         Route::get('dropdown/product_n_serial', 'Products\Product@index_product_n_serial');
 
@@ -282,7 +286,8 @@ Route::group([], function () {
 
         //microcredit transactions
         Route::get('transaction-microcredit', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@index');
-        Route::post('transaction-microcredit', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@store');
+        Route::post('transaction-microcredit/{type}', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@store');
+        Route::get('transaction-microcredit/instalment', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@getInstalment');
 
     });
 });

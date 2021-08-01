@@ -34,7 +34,7 @@ class Dps extends Controller
     public function dropdown()
     {
         //
-        return BR::collection(B::get(['name', 'id']));
+        return BR::collection(B::get(['id']));
     }
 
     /**
