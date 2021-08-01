@@ -57,6 +57,7 @@ class TransactionMicrocredit extends Controller
         }else if($type == 'loan'){
             $Loan =  Loan::find($data['dpsOrLoan_id']);
             unset($data['loan_id']);
+            $Loan->transactionMicrocredit()->create($data);
             return $Loan;
         }
         // return $dps->transactionMicrocredit;
