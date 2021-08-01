@@ -87,6 +87,7 @@ class TransactionMicrocredit extends Controller
     public function show($id)
     {
         //
+        return T::find($id);
     }
 
     /**
@@ -98,6 +99,7 @@ class TransactionMicrocredit extends Controller
     public function edit($id)
     {
         //
+        
     }
 
     
@@ -114,6 +116,16 @@ class TransactionMicrocredit extends Controller
         } else {
             return $this->search($req);
         }
+    }
+    
+    public function editInstalment(Request $req, $id)
+    {
+        //
+        $instalment =  T::find($id);
+
+        $instalment->update( $req->all() );
+
+        return $instalment->refresh();
     }
 
 

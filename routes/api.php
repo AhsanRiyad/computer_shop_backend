@@ -283,11 +283,12 @@ Route::group([], function () {
         Route::put('employee/{id}', 'Employees\Employee@update');
         Route::delete('employee/{id}', 'Employees\Employee@destroy');
 
-
         //microcredit transactions
         Route::get('transaction-microcredit', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@index');
-        Route::post('transaction-microcredit/{type}', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@store');
+        Route::post('transaction-microcredit/instalment/{type}', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@store');
         Route::get('transaction-microcredit/instalment', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@getInstalment');
+        Route::put('transaction-microcredit/instalment/{id}', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@editInstalment');
+        Route::get('transaction-microcredit/instalment/{id}', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@show');
 
     });
 });
