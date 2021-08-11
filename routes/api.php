@@ -200,7 +200,6 @@ Route::group([], function () {
 
         //sell
         Route::get('sell/{branch_id}', 'Orders\Order@index_sell');
-        
 
         //Transaction
         Route::get('transaction', 'Transactions\Transaction@index');
