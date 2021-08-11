@@ -32,7 +32,7 @@ class CreateTransactionsTable extends Migration
             $table->boolean('is_debit')->nullable();
             $table->boolean('is_cash')->default(true)->nullable();
             $table->boolean('is_advance')->default(false)->nullable();
-            $table->double('tk' , 8 , 2)->nullable();
+            $table->double('amount' , 8 , 2)->nullable();
             $table->string('date')->nullable();
 
             $table->string('status')->nullable();

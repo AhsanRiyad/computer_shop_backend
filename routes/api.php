@@ -20,7 +20,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
 /* Route::post('/register', 'Api\AuthController@register');
 Route::post('/login', 'Api\AuthController@login'); */
 
@@ -83,7 +82,6 @@ Route::group([], function () {
         Route::get('search/sell', 'Orders\Order@searchSell');
         Route::get('search/product/{branch_id}', 'Products\Product@search');
         Route::get('search/transaction', 'Transactions\Transaction@search');
-
 
         //dropdown
         Route::get('dropdown/category', 'Categories\Category@dropdown');
@@ -202,7 +200,7 @@ Route::group([], function () {
 
         //sell
         Route::get('sell/{branch_id}', 'Orders\Order@index_sell');
- 
+        
 
         //Transaction
         Route::get('transaction', 'Transactions\Transaction@index');
@@ -214,6 +212,7 @@ Route::group([], function () {
         Route::get('transaction/order/{order_id}', 'Transactions\Transaction@show_by_order');
         Route::post('transaction/order/{order_id}', 'Transactions\Transaction@store_by_order');
         Route::put('transaction/order/{order_id}/{transaction_id}', 'Transactions\Transaction@update_by_order');
+        Route::get('transaction/order/{order_id}/{id}', 'Transactions\Transaction@show');
 
         Route::get('transactions/client/{client_id}', 'Transactions\Transaction@show_by_client');
         Route::post('transaction/client/{client_id}', 'Transactions\Transaction@store_by_client');

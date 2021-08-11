@@ -84,10 +84,13 @@ class Transaction extends Controller
     {
         //
         $order = Order::find($order_id);
-
         $info = $request->all();
         $info['client_id'] = $order->client_id;
-
+        if($order->type == 0){
+            $info['is_debit'] = true;
+        }else{
+            $info['is_debit'] = false;
+        }
         $order->transactions()->create($info);
         return new CR($info);
 

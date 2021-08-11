@@ -114,14 +114,14 @@ class Order extends Model
     public function paid()
     {
         /* return $this->getDiscount() == "" ? $this->getSubTotal() : $this->coupon->istk ? $this->getSubTotal() - $this->coupon->tk : ""; */
-        return ( $this->transactions->where('is_debit', '=', true)->sum(DB::raw( 'tk' )) );
+        return ( $this->transactions->where('is_debit', '=', true)->sum(DB::raw('amount' )) );
     }
 
     public function received()
     {
         /* return $this->getDiscount() == "" ? $this->getSubTotal() : $this->coupon->istk ? $this->getSubTotal() - $this->coupon->tk : ""; */
 
-        return ( $this->transactions->where('is_debit', '=', false)->sum(DB::raw( 'tk' )) );
+        return ( $this->transactions->where('is_debit', '=', false)->sum(DB::raw('amount' )) );
     }
 
     public function balance()
