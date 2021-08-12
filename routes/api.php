@@ -190,7 +190,6 @@ Route::group([], function () {
         Route::put('order/{id}', 'Orders\Order@update');
         Route::delete('order/{id}', 'Orders\Order@destroy');
 
-
         //print invoice
         Route::post('order/invoice/{order_id}', 'Orders\Order@printInvoice');
         Route::post('order/invoice', 'Orders\Order@printInvoiceByInfo');
@@ -224,7 +223,6 @@ Route::group([], function () {
         Route::get('productReports/{product_id}', 'Reports\Report@productReports');
         Route::get('categoryReports/{category_id}', 'Reports\Report@categoryReports');
 
-
         //Microcredit
         //Member
         Route::get('member', 'Microcredit\Members\Member@index');
@@ -232,7 +230,6 @@ Route::group([], function () {
         Route::post('member', 'Microcredit\Members\Member@store');
         Route::put('member/{id}', 'Microcredit\Members\Member@update');
         Route::delete('member/{id}', 'Microcredit\Members\Member@destroy');
-
         
         //Loan
         Route::get('loan', 'Microcredit\Loans\Loan@index');
@@ -240,7 +237,6 @@ Route::group([], function () {
         Route::post('loan', 'Microcredit\Loans\Loan@store');
         Route::put('loan/{id}', 'Microcredit\Loans\Loan@update');
         Route::delete('loan/{id}', 'Microcredit\Loans\Loan@destroy');
-        
 
         //dps
         Route::get('dps', 'Microcredit\Dps\Dps@index');

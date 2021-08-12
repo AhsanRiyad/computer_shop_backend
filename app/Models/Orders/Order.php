@@ -45,7 +45,6 @@ class Order extends Model
         return $this->hasMany('App\Models\Warranty\WarrantyModel', 'order_id');
     }
 
-
     public function order_details()
     {
         return $this->hasMany('App\Models\Orders\Order_detail', 'order_id')->with(['products' , 'serial_numbers_purchase', 'serial_numbers_sell']);
@@ -54,7 +53,6 @@ class Order extends Model
     public function serial_numbers()
     {
         /*return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail')->with(['product']);*/
-
         return $this->hasManyThrough('App\Models\Products\Serial_number', 'App\Models\Orders\Order_detail');
     }
 

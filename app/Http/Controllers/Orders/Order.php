@@ -314,7 +314,7 @@ class Order extends Controller
             foreach ($orders as $order) {
                 $order['id_customized'] = 'HCC-' . $order->id;
                 $order['total'] = $order->getTotal();
-                $order['balance'] = $order->balance();
+                $order['balance'] = $order->balance_sell();
                 $order['discountInteger'] = $order->discount;
                 $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount();
                 $order['subtotal'] = $order->getSubTotal();
