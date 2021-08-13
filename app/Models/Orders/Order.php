@@ -15,6 +15,16 @@ class Order extends Model
 
     protected $casts = [ 'client_id' => 'integer', ];
 
+    protected $appends = ['balance-on-credit'];
+
+
+    public function getBalanceOnCreditAttribute()
+    {
+        // return  $this->discount;
+        return  $this->balance;
+    }
+
+
     public function address()
     {
         return $this->hasOne('App\Models\Addresses\Address', 'order_id');

@@ -116,6 +116,79 @@ class Order extends Controller
         });
         return R::collection( collect($order_info)->reverse()); */
     }
+    
+    public function indexOrderOnCredit(Request $req, $branch_id)
+    {
+        //  return $req->page;
+        //  
+        //  $menu = O::find(2);
+        //  return $menu->serial_numbers; 
+        //  return $menu->products; 
+        //  return $menu->order_details; 
+        //  return $menu;
+
+        if ($req->q == '') {
+            /*
+            return R::collection( O::with(['address', 'client' , 'order_details'])->get() );*/
+            $order_info = [];
+            // return O::find(1)->getTotal();
+
+            $orders = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell'])->where('type', '=', 0)->whereHas('branch', function ($q) use ($branch_id) {
+                $q->where('branch_id', $branch_id);
+            })->orderBy('id', 'desc')->paginate(10);
+
+            // $a = R::collection($orders);
+            // var_dump($a);
+            // return $orders['total'];
+            // return R::collection($orders);
+            // dd(R::collection($orders));
+            // $order_info['meta'] = R::collection($orders)['meta'];
+            foreach ($orders as $order) {
+                $order['id_customized'] = 'HCC-' . $order->id_customized;
+                $order['total'] = $order->getTotal();
+                $order['balance'] = $order->balance();
+                $order['discountInteger'] = $order->discount;
+                $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount();
+                $order['subtotal'] = $order->getSubTotal();
+                $order['paid'] = $order->paid();
+                // $order['date'] = date('d-m-Y', strtotime($order->date));
+                $order['received'] = $order->received();
+                $order['created'] = $order->created_by();
+                $order['updated'] = $order->updated_by();
+
+                $order_info['order'][] = $order;
+            }
+            $order_info['meta']['total'] = O::where('type', '=', 0)->count();
+            $order_info['meta']['from'] =  isset($req->page) && $req->page >= 1 ? $req->page * 10 - 10 : 0 ;
+            $order_info['meta']['to'] =  $order_info['meta']['from'] + 10 ;
+            return R::collection(collect($order_info)->reverse());
+        } else {
+            return $this->searchPurchase($req);
+        }
+        
+        // $b['meta'] = 10;
+        // return $b;
+        /* O::with(['address', 'client' , 'created_by', 'updated_by' ,'order_details', 'warranty' , 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell' ])->where('type', '=' ,'purchase')->chunk( 200 , function($result) use (&$order_info){
+            
+            foreach ($result as $order) {
+                # code...
+
+                $order['id_customized'] =  'HCC-' . $order->id;
+                $order['total'] = $order->getTotal();
+                $order['balance'] = $order->balance();
+                $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount() ;
+                $order['subtotal'] = $order->getSubTotal();
+                $order['paid'] = $order->paid();
+                $order['received'] = $order->received();
+                $order['created'] = $order->created_by();
+                $order['updated'] = $order->updated_by();
+
+                $order_info[] = $order;
+            }
+
+        });
+        return R::collection( collect($order_info)->reverse()); */
+    }
 
     public function searchPurchase(Request $req)
     {

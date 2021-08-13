@@ -183,6 +183,7 @@ Route::group([], function () {
         
         //Order
         Route::get('order/{branch_id}', 'Orders\Order@index');
+        Route::get('order-on-credit/{branch_id}', 'Orders\Order@indexOrderOnCredit');
         Route::get('order/test', 'Orders\Order@test');
         Route::get('orderReqiredData', 'Orders\Order@orderReqiredData');
         Route::get('order/{id}', 'Orders\Order@show');
