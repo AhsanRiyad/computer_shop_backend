@@ -64,6 +64,11 @@ class Order extends Controller
                 $q->where('branch_id', $branch_id);
             })->orderBy('id', 'desc')->paginate(10);
 
+            
+            // return O::all()->filter(function($q){
+            //     return $q->balance() == 46.01;
+            // });
+
             // $a = R::collection($orders);
             // var_dump($a);
             // return $orders['total'];
