@@ -133,7 +133,7 @@ class Transaction extends Controller
     public function show($id)
     {
         //
-        return new CR(C::find($id));
+        return new CR(C::with(['client'])->find($id));
     }
 
     /**
