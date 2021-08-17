@@ -27,11 +27,47 @@ class ClientResource extends JsonResource
         $all =  parent::toArray($request);
         $all['debit'] = $this->debit();
         $all['credit'] = $this->credit();
+        $all['needToPay'] =  round( $this->credit() - $this->debit() , 2 );
         return $all;
     }
 }
 
+class ClientResourceSeller extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
 
+    public function toArray($request)
+    {
+        $all =  parent::toArray($request);
+        $all['debit'] = $this->debitSeller();
+        $all['credit'] = $this->creditSeller();
+        $all['needToPay'] =  round( $this->debitSeller() - $this->creditSeller() , 2) ;
+        return $all;
+    }
+}
+
+class ClientResourceCustomer extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        $all =  parent::toArray($request);
+        $all['debit'] = $this->debitCustomer();
+        $all['credit'] = $this->creditCustomer();
+        $all['needToPay'] = $this->creditCustomer() - $this->debitCustomer();
+        return $all;
+    }
+}
 
 class Transaction extends Controller
 {
@@ -168,6 +204,28 @@ class Transaction extends Controller
         //     ->groupBy('client_id')
         //     ->get();
         return ClientResource::collection( Client::paginate(10) );
+    }
+
+    public function transactionBySeller()
+    {
+        //
+        // return DB::table('transactions')
+        //     ->select(DB::raw('sum(amount) as amount'))
+        //     ->where('is_debit',  true)
+        //     ->groupBy('client_id')
+        //     ->get();
+        return ClientResourceSeller::collection( Client::where('type' , 'seller')->paginate(10) );
+    }
+
+    public function transactionByCustomer()
+    {
+        //
+        // return DB::table('transactions')
+        //     ->select(DB::raw('sum(amount) as amount'))
+        //     ->where('is_debit',  true)
+        //     ->groupBy('client_id')
+        //     ->get();
+        return ClientResourceCustomer::collection( Client::where('type' , 'customer')->paginate(10) );
     }
 
     /**

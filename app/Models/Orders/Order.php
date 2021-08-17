@@ -3,7 +3,6 @@
 namespace App\Models\Orders;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
@@ -11,19 +10,27 @@ class Order extends Model
     use SoftDeletes;
     protected $guarded = ['id'];
     protected $casts = [ 'client_id' => 'integer', ];
-    protected $appends = ['balance-on-credit'];
+    protected $appends = ['balance-on-credit' ];
 
     public function getBalanceOnCreditAttribute()
     {
         // return  $this->discount;
-        return  $this->balance;
+        // return  $this->balance;
+        return  100;
     }
+
+    // public function getTotalAttribute()
+    // {
+    //     // return  $this->discount;
+    //     // return  $this->balance;
+    //     // return   $this->getTotal();
+    //     return $this->getTotal();
+    // }
 
     // public function getBalanceOnCreditAttribute()
     // {
     //     return "till_you_make_it";
     // }
-
 
     public function address()
     {

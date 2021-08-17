@@ -208,6 +208,8 @@ Route::group([], function () {
         Route::put('transaction/{id}', 'Transactions\Transaction@update');
         Route::delete('transaction/{id}', 'Transactions\Transaction@destroy');
         Route::get('transactionByClient', 'Transactions\Transaction@transactionByClient');
+        Route::get('transactionBySeller', 'Transactions\Transaction@transactionBySeller');
+        Route::get('transactionByCustomer', 'Transactions\Transaction@transactionByCustomer');
         
 
 
