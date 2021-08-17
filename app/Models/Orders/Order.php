@@ -104,7 +104,7 @@ class Order extends Model
 
     public function getSubTotal()
     {
-        return $this->order_details()->sum(DB::raw('quantity * price'));
+        return $this->order_details()->sum( DB::raw('quantity * price') );
     }
 
     public function getDiscount()
@@ -116,7 +116,7 @@ class Order extends Model
     public function discounts()
     {
         // return  $this->coupon->istk ? $this->coupon->tk . ' AED' : $this->coupon->percentage. " %"  ;
-        return  ( ($this->getSubTotal() *  $this->discount) /100 ) ;
+        return  ( ($this->getSubTotal() *  $this->discount) / 100 ) ;
     }
 
     public function getTotal()

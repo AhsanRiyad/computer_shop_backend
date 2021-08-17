@@ -53,7 +53,7 @@ class Client extends Model
     //customer starts
     public function debitCustomer()
     {
-        return $this->orders->sum('total');
+        // return $this->orders->sum('total');
         $total = 0;
         foreach ($this->orders as $value) {
             $total += $value->getTotal();

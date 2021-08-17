@@ -225,6 +225,7 @@ class Transaction extends Controller
         //     ->where('is_debit',  true)
         //     ->groupBy('client_id')
         //     ->get();
+        // return Client::where('type', 'customer')->paginate(10);
         return ClientResourceCustomer::collection( Client::where('type' , 'customer')->paginate(10) );
     }
 

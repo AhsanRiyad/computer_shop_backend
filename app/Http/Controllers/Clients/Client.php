@@ -62,13 +62,13 @@ class Client extends Controller
     public function index_seller()
     {
         //
-        return CR::collection(C::where('type' , '=' , 'seller')->get(['name' , 'id']));
+        return CR::collection(C::where('type' , 'seller')->get(['name' , 'id']));
     }
 
     public function index_customer()
     {
         //
-        return CR::collection(C::where('type' , '=' , 'customer')->get(['id' , 'name']));
+        return CR::collection(C::where('type'  , 'customer')->get(['id' , 'name']));
     }
 
     public function index_client()
