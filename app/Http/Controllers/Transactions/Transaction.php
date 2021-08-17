@@ -2,13 +2,36 @@
 
 namespace App\Http\Controllers\Transactions;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Transactions\Transaction as C;
 use App\Models\Orders\Order;
+use Illuminate\Http\Request;
 use App\Models\Clients\Client;
-use App\Http\Resources\Transactions\Transaction as CR;
 use App\Http\Others\SampleEmpty;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\Transactions\Transaction as C;
+use App\Http\Resources\Transactions\Transaction as CR;
+
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class ClientResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+
+    public function toArray($request)
+    {
+        $all =  parent::toArray($request);
+        $all['debit'] = $this->debit();
+        $all['credit'] = $this->credit();
+        return $all;
+    }
+}
+
+
 
 class Transaction extends Controller
 {
@@ -21,9 +44,9 @@ class Transaction extends Controller
     {
         //
         // return $req->q;
-        if($req->q == '' ){
-            return CR::collection( C::with(['client'])->orderBy('id' , 'desc')->paginate(10) );
-        }else{
+        if ($req->q == '') {
+            return CR::collection(C::with(['client'])->orderBy('id', 'desc')->paginate(10));
+        } else {
             return $this->search($req);
         }
     }
@@ -86,9 +109,9 @@ class Transaction extends Controller
         $order = Order::find($order_id);
         $info = $request->all();
         $info['client_id'] = $order->client_id;
-        if($order->type == 0){
+        if ($order->type == 0) {
             $info['is_debit'] = true;
-        }else{
+        } else {
             $info['is_debit'] = false;
         }
         $order->transactions()->create($info);
@@ -136,6 +159,17 @@ class Transaction extends Controller
         return new CR(C::with(['client'])->find($id));
     }
 
+    public function transactionByClient()
+    {
+        //
+        // return DB::table('transactions')
+        //     ->select(DB::raw('sum(amount) as amount'))
+        //     ->where('is_debit',  true)
+        //     ->groupBy('client_id')
+        //     ->get();
+        return ClientResource::collection( Client::paginate(10) );
+    }
+
     /**
      * Display the specified resource.
      *
@@ -145,7 +179,7 @@ class Transaction extends Controller
     public function show_by_order($order_id)
     {
         //
-        return new CR( Order::find($order_id)->Transactions()->paginate(10) );
+        return new CR(Order::find($order_id)->Transactions()->paginate(10));
     }
 
     /**
@@ -157,7 +191,7 @@ class Transaction extends Controller
     public function show_by_client($client_id)
     {
         //
-        return new CR( Client::find($client_id)->Transactions );
+        return new CR(Client::find($client_id)->Transactions);
     }
 
     /**
@@ -181,11 +215,11 @@ class Transaction extends Controller
     public function update(Request $request, $id)
     {
         //
-         if ( C::where('id' , $id)->update( $request->all() ) )  {
-            return new CR( C::find($id) );
+        if (C::where('id', $id)->update($request->all())) {
+            return new CR(C::find($id));
         };
         abort(403, 'Not found');
-    } 
+    }
 
     /**
      * Update the specified resource in storage.
@@ -199,7 +233,7 @@ class Transaction extends Controller
         //
         $transaction =  C::find($transaction_id);
         $transaction->update($request->all());
-        return response( $transaction->refresh(), 200 );
+        return response($transaction->refresh(), 200);
 
         /*if ($product->save($request->all())) {
             return new CR($request->all());

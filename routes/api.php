@@ -207,7 +207,10 @@ Route::group([], function () {
         Route::post('transaction', 'Transactions\Transaction@store');
         Route::put('transaction/{id}', 'Transactions\Transaction@update');
         Route::delete('transaction/{id}', 'Transactions\Transaction@destroy');
+        Route::get('transactionByClient', 'Transactions\Transaction@transactionByClient');
         
+
+
         Route::get('transaction/order/{order_id}', 'Transactions\Transaction@show_by_order');
         Route::post('transaction/order/{order_id}', 'Transactions\Transaction@store_by_order');
         Route::put('transaction/order/{order_id}/{transaction_id}', 'Transactions\Transaction@update_by_order');
