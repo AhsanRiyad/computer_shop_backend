@@ -92,7 +92,6 @@ class Product extends Controller
         })->where(function($q) use ($req){
             return $q->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%');
         } )->orderBy('id', 'desc')->get());
-
         
         if($a->count() > 0) return $a;
         else return  json_encode(new SampleEmpty([]));

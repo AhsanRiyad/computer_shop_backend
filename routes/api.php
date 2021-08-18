@@ -190,7 +190,7 @@ Route::group([], function () {
         Route::post('order', 'Orders\Order@store');
         Route::put('order/{id}', 'Orders\Order@update');
         Route::delete('order/{id}', 'Orders\Order@destroy');
-
+        
         //print invoice
         Route::post('order/invoice/{order_id}', 'Orders\Order@printInvoice');
         Route::post('order/invoice', 'Orders\Order@printInvoiceByInfo');
@@ -210,8 +210,7 @@ Route::group([], function () {
         Route::get('transactionByClient', 'Transactions\Transaction@transactionByClient');
         Route::get('transactionBySeller', 'Transactions\Transaction@transactionBySeller');
         Route::get('transactionByCustomer', 'Transactions\Transaction@transactionByCustomer');
-        
-
+        Route::get('transactionLedger/{period}/{client_id}', 'Transactions\Transaction@transactionLedger');
 
         Route::get('transaction/order/{order_id}', 'Transactions\Transaction@show_by_order');
         Route::post('transaction/order/{order_id}', 'Transactions\Transaction@store_by_order');
@@ -251,14 +250,12 @@ Route::group([], function () {
         Route::put('dps/{id}', 'Microcredit\Dps\Dps@update');
         Route::delete('dps/{id}', 'Microcredit\Dps\Dps@destroy');
 
-
         //fixedDeposit
         Route::get('fixedDeposit', 'Microcredit\FixedDeposit\FixedDeposit@index');
         Route::get('fixedDeposit/{id}', 'Microcredit\FixedDeposit\FixedDeposit@show');
         Route::post('fixedDeposit', 'Microcredit\FixedDeposit\FixedDeposit@store');
         Route::put('fixedDeposit/{id}', 'Microcredit\FixedDeposit\FixedDeposit@update');
         Route::delete('fixedDeposit/{id}', 'Microcredit\FixedDeposit\FixedDeposit@destroy');
-
 
         //Grantors
         Route::get('grantor', 'Microcredit\Grantors\Grantor@index');

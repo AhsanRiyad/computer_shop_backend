@@ -51,6 +51,23 @@ class ClientResourceSeller extends JsonResource
     }
 }
 
+class ClientLedgerResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+
+    public function toArray($request)
+    {
+        $all =  parent::toArray($request);
+        $all['total'] = $this->getTotal();
+        return $all;
+    }
+}
+
 class ClientResourceCustomer extends JsonResource
 {
     /**
@@ -64,7 +81,7 @@ class ClientResourceCustomer extends JsonResource
         $all =  parent::toArray($request);
         $all['debit'] = $this->debitCustomer();
         $all['credit'] = $this->creditCustomer();
-        $all['needToPay'] = $this->creditCustomer() - $this->debitCustomer();
+        $all['needToPay'] = round( $this->debitCustomer() - $this->creditCustomer()  );
         return $all;
     }
 }
@@ -238,7 +255,10 @@ class Transaction extends Controller
     public function show_by_order($order_id)
     {
         //
+        // return new CR(Order::find($order_id)->Transactions()->paginate(10));
         return new CR(Order::find($order_id)->Transactions()->paginate(10));
+        
+
     }
 
     /**
@@ -259,9 +279,30 @@ class Transaction extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function transactionLedger($period , $client_id)
     {
         //
+        $time = strtotime($period);
+        $month = date("m", $time);
+        $year = date("Y", $time);
+
+        // return $month;
+
+        // return CR::collection(Client::find($client_id)->Transactions->where('is_debit' , false));
+        // $transactions = Client::find($client_id)->Transactions->take(10);
+        // $transactions = Client::find($client_id)->Transactions->where('date', 'regexp' ,  '(2021-08-12)')->take(10);
+
+        $transactions = C::where('client_id' , $client_id)->where('date' , 'like' , '%'.'08-12'.'%')->get()->take(10);
+        $orders = Order::where('client_id' , $client_id)->where('date' , 'like' , '%'.'08-12'.'%')->get()->take(10);
+
+        // $orders = ClientLedgerResource::collection(Client::find($client_id)->Orders->take(10));
+        // $orders = ClientLedgerResource::collection(Client::find($client_id)->Orders->where('date',  '2021-08-12')->take(10) );
+        return $transactions->merge($orders)->sortBy('date');
+
+        // return collect(array_merge( $transactions->toArray(), $orders->toArray() ))->sortBy('date');
+
+        // return compact('transactions', 'orders');
+        // return $period;
     }
 
     /**
