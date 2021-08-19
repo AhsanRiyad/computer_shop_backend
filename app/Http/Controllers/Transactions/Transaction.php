@@ -292,8 +292,8 @@ class Transaction extends Controller
         // $transactions = Client::find($client_id)->Transactions->take(10);
         // $transactions = Client::find($client_id)->Transactions->where('date', 'regexp' ,  '(2021-08-12)')->take(10);
 
-        $transactions = C::where('client_id' , $client_id)->where('date' , 'like' , '%'.'08-12'.'%')->get()->take(10);
-        $orders = Order::where('client_id' , $client_id)->where('date' , 'like' , '%'.'08-12'.'%')->get()->take(10);
+        $transactions = C::where('client_id' , $client_id)->where('date' , 'like' , '%'.'08-12'.'%')->get();
+        $orders = Order::where('client_id' , $client_id)->where('date' , 'like' , '%'.'08-12'.'%')->get();
 
         // $orders = ClientLedgerResource::collection(Client::find($client_id)->Orders->take(10));
         // $orders = ClientLedgerResource::collection(Client::find($client_id)->Orders->where('date',  '2021-08-12')->take(10) );
