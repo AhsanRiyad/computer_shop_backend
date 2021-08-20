@@ -65,7 +65,6 @@ Route::group([], function () {
 
     });
 
-
     Route::group([
         'middleware' => 'auth:api'
     ], function () {
@@ -240,17 +239,15 @@ Route::group([], function () {
         Route::get('transactions/client/{client_id}', 'Transactions\Transaction@show_by_client');
         Route::post('transaction/client/{client_id}', 'Transactions\Transaction@store_by_client');
 
-
         //for income
         Route::get('transactions/income', 'Incomes\IncomeController@indexIncome');
         Route::post('transactions/income', 'Incomes\IncomeController@storeIncome');
-        Route::post('transactions/income/{id}', 'Transactions\Transaction@update');
+        Route::put('transactions/income/{id}', 'Transactions\Transaction@update');
 
         //for expense
         Route::get('transactions/expense', 'Expenses\ExpenseController@indexExpense');
         Route::post('transactions/expense', 'Expenses\ExpenseController@storeExpense');
-        Route::post('transactions/expense/{id}', 'Transactions\Transaction@update');
-
+        Route::put('transactions/expense/{id}', 'Transactions\Transaction@update');
 
         //bulk create
         Route::post('transactions', 'Transactions\Transaction@create');

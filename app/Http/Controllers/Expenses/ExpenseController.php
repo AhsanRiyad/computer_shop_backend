@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Expenses;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Expenses\Expense as B;
+use App\Models\Transactions\Transaction;
 use App\Http\Resources\Expenses\Expense as BR;
 
 class ExpenseController extends Controller
@@ -40,8 +41,7 @@ class ExpenseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
-    {
-    }
+    {}
 
     /**
      * Store a newly created resource in storage.
@@ -57,16 +57,16 @@ class ExpenseController extends Controller
 
     public function indexExpense()
     {
-        return BR::collection(B::paginate(10));
+        return BR::collection(Transaction::where('transactionable_type', 'App\Models\Expenses\Expense')->with(['transactionable'])->paginate(10));
         // return $request;
     }
 
     public function storeExpense(Request $request)
     {
-        return B::find($request->expense_id)->transaction()->create($request->all());
+        $request['is_debit'] = true;
+        return B::find($request->transactionable_id)->transaction()->create($request->all());
         // return $request;
     }
-
 
     /**
      * Display the specified resource.

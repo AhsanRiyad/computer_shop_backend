@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Incomes;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Incomes\Income as B;
+use App\Models\Transactions\Transaction;
 use App\Http\Resources\Incomes\Income as BR;
 
 class IncomeController extends Controller
@@ -59,13 +60,15 @@ class IncomeController extends Controller
 
     public function indexIncome()
     {
-        return BR::collection( B::paginate(10) );
+        return BR::collection(Transaction::where('transactionable_type', 'App\Models\Incomes\Income')->with(['transactionable'])->paginate(10));
+        // return BR::collection(B::paginate(10));
         // return $request;
     }
 
     public function storeIncome(Request $request)
     {
-        return B::find($request->income_id)->transaction()->create($request->all());
+        $request['is_debit'] = false;
+        return B::find($request->transactionable_id)->transaction()->create($request->all());
         // return $request;
     }
 
