@@ -36,7 +36,12 @@ class CreateTransactionsTable extends Migration
             $table->string('date')->nullable();
 
             $table->string('status')->nullable();
-            
+
+
+            $table->integer('transactionable_id')->nullable();
+            $table->string('transactionable_type')->nullable();
+
+
             $table->string('reference')->nullable();
             $table->date('check_date')->nullable();
 

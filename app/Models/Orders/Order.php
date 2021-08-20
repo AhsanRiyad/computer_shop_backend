@@ -32,6 +32,11 @@ class Order extends Model
     //     return "till_you_make_it";
     // }
 
+    public function transaction()
+    {
+        return $this->morphMany('App\Models\Transactions\Transaction', 'transactionable');
+    }
+
     public function address()
     {
         return $this->hasOne('App\Models\Addresses\Address', 'order_id');

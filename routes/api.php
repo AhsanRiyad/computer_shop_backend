@@ -130,6 +130,13 @@ Route::group([], function () {
         Route::put('bank/{id}', 'Banks\Bank@update');
         Route::delete('bank/{id}', 'Banks\Bank@destroy');
 
+        //income
+        Route::get('income-name', 'Incomes\IncomeController@indexIncomeName');
+        Route::get('income-name/{id}', 'Incomes\IncomeController@showIncomeName');
+        Route::post('income-name', 'Incomes\IncomeController@storeIncomeName');
+        Route::put('income-name/{id}', 'Incomes\IncomeController@updateIncomeName');
+        Route::delete('income-name/{id}', 'Incomes\IncomeController@destroyIncomeName');
+
 
         //unit
         Route::get('unit', 'Units\Unit@index');

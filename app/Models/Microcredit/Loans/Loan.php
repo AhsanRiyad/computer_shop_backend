@@ -11,7 +11,6 @@ class Loan extends Model
     //
     use SoftDeletes;
     protected $guarded = ['id'];
-
     protected $casts = ['member_id' => 'integer'];
 
     public function transactionMicrocredit()
@@ -24,7 +23,6 @@ class Loan extends Model
         return $this->belongsTo('App\Models\Microcredit\Members\Member', 'member_id', 'id');
     }
 
-
     public function grantor()
     {
         return $this->belongsTo('App\Models\Microcredit\Grantors\Grantor', 'grantor_id', 'id');
@@ -34,4 +32,5 @@ class Loan extends Model
     {
         return $this->belongsTo('App\Models\Employees\Employee', 'collector_id', 'id')->with(['user']);
     }
+
 }

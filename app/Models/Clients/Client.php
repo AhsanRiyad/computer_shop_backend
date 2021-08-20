@@ -14,6 +14,12 @@ class Client extends Model
         return $this->hasMany('App\Models\Orders\Order', 'client_id');
     }
 
+    public function transaction()
+    {
+        return $this->morphMany('App\Models\Transactions\Transaction', 'transactionable');
+    }
+
+
     public function branch()
     {
         return $this->belongsToMany('App\Models\Branches\Branch');

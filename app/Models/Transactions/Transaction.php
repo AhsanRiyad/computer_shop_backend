@@ -25,4 +25,9 @@ class Transaction extends Model
         return $this->belongsTo('App\Models\Transactions\Refund', 'refund_id', 'id');
     }
 
+    public function transactionable()
+    {
+        return $this->morphTo();
+    }
+
 }
