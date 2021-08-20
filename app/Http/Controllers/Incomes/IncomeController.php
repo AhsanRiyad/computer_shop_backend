@@ -30,9 +30,9 @@ class IncomeController extends Controller
         return BR::collection(B::get(['name', 'id']));
     }
 
-
     public function search(Request $req)
     {
+
     }
 
     /**
@@ -42,6 +42,7 @@ class IncomeController extends Controller
      */
     public function create(Request $request)
     {
+        
     }
 
     /**

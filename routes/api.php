@@ -139,6 +139,13 @@ Route::group([], function () {
         Route::put('income-name/{id}', 'Incomes\IncomeController@updateIncomeName');
         Route::delete('income-name/{id}', 'Incomes\IncomeController@destroyIncomeName');
 
+        //expense
+        Route::get('expense-name', 'Expenses\ExpenseController@indexExpenseName');
+        Route::get('expense-name/{id}', 'Expenses\ExpenseController@showExpenseName');
+        Route::post('expense-name', 'Expenses\ExpenseController@storeExpenseName');
+        Route::put('expense-name/{id}', 'Expenses\ExpenseController@updateExpenseName');
+        Route::delete('expense-name/{id}', 'Expenses\ExpenseController@destroyExpenseName');
+
         //unit
         Route::get('unit', 'Units\Unit@index');
         Route::get('unit/{id}', 'Units\Unit@index');

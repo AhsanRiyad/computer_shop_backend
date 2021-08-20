@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Expenses;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Expenses\Expense as B;
+use App\Http\Resources\Expenses\Expense as BR;
 
 class ExpenseController extends Controller
 {
@@ -12,9 +14,24 @@ class ExpenseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function indexExpenseName(Request $req)
     {
         //
+        if ($req->q == '') {
+            return BR::collection(B::with(['created_by'])->paginate(10));
+        } else {
+            return $this->search($req);
+        }
+    }
+
+    public function dropdown()
+    {
+        //
+        return BR::collection(B::get(['name', 'id']));
+    }
+
+    public function search(Request $req)
+    {
     }
 
     /**
@@ -22,9 +39,8 @@ class ExpenseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
     }
 
     /**
@@ -33,9 +49,10 @@ class ExpenseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function storeExpenseName(Request $request)
     {
-        //
+        B::create($request->all());
+        return new BR($request->all());
     }
 
     /**
@@ -44,9 +61,10 @@ class ExpenseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showExpenseName($id)
     {
         //
+        return new BR(B::find($id));
     }
 
     /**
@@ -67,9 +85,12 @@ class ExpenseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateExpenseName(Request $request, $id)
     {
-        //
+        if (B::where('id', $id)->update($request->all())) {
+            return new BR(B::find($id));
+        };
+        abort(403, 'Not found');
     }
 
     /**
@@ -78,8 +99,13 @@ class ExpenseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroyExpenseName($id)
     {
         //
+        $menu = B::find($id);
+        if (B::destroy($id)) {
+            return new BR($menu);
+        }
+        abort(403, 'Not found');
     }
 }
