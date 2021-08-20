@@ -6,7 +6,6 @@ use App\Models\Orders\Order;
 use Illuminate\Http\Request;
 use App\Models\Clients\Client;
 use App\Http\Others\SampleEmpty;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Transactions\Transaction as C;
 use App\Http\Resources\Transactions\Transaction as CR;

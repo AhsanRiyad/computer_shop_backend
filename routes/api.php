@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Incomes\IncomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Microcredit\Dps\Dps;
@@ -97,6 +98,7 @@ Route::group([], function () {
         Route::get('dropdown/employee', 'Employees\Employee@dropdown');
         Route::get('dropdown/dps', [Dps::class, 'dropdown']);
         Route::get('dropdown/loan', [Loan::class, 'dropdown']);
+        Route::get('dropdown/income-name', [IncomeController::class, 'dropdown']);
 
         Route::get('dropdown/product_n_serial', 'Products\Product@index_product_n_serial');
 
@@ -136,7 +138,6 @@ Route::group([], function () {
         Route::post('income-name', 'Incomes\IncomeController@storeIncomeName');
         Route::put('income-name/{id}', 'Incomes\IncomeController@updateIncomeName');
         Route::delete('income-name/{id}', 'Incomes\IncomeController@destroyIncomeName');
-
 
         //unit
         Route::get('unit', 'Units\Unit@index');
