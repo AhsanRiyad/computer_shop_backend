@@ -16,6 +16,7 @@ class Expense extends Model
         return $this->belongsTo('App\User', 'created_by', 'id');
     }
 
+
     public function transaction()
     {
         return $this->morphMany('App\Models\Transactions\Transaction', 'transactionable');

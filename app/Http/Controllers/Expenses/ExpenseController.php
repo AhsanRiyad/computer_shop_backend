@@ -55,6 +55,19 @@ class ExpenseController extends Controller
         return new BR($request->all());
     }
 
+    public function indexExpense()
+    {
+        return BR::collection(B::paginate(10));
+        // return $request;
+    }
+
+    public function storeExpense(Request $request)
+    {
+        return B::find($request->expense_id)->transaction()->create($request->all());
+        // return $request;
+    }
+
+
     /**
      * Display the specified resource.
      *

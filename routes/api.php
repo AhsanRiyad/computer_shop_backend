@@ -138,6 +138,11 @@ Route::group([], function () {
         Route::post('income-name', 'Incomes\IncomeController@storeIncomeName');
         Route::put('income-name/{id}', 'Incomes\IncomeController@updateIncomeName');
         Route::delete('income-name/{id}', 'Incomes\IncomeController@destroyIncomeName');
+        
+        //store income
+        Route::get('income', 'Incomes\IncomeController@indexIncome');
+        Route::post('income', 'Incomes\IncomeController@storeIncome');
+        
 
         //expense
         Route::get('expense-name', 'Expenses\ExpenseController@indexExpenseName');
@@ -234,6 +239,18 @@ Route::group([], function () {
 
         Route::get('transactions/client/{client_id}', 'Transactions\Transaction@show_by_client');
         Route::post('transaction/client/{client_id}', 'Transactions\Transaction@store_by_client');
+
+
+        //for income
+        Route::get('transactions/income', 'Incomes\IncomeController@indexIncome');
+        Route::post('transactions/income', 'Incomes\IncomeController@storeIncome');
+        Route::post('transactions/income/{id}', 'Transactions\Transaction@update');
+
+        //for expense
+        Route::get('transactions/expense', 'Expenses\ExpenseController@indexExpense');
+        Route::post('transactions/expense', 'Expenses\ExpenseController@storeExpense');
+        Route::post('transactions/expense/{id}', 'Transactions\Transaction@update');
+
 
         //bulk create
         Route::post('transactions', 'Transactions\Transaction@create');

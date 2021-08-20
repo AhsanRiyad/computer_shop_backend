@@ -57,6 +57,18 @@ class IncomeController extends Controller
         return new BR($request->all());
     }
 
+    public function indexIncome()
+    {
+        return BR::collection( B::paginate(10) );
+        // return $request;
+    }
+
+    public function storeIncome(Request $request)
+    {
+        return B::find($request->income_id)->transaction()->create($request->all());
+        // return $request;
+    }
+
     /**
      * Display the specified resource.
      *
