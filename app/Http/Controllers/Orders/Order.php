@@ -499,8 +499,7 @@ class Order extends Controller
         DB::beginTransaction();
 
         try {
-
-           $s = Serial_sell::whereIn('number', $request->serials)->get();
+            $s = Serial_sell::whereIn('number', $request->serials)->get();
             if (count($s) > 0) return response( $s , 403 );
 
             $branch =  Branch::find($request->order['branch_id']);
