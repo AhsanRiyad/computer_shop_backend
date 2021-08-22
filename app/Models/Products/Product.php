@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 class Product extends Model
 {
-    use SoftDeletes;
+use SoftDeletes;
     //
     protected $guarded = ['id'];
     protected $casts = [ "having_serial" => 'boolean', 'brand_id' => 'integer' , 'category_id' => 'integer' ];

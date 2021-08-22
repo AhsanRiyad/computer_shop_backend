@@ -205,7 +205,7 @@ Route::group([], function () {
         Route::get('order-on-credit/{branch_id}', 'Orders\Order@indexOrderOnCredit');
         Route::get('order/test', 'Orders\Order@test');
         Route::get('orderReqiredData', 'Orders\Order@orderReqiredData');
-        Route::get('order/{id}', 'Orders\Order@show');
+        Route::get('order-details/{id}', 'Orders\Order@show');
         Route::post('order', 'Orders\Order@store');
         Route::put('order/{id}', 'Orders\Order@update');
         Route::delete('order/{id}', 'Orders\Order@destroy');
@@ -238,6 +238,8 @@ Route::group([], function () {
 
         Route::get('transactions/client/{client_id}', 'Transactions\Transaction@show_by_client');
         Route::post('transaction/client/{client_id}', 'Transactions\Transaction@store_by_client');
+        
+        Route::get('incomeStatement/{period}', 'Transactions\Transaction@incomeStatement');
 
         //for income
         Route::get('transactions/income', 'Incomes\IncomeController@indexIncome');

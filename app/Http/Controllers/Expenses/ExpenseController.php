@@ -57,7 +57,7 @@ class ExpenseController extends Controller
 
     public function indexExpense()
     {
-        return BR::collection(Transaction::where('transactionable_type', 'App\Models\Expenses\Expense')->with(['transactionable'])->paginate(10));
+        return BR::collection(Transaction::where('transactionable_type', 'expense')->with(['transactionable'])->paginate(10));
         // return $request;
     }
 

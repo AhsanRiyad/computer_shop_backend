@@ -9,14 +9,42 @@ class Order extends Model
 {
     use SoftDeletes;
     protected $guarded = ['id'];
-    protected $casts = [ 'client_id' => 'integer', ];
-    protected $appends = ['balance-on-credit' ];
+    protected $casts = [ 'client_id' => 'integer' ];
+    protected $appends = ['balance-on-credit' , 'total' , 'balance', 'balanceSell', 'subtotal', 'paid' , 'received'];
 
     public function getBalanceOnCreditAttribute()
     {
-        // return  $this->discount;
-        // return  $this->balance;
         return  100;
+    }
+
+    public function getTotalAttribute()
+    {
+        return  $this->getTotal();
+    }
+
+    public function getBalanceAttribute()
+    {
+        return  $this->balance();
+    }
+
+    public function getBalanceSellAttribute()
+    {
+        return  $this->balance_sell();
+    }
+
+    public function getSubtotalAttribute()
+    {
+        return  $this->getSubTotal();
+    }
+
+    public function getPaidAttribute()
+    {
+        return  $this->paid();
+    }
+
+    public function getReceivedAttribute()
+    {
+        return  $this->received();
     }
 
     // public function getTotalAttribute()

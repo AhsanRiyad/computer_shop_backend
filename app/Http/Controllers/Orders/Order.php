@@ -55,45 +55,11 @@ class Order extends Controller
         //  return $menu;
 
         if ($req->q == '') {
-            /*
-            return R::collection( O::with(['address', 'client' , 'order_details'])->get() );*/
-            $order_info = [];
-            // return O::find(1)->getTotal();
-
             $orders = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell'])->where('type', '=', 0)->whereHas('branch', function ($q) use ($branch_id) {
                 $q->where('branch_id', $branch_id);
             })->orderBy('id', 'desc')->paginate(10);
 
-            
-            // return O::all()->filter(function($q){
-            //     return $q->balance() == 46.01;
-            // });
-
-            // $a = R::collection($orders);
-            // var_dump($a);
-            // return $orders['total'];
-            // return R::collection($orders);
-            // dd(R::collection($orders));
-            // $order_info['meta'] = R::collection($orders)['meta'];
-            foreach ($orders as $order) {
-                $order['id_customized'] = 'HCC-' . $order->id_customized;
-                $order['total'] = $order->getTotal();
-                $order['balance'] = $order->balance();
-                $order['discountInteger'] = $order->discount;
-                $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount();
-                $order['subtotal'] = $order->getSubTotal();
-                $order['paid'] = $order->paid();
-                // $order['date'] = date('d-m-Y', strtotime($order->date));
-                $order['received'] = $order->received();
-                $order['created'] = $order->created_by();
-                $order['updated'] = $order->updated_by();
-
-                $order_info['order'][] = $order;
-            }
-            $order_info['meta']['total'] = O::where('type', '=', 0)->count();
-            $order_info['meta']['from'] =  isset($req->page) && $req->page >= 1 ? $req->page * 10 - 10 : 0 ;
-            $order_info['meta']['to'] =  $order_info['meta']['from'] + 10 ;
-            return R::collection(collect($order_info)->reverse());
+            return R::collection($orders);
         } else {
             return $this->searchPurchase($req);
         }
@@ -376,37 +342,11 @@ class Order extends Controller
 
         if ($req->q == ''
         ) {
-            $order_info = [];
-            // return O::find(1)->getTotal();
-
             $orders = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell.order_detail'])->whereHas('branch', function ($q) use ($branch_id) {
                 $q->where('branch_id', $branch_id);
             })->where('type', '=', 1)->paginate(10);
 
-            // $a = R::collection($orders);
-            // var_dump($a);
-            // return $orders['total'];
-            // return R::collection($orders);
-            // dd(R::collection($orders));
-            // $order_info['meta'] = R::collection($orders)['meta'];
-            foreach ($orders as $order) {
-                $order['id_customized'] = 'HCC-' . $order->id;
-                $order['total'] = $order->getTotal();
-                $order['balance'] = $order->balance_sell();
-                $order['discountInteger'] = $order->discount;
-                $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount();
-                $order['subtotal'] = $order->getSubTotal();
-                $order['paid'] = $order->paid();
-                $order['received'] = $order->received();
-                $order['created'] = $order->created_by();
-                $order['updated'] = $order->updated_by();
-
-                $order_info['order'][] = $order;
-            }
-            $order_info['meta']['total'] = O::where('type', '=', 1)->count();
-            $order_info['meta']['from'] =  isset($req->page) && $req->page >= 1 ? $req->page * 10 - 10 : 0;
-            $order_info['meta']['to'] =  $order_info['meta']['from'] + 10;
-            return R::collection(collect($order_info)->reverse());
+            return R::collection($orders);
         } else {
             return $this->searchSell($req);
         }
@@ -550,24 +490,27 @@ class Order extends Controller
     {
         //
         // return new R(O::find($id));
-
+        // return $id;
         $order = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell.order_detail'])->where('id', '=', $id)->first();
 
-        $order['total'] = $order->getTotal();
-        $order['balance'] = $order->balance();
-        $order['discountInteger'] = $order->discount;
-        $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount();
-        $order['subtotal'] = $order->getSubTotal();
-        $order['paid'] = $order->paid();
-        $order['received'] = $order->received();
-        $order['created'] = $order->created_by();
-        $order['updated'] = $order->updated_by();
+        // $order['total'] = $order->getTotal();
+        // $order['balance'] = $order->balance();
+        // $order['discountInteger'] = $order->discount;
+        // $order['discount'] = $order->getDiscount() == "" ? 0 : $order->getDiscount();
+        // $order['subtotal'] = $order->getSubTotal();
+        // $order['paid'] = $order->paid();
+        // $order['received'] = $order->received();
+        // $order['created'] = $order->created_by();
+        // $order['updated'] = $order->updated_by();
 
         return $order;
     }
   
     public function store(OV $request)
     {
+        // $branch =  Branch::find($request->order['branch_id']);
+        // $order =  $branch->orders()->create($request->order);   
+        // return $order;
 
         DB::beginTransaction();
         try {
@@ -595,6 +538,7 @@ class Order extends Controller
             }
             DB::commit();
             return $this->show($order->id);
+            // return 0;
         } catch (\Exception $e) {
             DB::rollback();
             return response($e, 403);

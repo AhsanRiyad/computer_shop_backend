@@ -60,7 +60,7 @@ class IncomeController extends Controller
 
     public function indexIncome()
     {
-        return BR::collection(Transaction::where('transactionable_type', 'App\Models\Incomes\Income')->with(['transactionable'])->paginate(10));
+        return BR::collection(Transaction::where('transactionable_type', 'income')->with(['transactionable'])->paginate(10));
         // return BR::collection(B::paginate(10));
         // return $request;
     }

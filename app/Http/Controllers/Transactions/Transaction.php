@@ -340,6 +340,19 @@ class Transaction extends Controller
         abort(403, 'Not found');*/
     }
 
+    public function incomeStatement($period)
+    {
+        //
+        $incomeTotal = C::where('transactionable_type' , 'income')->sum('amount');
+        $expenseTotal =  C::where('transactionable_type' , 'expense')->sum('amount');
+        $purchaseTotal = Order::where('type', 0)->get();
+
+        $p =  $purchaseTotal->sum('totalAmount');
+
+        return compact('incomeTotal', 'expenseTotal', 'purchaseTotal', 'p');
+        // return $period;
+    }
+
     /**
      * Remove the specified resource from storage.
      *
