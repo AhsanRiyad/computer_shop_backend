@@ -242,14 +242,14 @@ Route::group([], function () {
         Route::get('incomeStatement/{period}', 'Transactions\Transaction@incomeStatement');
 
         //for income
-        Route::get('transactions/income', 'Incomes\IncomeController@indexIncome');
-        Route::post('transactions/income', 'Incomes\IncomeController@storeIncome');
-        Route::put('transactions/income/{id}', 'Transactions\Transaction@update');
+        Route::get('transactions/{ext}', 'Incomes\IncomeController@indexIncome')->where('ext', 'income');
+        Route::post('transactions/{ext}', 'Incomes\IncomeController@storeIncome')->where('ext', 'income');
+        Route::put('transactions/{ext}/{id}', 'Transactions\Transaction@update')->where('ext', 'income');
 
         //for expense
-        Route::get('transactions/expense', 'Expenses\ExpenseController@indexExpense');
-        Route::post('transactions/expense', 'Expenses\ExpenseController@storeExpense');
-        Route::put('transactions/expense/{id}', 'Transactions\Transaction@update');
+        Route::get('transactions/{ext}', 'Expenses\ExpenseController@indexExpense')->where('ext', 'expense');
+        Route::post('transactions/{ext}', 'Expenses\ExpenseController@storeExpense')->where('ext', 'expense');
+        Route::put('transactions/{ext}/{id}', 'Transactions\Transaction@update')->where('ext', 'expense');
 
         //bulk create
         Route::post('transactions', 'Transactions\Transaction@create');

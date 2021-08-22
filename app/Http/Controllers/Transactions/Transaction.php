@@ -208,6 +208,7 @@ class Transaction extends Controller
     public function show($id)
     {
         //
+        // return 'value';
         return new CR(C::with(['client'])->find($id));
     }
 
@@ -291,7 +292,7 @@ class Transaction extends Controller
         // $transactions = Client::find($client_id)->Transactions->take(10);
         // $transactions = Client::find($client_id)->Transactions->where('date', 'regexp' ,  '(2021-08-12)')->take(10);
 
-        $transactions = C::where('client_id' , $client_id)->where('date' , 'like' , '%'.'08-12'.'%')->get();
+        $transactions = C::where('client_id' , $client_id)->where('date' , 'like' , '%'. $month .'-'.$year.'%')->get();
         $orders = Order::where('client_id' , $client_id)->where('date' , 'like' , '%'.'08-12'.'%')->get();
 
         // $orders = ClientLedgerResource::collection(Client::find($client_id)->Orders->take(10));
@@ -345,11 +346,11 @@ class Transaction extends Controller
         //
         $incomeTotal = C::where('transactionable_type' , 'income')->sum('amount');
         $expenseTotal =  C::where('transactionable_type' , 'expense')->sum('amount');
-        $purchaseTotal = Order::where('type', 0)->get();
+        $purchaseTotal = Order::where('type', 0)->get()->sum('total');
+        $sellTotal = Order::where('type', 1)->get()->sum('total');
+        // $p =  $purchaseTotal->sum('total');
 
-        $p =  $purchaseTotal->sum('totalAmount');
-
-        return compact('incomeTotal', 'expenseTotal', 'purchaseTotal', 'p');
+        return compact('incomeTotal', 'expenseTotal', 'purchaseTotal' , 'sellTotal');
         // return $period;
     }
 
