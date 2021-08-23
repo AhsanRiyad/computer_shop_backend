@@ -429,8 +429,8 @@ class Transaction extends Controller
         $purchaseTotal = Order::where('type', 0)->where('date' , 'like' , '%'. $year .'-'. $month.'%')->get()->sum('total');
         $sellTotal = Order::where('type', 1)->where('date' , 'like' , '%'. $year .'-'. $month.'%')->get()->sum('total');
         // $p =  $purchaseTotal->sum('total');
-
-        return compact('incomeTotal', 'expenseTotal', 'purchaseTotal' , 'sellTotal' , 'incomeList' , 'expenseList');
+        $netProfit = round( ( $incomeTotal + $sellTotal) - ($purchaseTotal + $expenseTotal) , 2 );
+        return compact('incomeTotal', 'expenseTotal', 'purchaseTotal' , 'sellTotal' , 'incomeList' , 'expenseList' , 'netProfit');
         // return $period;
     }
 
