@@ -6,11 +6,12 @@ use App\Models\Orders\Order;
 use Illuminate\Http\Request;
 use App\Models\Clients\Client;
 use App\Http\Others\SampleEmpty;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Transactions\Transaction as C;
-use App\Http\Resources\Transactions\Transaction as CR;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Transactions\Transaction as CR;
 
 class ClientResource extends JsonResource
 {
@@ -399,13 +400,37 @@ class Transaction extends Controller
     public function incomeStatement($period)
     {
         //
-        $incomeTotal = C::where('transactionable_type' , 'income')->sum('amount');
-        $expenseTotal =  C::where('transactionable_type' , 'expense')->sum('amount');
-        $purchaseTotal = Order::where('type', 0)->get()->sum('total');
-        $sellTotal = Order::where('type', 1)->get()->sum('total');
+        $month =  explode('-', $period)[1];
+        $year =  explode('-', $period)[0];
+        // C::groupBy('transactionable_id')->where('date', 'like', '%' . $year . '-' . $month . '%')->select('browser', DB::raw("sum('amount')"))->get();
+        $incomeList =
+            // C::groupBy('transactionable_id')->where('date', 'like', '%' . $year . '-' . $month . '%')->select('transactionable_id', DB::raw("sum('amount')"))->with(['transactionable'])->get();
+
+            DB::table('transactions')
+            ->where('date', 'like', '%' . $year . '-' . $month . '%')
+            ->where('transactionable_type', 'income')
+            ->select('transactions.transactionable_id', 'incomes.name', DB::raw("sum(transactions.amount) as amount"))
+            ->join('incomes', 'transactions.transactionable_id', '=', 'incomes.id')
+            ->groupBy('transactions.transactionable_id')
+            ->get();
+        
+        $expenseList =
+        DB::table('transactions')
+        ->where('date', 'like', '%' . $year . '-' . $month . '%')
+        ->where('transactionable_type', 'expense')
+        ->select('transactions.transactionable_id', 'expenses.name', DB::raw("sum(transactions.amount) as amount"))
+        ->join('expenses', 'transactions.transactionable_id', '=', 'expenses.id')
+        ->groupBy('transactions.transactionable_id')
+        ->get();
+
+
+        $incomeTotal = C::where('transactionable_type' , 'income')->where('date' , 'like' , '%'. $year .'-'. $month.'%')->sum('amount');
+        $expenseTotal =  C::where('transactionable_type' , 'expense')->where('date' , 'like' , '%'. $year .'-'. $month.'%')->sum('amount');
+        $purchaseTotal = Order::where('type', 0)->where('date' , 'like' , '%'. $year .'-'. $month.'%')->get()->sum('total');
+        $sellTotal = Order::where('type', 1)->where('date' , 'like' , '%'. $year .'-'. $month.'%')->get()->sum('total');
         // $p =  $purchaseTotal->sum('total');
 
-        return compact('incomeTotal', 'expenseTotal', 'purchaseTotal' , 'sellTotal');
+        return compact('incomeTotal', 'expenseTotal', 'purchaseTotal' , 'sellTotal' , 'incomeList' , 'expenseList');
         // return $period;
     }
 
