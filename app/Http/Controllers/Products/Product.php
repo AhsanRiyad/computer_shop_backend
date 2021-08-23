@@ -58,7 +58,6 @@ class Product extends Controller
         // return response( CR::collection(C::all()) ) ;
         /*$products = C::with(['brand', 'category', 'created_by'])->get();*/
         // return CR::collection(C::with(['brand', 'category', 'created_by', 'order_detail'])->paginate(10));
-
         // return Branch::all();
 
         if ( !isset($branch_id)) return response('branch not defined' , 403);
