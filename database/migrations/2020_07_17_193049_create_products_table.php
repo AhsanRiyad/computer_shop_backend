@@ -31,6 +31,9 @@ class CreateProductsTable extends Migration
             $table->double('price', 8  , 2)->nullable();
             $table->boolean('having_serial')->nullable();
 
+            // $table->foreignId('vendor_id')->constrained('vendors');
+
+
             $table->bigInteger('brand_id')->unsigned()->nullable();
             $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
 

@@ -17,6 +17,9 @@ use App\Http\Controllers\Microcredit\Loans\Loan;
 |
 */
 
+
+
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
