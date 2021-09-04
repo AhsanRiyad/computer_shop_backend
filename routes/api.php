@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Incomes\IncomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Microcredit\Dps\Dps;
 use App\Http\Controllers\Microcredit\Loans\Loan;
+use App\Http\Controllers\Incomes\IncomeController;
+use App\Http\Controllers\Expenses\ExpenseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,6 +102,7 @@ Route::group([], function () {
         Route::get('dropdown/dps', [Dps::class, 'dropdown']);
         Route::get('dropdown/loan', [Loan::class, 'dropdown']);
         Route::get('dropdown/income-name', [IncomeController::class, 'dropdown']);
+        Route::get('dropdown/expense-name', [ExpenseController::class, 'dropdown']);
 
         Route::get('dropdown/product_n_serial', 'Products\Product@index_product_n_serial');
 
