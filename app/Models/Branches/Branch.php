@@ -29,6 +29,6 @@ class Branch extends Model
 
     public function clients()
     {
-        return $this->hasMany('App\Models\Clients\Client');
+        return $this->belongsToMany('App\Models\Clients\Client');
     }
 }

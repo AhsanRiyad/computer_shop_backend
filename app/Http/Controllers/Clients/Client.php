@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Clients;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Clients\Client as C;
-use App\Http\Resources\Clients\Client as CR;
+use App\Models\Branches\Branch;
 use App\Http\Others\SampleEmpty;
+use App\Models\Clients\Client as C;
+use App\Http\Controllers\Controller;
 
+use App\Http\Resources\Clients\Client as CR;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ClientResource extends JsonResource
@@ -113,7 +114,9 @@ class Client extends Controller
     public function store(Request $request)
     {
         //
-        C::create($request->all());
+        $branch =  Branch::find($request->branch_id);
+        return $branch->clients()->create($request->all());
+        // C::create($request->all());
         return new CR($request->all());
 
         // $product->save($parameters);
