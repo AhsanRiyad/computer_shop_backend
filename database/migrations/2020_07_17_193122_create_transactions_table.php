@@ -29,6 +29,9 @@ class CreateTransactionsTable extends Migration
             $table->bigInteger('client_id')->unsigned()->nullable();
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
 
+            $table->bigInteger('branch_id')->unsigned()->nullable();
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
+
             $table->boolean('is_debit')->nullable();
             $table->boolean('is_cash')->default(true)->nullable();
             $table->boolean('is_advance')->default(false)->nullable();
@@ -37,10 +40,8 @@ class CreateTransactionsTable extends Migration
 
             $table->string('status')->nullable();
 
-
             $table->integer('transactionable_id')->nullable();
             $table->string('transactionable_type')->nullable();
-
 
             $table->string('reference')->nullable();
             $table->date('check_date')->nullable();

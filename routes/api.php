@@ -182,13 +182,13 @@ Route::group([], function () {
         Route::post('products', 'Products\Product@create');
 
         //salary
-        Route::get('salary', 'Salary\Salary@index');
-        Route::get('salary/{id}', 'Salary\Salary@show');
-        Route::post('salary', 'Salary\Salary@store');
-        Route::put('salary/{id}', 'Salary\Salary@update');
-        Route::delete('salary/{id}', 'Salary\Salary@destroy');
+        Route::get('salary', 'Salary\SalaryController@index');
+        Route::get('salary/{id}', 'Salary\SalaryController@show');
+        Route::post('salary', 'Salary\SalaryController@store');
+        Route::put('salary/{id}', 'Salary\SalaryController@update');
+        Route::delete('salary/{id}', 'Salary\SalaryController@destroy');
         //bulk create
-        Route::post('salaries', 'Salary\Salary@create');
+        Route::post('salaries', 'Salary\SalaryController@create');
 
         //Client
         Route::get('client', 'Clients\Client@index');
@@ -263,6 +263,13 @@ Route::group([], function () {
         Route::get('overallReports', 'Reports\Report@overallReports');
         Route::get('productReports/{product_id}', 'Reports\Report@productReports');
         Route::get('categoryReports/{category_id}', 'Reports\Report@categoryReports');
+
+
+        //role-permission
+        Route::resource('role' , 'RolePermission\RoleController');
+        Route::resource('permission' , 'RolePermission\PermissionController');
+
+
 
         //Microcredit
         //Member

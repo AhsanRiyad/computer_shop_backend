@@ -23,6 +23,13 @@ class CreateEmployeesTable extends Migration
             $table->foreign('updated_by')->references('id')->on('users');
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users');
+
+            $table->bigInteger('shop_id')->unsigned()->nullable();
+            $table->foreign('shop_id')->references('id')->on('users');
+
+            $table->bigInteger('branch_id')->unsigned()->nullable();
+            $table->foreign('branch_id')->references('id')->on('branches');
+
             $table->softDeletes();
 
             $table->integer('salary')->nullable();

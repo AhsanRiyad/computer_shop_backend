@@ -21,6 +21,10 @@ class CreateBranchesTable extends Migration
             $table->foreign('created_by')->references('id')->on('users');
             $table->bigInteger('updated_by')->unsigned()->nullable();
             $table->foreign('updated_by')->references('id')->on('users');
+
+            $table->bigInteger('shop_id')->unsigned()->nullable();
+            $table->foreign('shop_id')->references('id')->on('users');
+            
             $table->softDeletes();
 
             $table->string('name')->nullable()->unique();
