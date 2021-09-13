@@ -33,7 +33,6 @@ class CreateProductsTable extends Migration
 
             // $table->foreignId('vendor_id')->constrained('vendors');
 
-
             $table->bigInteger('brand_id')->unsigned()->nullable();
             $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
 

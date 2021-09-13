@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\RolePermission;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
@@ -15,6 +16,7 @@ class PermissionController extends Controller
     public function index()
     {
         //
+        return Permission::paginate(10);
     }
 
     /**
@@ -36,6 +38,8 @@ class PermissionController extends Controller
     public function store(Request $request)
     {
         //
+        $role = Permission::create(['name' => $request->name]);
+        return $role;
     }
 
     /**
@@ -47,6 +51,7 @@ class PermissionController extends Controller
     public function show($id)
     {
         //
+        return Permission::findById($id);
     }
 
     /**
@@ -69,7 +74,11 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            return Permission::where('id', $id)->update(["name" => $request->name]);
+        } catch (\Throwable $th) {
+            abort(403, 'Can not be updated');
+        }
     }
 
     /**
@@ -80,6 +89,10 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            return Permission::destroy($id);
+        } catch (\Throwable $th) {
+            abort(403, 'Not found');
+        }
     }
 }

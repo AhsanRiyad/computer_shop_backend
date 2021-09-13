@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\RolePermission;
 
+use App\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
@@ -16,7 +18,7 @@ class RoleController extends Controller
     public function index()
     {
         //
-        return Role::paginate(10);
+        return Role::with(['permissions'])->paginate(10);
     }
 
     /**
@@ -27,7 +29,37 @@ class RoleController extends Controller
     public function create()
     {
         //
+    }
 
+    //assign permission
+    public function assignPermission($id , $permissionId)
+    {
+        //
+        try {
+            //code...
+            $permission = Permission::findById($permissionId);
+            $role = Role::findById($id);
+            return $role->givePermissionTo($permission);
+        } catch (\Throwable $th) {
+            //throw $th;
+            abort(403, 'not found');
+        }
+    }
+
+    //assign multiple permission
+    public function assignMultiplePermission(Request $request, $id)
+    {
+        //
+        try {
+            //code...
+            $permissions =  Permission::whereIn('id' , $request->permissionIds )->get();
+            $role = Role::find($id);
+            $role->syncPermissions($permissions);
+            return response(200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response(403);
+        }
     }
 
     /**
@@ -41,6 +73,24 @@ class RoleController extends Controller
         //
         $role = Role::create(['name' => $request->name]);
         return $role;
+    }
+
+
+    public function assignRoleToUser(Request $request, $userId)
+    {
+        //
+        $user =  User::find($userId);
+        $user->syncRoles($request->roles);
+        return $user;
+    }
+
+
+    public function getUsersRole($userId)
+    {
+        //
+        $user =  User::find($userId);
+        
+        return $user->roles;
     }
 
     /**

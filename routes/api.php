@@ -266,9 +266,13 @@ Route::group([], function () {
 
 
         //role-permission
+        Route::post('role/assignPermission/{id}/{permissionId}' , 'RolePermission\RoleController@assignPermission');
+        Route::post('role/assignMultiplePermission/{id}' , 'RolePermission\RoleController@assignMultiplePermission');
+        Route::post('role/user/{userId}' , 'RolePermission\RoleController@assignRoleToUser');
+        Route::get('role/user/{userId}' , 'RolePermission\RoleController@getUsersRole');
+
         Route::resource('role' , 'RolePermission\RoleController');
         Route::resource('permission' , 'RolePermission\PermissionController');
-
 
 
         //Microcredit
