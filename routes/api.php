@@ -6,6 +6,9 @@ use App\Http\Controllers\Microcredit\Dps\Dps;
 use App\Http\Controllers\Microcredit\Loans\Loan;
 use App\Http\Controllers\Incomes\IncomeController;
 use App\Http\Controllers\Expenses\ExpenseController;
+use App\Http\Controllers\RolePermission\PermissionController;
+use App\Http\Controllers\RolePermission\RoleController;
+use App\Http\Controllers\User\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,6 +106,9 @@ Route::group([], function () {
         Route::get('dropdown/loan', [Loan::class, 'dropdown']);
         Route::get('dropdown/income-name', [IncomeController::class, 'dropdown']);
         Route::get('dropdown/expense-name', [ExpenseController::class, 'dropdown']);
+        Route::get('dropdown/role', [RoleController::class, 'dropdown']);
+        Route::get('dropdown/user', [UserController::class, 'dropdown']);
+        Route::get('dropdown/permission', [PermissionController::class, 'dropdown']);
 
         Route::get('dropdown/product_n_serial', 'Products\Product@index_product_n_serial');
 
@@ -270,6 +276,7 @@ Route::group([], function () {
         Route::post('role/assignMultiplePermission/{id}' , 'RolePermission\RoleController@assignMultiplePermission');
         Route::post('role/user/{userId}' , 'RolePermission\RoleController@assignRoleToUser');
         Route::get('role/user/{userId}' , 'RolePermission\RoleController@getUsersRole');
+        Route::get('role/permission/{roleId}' , 'RolePermission\RoleController@getPermissions');
 
         Route::resource('role' , 'RolePermission\RoleController');
         Route::resource('permission' , 'RolePermission\PermissionController');

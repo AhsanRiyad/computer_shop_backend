@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Permission;
-
+use App\Http\Resources\Role\Role as RoleResource;
 class RoleController extends Controller
 {
     /**
@@ -18,7 +18,7 @@ class RoleController extends Controller
     public function index()
     {
         //
-        return Role::with(['permissions'])->paginate(10);
+        return RoleResource::collection( Role::with(['permissions'])->paginate(10) ) ;
     }
 
     /**
@@ -46,6 +46,11 @@ class RoleController extends Controller
         }
     }
 
+    public function getPermissions($roleId){
+        $role = Role::find($roleId);
+        return $role->permissions;
+    }
+
     //assign multiple permission
     public function assignMultiplePermission(Request $request, $id)
     {
@@ -62,6 +67,13 @@ class RoleController extends Controller
         }
     }
 
+    //assign multiple permission
+    public function dropdown()
+    {
+        //
+        return  RoleResource::collection( Role::get(['id' , 'name']) );
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -75,15 +87,13 @@ class RoleController extends Controller
         return $role;
     }
 
-
     public function assignRoleToUser(Request $request, $userId)
     {
         //
         $user =  User::find($userId);
-        $user->syncRoles($request->roles);
+        $user->syncRoles($request->roleNames);
         return $user;
     }
-
 
     public function getUsersRole($userId)
     {
@@ -102,7 +112,7 @@ class RoleController extends Controller
     public function show($id)
     {
         //
-        return Role::findById($id);
+        return   Role::findById($id) ;
     }
 
     /**

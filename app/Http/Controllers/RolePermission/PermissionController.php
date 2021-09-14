@@ -5,7 +5,7 @@ namespace App\Http\Controllers\RolePermission;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Permission;
-
+use App\Http\Resources\Role\Role as RoleResource;
 class PermissionController extends Controller
 {
     /**
@@ -16,7 +16,7 @@ class PermissionController extends Controller
     public function index()
     {
         //
-        return Permission::paginate(10);
+        return RoleResource::collection(  Permission::paginate(10) );
     }
 
     /**
@@ -41,6 +41,8 @@ class PermissionController extends Controller
         $role = Permission::create(['name' => $request->name]);
         return $role;
     }
+
+
 
     /**
      * Display the specified resource.
@@ -80,7 +82,11 @@ class PermissionController extends Controller
             abort(403, 'Can not be updated');
         }
     }
-
+    public function dropdown()
+    {
+        //
+        return RoleResource::collection( Permission::get(['id', 'name']) );
+    }
     /**
      * Remove the specified resource from storage.
      *

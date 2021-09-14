@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Resources\Role\Role;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -54,5 +55,6 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Salary\Salary', 'user_id');
     }
 
+    
 
 }
