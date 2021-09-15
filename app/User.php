@@ -60,6 +60,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Salary\Salary', 'user_id');
     }
 
+    public function branches()
+    {
+        return $this->hasMany('App\Models\Branches\Branch', 'shop_id');
+    }
+
     
 
 }

@@ -26,7 +26,7 @@ class CreateShopsTable extends Migration
 
             $table->softDeletes();
 
-            $table->string('name')->nullable();
+            $table->string('name')->unique()->nullable();
             $table->string('address')->nullable();
             $table->string('mobile')->nullable();
 

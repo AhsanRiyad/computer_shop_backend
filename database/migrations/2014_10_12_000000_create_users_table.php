@@ -20,6 +20,10 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('mobile')->nullable()->unique();
             $table->softDeletes();
+
+            $table->bigInteger('shop_id')->unsigned()->nullable();
+            $table->foreign('shop_id')->references('id')->on('users');
+
             $table->timestamp('email_verified_at')->nullable();
 
             $table->string('password');

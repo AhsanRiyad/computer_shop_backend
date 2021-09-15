@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Http\Controllers\Controller;
+use DB;
+use App\User;
 use Illuminate\Http\Request;
 use App\Models\Shop\Shop as B;
-use App\Http\Resources\Shop\Shop as BR;
-use DB;
+use App\Models\Branches\Branch;
 use App\Http\Others\SampleEmpty;
-use App\User;
+use Spatie\Permission\Models\Role;
 
 
+use App\Http\Controllers\Controller;
+use App\Http\Resources\Shop\Shop as BR;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ShopDropdown extends JsonResource
@@ -105,7 +108,15 @@ class ShopController extends Controller
         $validatedData["password"] = bcrypt($validatedData["password"]);
         $User = User::create($validatedData);
 
+        $count =  Role::where('name', 'Shop')->count();
+        if ($count < 1
+        ) {
+            Role::create(['name' => 'Shop']);
+        }
+        $User->assignRole('Shop');
         $Shop =  $User->shop()->create($request->all());
+        Branch::create([ 'name' => 'Branch-1' , 'address' => 'Your location', 'shop_id' => $User->id ]);
+
         return new BR($Shop);
 
         // $product->save($parameters);
@@ -161,7 +172,7 @@ class ShopController extends Controller
         $Shop = B::find($id);
         if (isset($Shop)) {
             $Shop->update(["address" => $request->address]);
-            $Shop->user()->update(["name" => $request->name, "email" => $request->email, "password" => $request->password]);
+            $Shop->user()->update(["name" => $request->name, "email" => $request->email, "password" => bcrypt( $request->password ) ]);
             return new BR(B::find($id));
         } else {
             abort(403, 'Not found');

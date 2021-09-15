@@ -271,26 +271,29 @@ Route::group([], function () {
         Route::get('categoryReports/{category_id}', 'Reports\Report@categoryReports');
 
 
-        //role-permission
-        Route::post('role/assignPermission/{id}/{permissionId}' , 'RolePermission\RoleController@assignPermission');
-        Route::post('role/assignMultiplePermission/{id}' , 'RolePermission\RoleController@assignMultiplePermission');
-        Route::post('role/user/{userId}' , 'RolePermission\RoleController@assignRoleToUser');
-        Route::get('role/user/{userId}' , 'RolePermission\RoleController@getUsersRole');
-        Route::get('role/permission/{roleId}' , 'RolePermission\RoleController@getPermissions');
+        Route::group(['middleware' => ['role:Admin']], function () {
+            Route::post('role/assignPermission/{id}/{permissionId}', 'RolePermission\RoleController@assignPermission');
+            Route::post('role/assignMultiplePermission/{id}', 'RolePermission\RoleController@assignMultiplePermission');
+            Route::post('role/user/{userId}', 'RolePermission\RoleController@assignRoleToUser');
+            Route::get('role/user/{userId}', 'RolePermission\RoleController@getUsersRole');
+            Route::get('role/permission/{roleId}', 'RolePermission\RoleController@getPermissions');
 
-        Route::resource('role' , 'RolePermission\RoleController');
-        Route::resource('permission' , 'RolePermission\PermissionController');
+            Route::resource('role', 'RolePermission\RoleController');
+            Route::resource('permission', 'RolePermission\PermissionController');
 
-        /**
-         * TODO next time when user module needs to be updated, it should be notices also. If working with microcredit then also watch this.
-         * ? this will follow employee module of microcredit
-         */
-        //shop
-        Route::get('shop', 'Shop\ShopController@index');
-        Route::get('shop/{id}', 'Shop\ShopController@show');
-        Route::post('shop', 'Shop\ShopController@store');
-        Route::put('shop/{id}', 'Shop\ShopController@update');
-        Route::delete('shop/{id}', 'Shop\ShopController@destroy');
+            /**
+             * TODO next time when user module needs to be updated, it should be notices also. If working with microcredit then also watch this.
+             * ? this will follow employee module of microcredit
+             */
+            //shop
+            Route::get('shop', 'Shop\ShopController@index');
+            Route::get('shop/{id}', 'Shop\ShopController@show');
+            Route::post('shop', 'Shop\ShopController@store');
+            Route::put('shop/{id}', 'Shop\ShopController@update');
+            Route::delete('shop/{id}', 'Shop\ShopController@destroy');
+        });
+
+   
 
         //Microcredit
         //Member

@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Employees;
 
-use App\Http\Controllers\Controller;
+use DB;
+use App\User;
 use Illuminate\Http\Request;
+use App\Http\Others\SampleEmpty;
+use App\Models\Employees\Employee;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+
+
 use App\Models\Employees\Employee as B;
 use App\Http\Resources\Employees\Employee as BR;
-use DB;
-use App\Http\Others\SampleEmpty;
-use App\User;
-
-
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EmployeeDropdown extends JsonResource
@@ -98,14 +100,24 @@ class Employee extends Controller
         $validatedData =  $request->validate([
             "name" => "required|max:55",
             "email" => "required",
-            "password" => "required|max:100"
+            "password" => "required|max:100",
+            "shop_id" => "required",
             // "password" => "required|confirmed"
         ]);
 
+        
         $validatedData["password"] = bcrypt($validatedData["password"]);
         $User = User::create($validatedData);
+        
+        $count =  Role::where('name', 'Employee')->count();
+        if($count < 1){
+            Role::create(['name' => 'Employee']);
+        }
 
-        $employee =  $User->employees()->create($request->all());
+        $User->assignRole('Employee');
+        
+        $employee =  Employee::create($request->all());
+        
         return new BR($employee);
 
         // $product->save($parameters);

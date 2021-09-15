@@ -27,7 +27,7 @@ class CreateBranchesTable extends Migration
             
             $table->softDeletes();
 
-            $table->string('name')->nullable()->unique();
+            $table->string('name')->nullable();
             $table->string('address')->nullable();
 
         });

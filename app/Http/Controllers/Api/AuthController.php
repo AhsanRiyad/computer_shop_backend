@@ -37,7 +37,28 @@ class AuthController extends Controller
             return response(["msg" => "invalid user"] , 401);
         }
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
-        return response(['user' => User::find(auth()->id()), 'accessToken' => $accessToken, 'roles' => User::find(auth()->id())->roles]);
+        $user =  User::find(auth()->id());
+
+        $shop_id = 0;
+        $branch_id = 0;
+        if( $user->hasRole('Admin')){
+            $shop_id = 0;
+            $branch_id = 0;
+        } else if($user->hasRole('Shop') ){
+            $shop_id = $user->id;
+            $branch_id = $user->branches->first()->id;
+        }else{
+            $shop_id = $user->shop_id;
+        }
+
+        return response([ 
+                          'user' => User::find(auth()->id()),
+                          'accessToken' => $accessToken,
+                          'roles' => $user->roles,
+                          'shop_id' =>  $shop_id,
+                          'branch_id' =>  $branch_id
+                        ]
+                       );
     }
 
 
