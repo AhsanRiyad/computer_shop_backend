@@ -281,6 +281,16 @@ Route::group([], function () {
         Route::resource('role' , 'RolePermission\RoleController');
         Route::resource('permission' , 'RolePermission\PermissionController');
 
+        /**
+         * TODO next time when user module needs to be updated, it should be notices also. If working with microcredit then also watch this.
+         * ? this will follow employee module of microcredit
+         */
+        //shop
+        Route::get('shop', 'Shop\ShopController@index');
+        Route::get('shop/{id}', 'Shop\ShopController@show');
+        Route::post('shop', 'Shop\ShopController@store');
+        Route::put('shop/{id}', 'Shop\ShopController@update');
+        Route::delete('shop/{id}', 'Shop\ShopController@destroy');
 
         //Microcredit
         //Member
@@ -327,7 +337,7 @@ Route::group([], function () {
         Route::delete('nominee/{id}', 'Microcredit\Nominee\Nominee@destroy');
 
 
-        //nominee
+        //employee
         Route::get('employee', 'Employees\Employee@index');
         Route::get('employee/{id}', 'Employees\Employee@show');
         Route::post('employee', 'Employees\Employee@store');

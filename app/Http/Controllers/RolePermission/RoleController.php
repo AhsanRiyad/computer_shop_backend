@@ -49,6 +49,18 @@ class RoleController extends Controller
     public function getPermissions($roleId){
         $role = Role::find($roleId);
         return $role->permissions;
+
+        // get a list of all permissions directly assigned to the user
+        // $permissionNames = $user->getPermissionNames(); // collection of name strings
+        // $permissions = $user->permissions; // collection of permission objects
+
+        // get all permissions for the user, either directly, or from roles, or from both
+        // $permissions = $user->getDirectPermissions();
+        // $permissions = $user->getPermissionsViaRoles();
+        // $permissions = $user->getAllPermissions();
+
+        // // get the names of the user's roles
+        // $roles = $user->getRoleNames(); // Returns a collection
     }
 
     //assign multiple permission

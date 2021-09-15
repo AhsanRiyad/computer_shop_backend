@@ -17,10 +17,18 @@ class CreateShopsTable extends Migration
             $table->id();
             $table->timestamps();
 
-            $table->string('name')->nullable()->unique();
-            $table->text('description')->nullable();
+            $table->bigInteger('created_by')->unsigned()->nullable();
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->bigInteger('updated_by')->unsigned()->nullable();
+            $table->foreign('updated_by')->references('id')->on('users');
+            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
 
-            
+            $table->softDeletes();
+
+            $table->string('name')->nullable();
+            $table->string('address')->nullable();
+            $table->string('mobile')->nullable();
 
         });
     }
