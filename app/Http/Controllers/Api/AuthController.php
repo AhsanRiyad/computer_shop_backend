@@ -37,7 +37,7 @@ class AuthController extends Controller
             return response(["msg" => "invalid user"] , 401);
         }
         $accessToken = auth()->user()->createToken('authToken')->accessToken;
-        return response(['user' => auth()->user(), 'accessToken' => $accessToken]);
+        return response(['user' => User::find(auth()->id()), 'accessToken' => $accessToken, 'roles' => User::find(auth()->id())->roles]);
     }
 
 
