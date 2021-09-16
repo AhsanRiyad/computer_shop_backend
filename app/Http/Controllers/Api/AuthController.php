@@ -20,7 +20,9 @@ class AuthController extends Controller
         
         $validatedData["password"] = bcrypt($validatedData["password"]);
         $User = User::create($validatedData);
-
+        $User->shop_id = 0;
+        $User->branch_id = 0;
+        $User->save();
         $accessToken = $User->createToken('authToken')->accessToken;
 
         $count =  Role::where('name', 'Admin')->count();
@@ -50,8 +52,8 @@ class AuthController extends Controller
         $shop_id = 0;
         $branch_id = 0;
         if( $user->hasRole('Admin')){
-            $shop_id = 0;
-            $branch_id = 0;
+            $shop_id = $user->shop_id;
+            $branch_id = $user->branch_id;
         } else if($user->hasRole('Shop') ){
             $shop_id = $user->id;
             $branch_id = $user->branches->first()->id;
