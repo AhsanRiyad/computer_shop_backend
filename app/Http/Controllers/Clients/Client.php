@@ -95,7 +95,7 @@ class Client extends Controller
                 $q->where('branch_id', $branch_id);
             })->paginate(10));
         } else {
-            return $this->search($req);
+            return $this->search($req, 'seller');
         }
     }
 
@@ -111,7 +111,7 @@ class Client extends Controller
                 $q->where('branch_id', $branch_id);
             })->paginate(10));
         } else {
-            return $this->search($req);
+            return $this->search($req , 'customer');
         }
 
     }
@@ -119,13 +119,15 @@ class Client extends Controller
     public function index_seller()
     {
         //
-        return CR::collection(C::where('type' , 'seller')->get(['name' , 'id']));
+        $branch_id =  auth()->user()->branch_id;
+        return CR::collection(C::where('branch_id', $branch_id)->where('type' , 'seller')->get(['name' , 'id']));
     }
 
     public function index_customer()
     {
         //
-        return CR::collection(C::where('type'  , 'customer')->get(['id' , 'name']));
+        $branch_id =  auth()->user()->branch_id;
+        return CR::collection(C::where('branch_id', $branch_id)->where('type', 'cust')->get(['name', 'id']));
     }
 
     public function index_client()
@@ -134,17 +136,19 @@ class Client extends Controller
         return ClientResource::collection(C::all());
     }
 
-
-    public function search(Request $req)
+    public function search(Request $req , $type)
     {
-        // return $req->search;
-        if (C::where('id', 'like', '%' . $req->q . '%')->count() > 0) {
-            return CR::collection(C::with(['created_by'])->where('id', 'like', '%' . $req->q . '%')->paginate(10));
-        } else if (C::where('name', 'like', '%' . $req->q . '%')->count() > 0) {
-            return CR::collection(C::with(['created_by'])->where('name', 'like', '%' . $req->q . '%')->paginate(10));
-        } else {
-            return  json_encode(new SampleEmpty([]));
-        };
+        $branch_id = auth()->user()->branch_id;
+        // $req['type'] = $type;
+        
+        $a =  CR::collection(C::whereHas('branch', function ($q) use ($branch_id) {
+            $q->where('branch_id', $branch_id);
+        })->where('type', $type)->where(function ($q) use ($req) {
+            return $q->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%');
+        })->orderBy('id', 'desc')->paginate(10));
+
+        if ($a->count() > 0) return $a;
+        else return  json_encode(new SampleEmpty([]));
         // return $req->q;
     }
 

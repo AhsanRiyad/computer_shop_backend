@@ -75,18 +75,24 @@ class Category extends Controller
     public function dropdown()
     {
         //
-        return CR::collection(C::get(['name', 'id']));
+        $branch_id =  auth()->user()->branch_id;
+        return CR::collection(C::whereHas('branch' , function ($q) use ($branch_id) {
+                $q->where('branch_id', $branch_id);
+            } )->get(['name', 'id']));
     }
 
     public function search(Request $req){
         // return $req->search;
 
-        if (C::where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->count() > 0) {
-            return CR::collection(C::with(['created_by'])->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->paginate(10));
-        } else {
-            return  json_encode(new SampleEmpty([]));
-        };
+        $branch_id = auth()->user()->branch_id;
+        $a =  CR::collection(C::whereHas('branch', function ($q) use ($branch_id) {
+            $q->where('branch_id', $branch_id);
+        })->where(function ($q) use ($req) {
+            return $q->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%');
+        })->orderBy('id', 'desc')->paginate(10));
 
+        if ($a->count() > 0) return $a;
+        else return  json_encode(new SampleEmpty([]));
         // return $req->q;
     }
 

@@ -59,13 +59,21 @@ class Branch extends Controller
     public function dropdown()
     {
         //
-        return BR::collection(B::get(['name', 'id']));
+        $shop_id =  auth()->user()->shop_id;
+        return BR::collection(B::where('shop_id', $shop_id)->get(['name', 'id']));
+        // return BR::collection(B::get(['name', 'id']));
     }
 
 
     public function search(Request $req)
     {
+        $shop_id = auth()->user()->shop_id;
+        $a =  BR::collection(B::where('shop_id' , $shop_id)->where(function ($q) use ($req) {
+            return $q->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%');
+        })->orderBy('id', 'desc')->paginate(10));
 
+        if ($a->count() > 0) return $a;
+        else return  json_encode(new SampleEmpty([]));
     }
 
     /**

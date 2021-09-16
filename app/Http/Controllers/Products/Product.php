@@ -52,7 +52,7 @@ class Product extends Controller
      * @return \Illuminate\Http\Response
      */
     use ImageUploadTrait;
-    public function index(Request $req , $branch_id)
+    public function index(Request $req)
     {
         //
         // return response( CR::collection(C::all()) ) ;
@@ -68,29 +68,32 @@ class Product extends Controller
                 $q->where('branch_id' , $branch_id);
             })->orderBy('id', 'desc')->paginate(10));
         } else {
-            return $this->search($req , $branch_id);
+            return $this->search($req );
         }
     }
 
-    public function dropdown($branch_id)
+    public function dropdown()
     {
         //
         // return response( CR::collection(C::all()) ) ;
         /*$products = C::with(['brand', 'category', 'created_by'])->get();*/
         // return CR::collection(C::with(['brand', 'category', 'created_by', 'order_detail'])->paginate(10));
         // return ProductResource::collection(C::get(['name' , 'id', 'price' , 'cost', 'description', 'path'])->take(30));
+        $branch_id =  auth()->user()->branch_id;
+        // return BR::collection(B::where('branch_id', $branch_id)->get(['name', 'id']));
         return C::whereHas('branch', function ($q) use ($branch_id) {
             $q->where('branch_id', $branch_id);
         })->orderBy('id', 'desc')->get(['name', 'id', 'price', 'cost', 'description', 'path'])->take(30);
     }
 
-    public function search(Request $req, $branch_id)
+    public function search(Request $req)
     {
-        $a =  CR::collection(C::whereHas('branch', function ($q) use ($branch_id) {
+        $branch_id = auth()->user()->branch_id;
+        $a =  CR::collection(C::with(['brand', 'category', 'created_by', 'branch'])->whereHas('branch', function ($q) use ($branch_id) {
             $q->where('branch_id', $branch_id);
         })->where(function($q) use ($req){
             return $q->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%');
-        } )->orderBy('id', 'desc')->get());
+        } )->orderBy('id', 'desc')->paginate(10));
         
         if($a->count() > 0) return $a;
         else return  json_encode(new SampleEmpty([]));

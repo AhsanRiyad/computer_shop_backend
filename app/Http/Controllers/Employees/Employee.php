@@ -90,7 +90,7 @@ class Employee extends Controller
 
         return new BR($employee);
 
-        // $product->save($parameters);
+    // $product->save($parameters);
 
         // return $request;
         // $a = new P;
@@ -98,8 +98,6 @@ class Employee extends Controller
         // return $a->save();
         // return $user;
     }
-
-
 
     public function dropdown()
     {
@@ -111,11 +109,22 @@ class Employee extends Controller
     {
         // return $req->search;
 
-        if (B::where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->count() > 0) {
-            return BR::collection(B::with(['created_by'])->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->paginate(10));
-        }else {
-            return  json_encode(new SampleEmpty([]));
-        };
+        $branch_id = auth()->user()->branch_id;
+        $a =  BR::collection(
+        B::with(['created_by', 'branch', 'user'])
+        ->whereHas('user' , function($q) use ($req){
+           $q->where('name' ,'like', '%' . $req->q . '%')->orWhere('email', 'like', '%' . $req->q . '%');
+        })
+        ->whereHas('branch', function ($q) use ($branch_id) {
+            $q->where('branch_id', $branch_id);
+        })
+        ->orWhere(function ($q) use ($req) {
+            return $q->where('id', 'like', '%' . $req->q . '%')->orWhere('salary', 'like', '%' . $req->q . '%');
+        })
+        ->orderBy('id', 'desc')->paginate(10));
+
+        if ($a->count() > 0) return $a;
+        else return  json_encode(new SampleEmpty([]));
 
         // return $req->q;
     }

@@ -44,7 +44,7 @@ class Order extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $req, $branch_id)
+    public function index(Request $req)
     {
         //  return $req->page;
         //  
@@ -54,12 +54,15 @@ class Order extends Controller
         //  return $menu->order_details; 
         //  return $menu;
 
-        if ($req->q == '') {
-            $orders = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell'])->where('type', '=', 0)->whereHas('branch', function ($q) use ($branch_id) {
-                $q->where('branch_id', $branch_id);
-            })->orderBy('id', 'desc')->paginate(10);
-
-            return R::collection($orders);
+        $branch_id =  auth()->user()->branch_id;
+        if (
+            $req->q == ''
+        ) {
+            return R::collection(O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell'])->where('type', '=', 0)->whereHas('branch',
+                function ($q) use ($branch_id) {
+                    $q->where('branch_id', $branch_id);
+                }
+            )->orderBy('id', 'desc')->paginate(10));
         } else {
             return $this->searchPurchase($req);
         }
@@ -165,19 +168,33 @@ class Order extends Controller
     {
         // return $req->search;
 
-        $searchResultsByClient =  O::where([['type', '=', 0]])->whereHas('client', function ($query) use (&$req) {
-            return $query->where([['name', 'like', '%' . $req->q . '%'],]);
+        // $searchResultsByClient =  O::where([['type', '=', 0]])->whereHas('client', function ($query) use (&$req) {
+        //     return $query->where([['name', 'like', '%' . $req->q . '%'],]);
+        // });
+
+        // $searchResultsById =  O::where([['type', '=', 0], ['id', 'like', '%' . $req->q . '%']]);
+
+        // if ($searchResultsById->count() > 0) {
+        //     return $this->searchResultsPurchase($searchResultsById , $req);
+        // } else if ($searchResultsByClient->count() > 0) {
+        //     return $this->searchResultsPurchase($searchResultsByClient, $req);
+        // } else {
+        //     return  json_encode(new SampleEmpty([]));
+        // };
+        // return 'abc';
+
+        $branch_id = auth()->user()->branch_id;
+        $p = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell'])->where('type', 0)->whereHas('branch', function ($q) use ($branch_id) {
+            $q->where('branch_id', $branch_id);
+        })->where(function ($q) use ($req) {
+            return $q->where('id', 'like', '%' . $req->q . '%');
         });
+        $a =  R::collection($p->orderBy('id', 'desc')->paginate(10) );
+        // return $p->count();
 
-        $searchResultsById =  O::where([['type', '=', 0], ['id', 'like', '%' . $req->q . '%']]);
+        if ($p->count() > 0) return $a;
+        else return  0;
 
-        if ($searchResultsById->count() > 0) {
-            return $this->searchResultsPurchase($searchResultsById , $req);
-        } else if ($searchResultsByClient->count() > 0) {
-            return $this->searchResultsPurchase($searchResultsByClient, $req);
-        } else {
-            return  json_encode(new SampleEmpty([]));
-        };
         /* 
             return O::('client', function ($query) use (&$req) {
                 return $query->where('name','like', '%' . $req->q . '%');
@@ -196,20 +213,17 @@ class Order extends Controller
     {
         // return $req->search;
 
-        $searchResultsByClient =  O::where([['type' , '=' , 1]])->whereHas('client', function ($query) use (&$req) {
-            return $query->where([['name', 'like', '%' . $req->q . '%'],]);
+        $branch_id = auth()->user()->branch_id;
+        $p = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell'])->where('type', 1)->whereHas('branch', function ($q) use ($branch_id) {
+            $q->where('branch_id', $branch_id);
+        })->where(function ($q) use ($req) {
+            return $q->where('id', 'like', '%' . $req->q . '%');
         });
+        $a =  R::collection($p->orderBy('id', 'desc')->paginate(10));
+        // return $p->count();
 
-        $searchResultsById =  O::where([['type' , '=' , 1], ['id', 'like', '%' . $req->q . '%']]);
-
-        if($searchResultsById->count() > 0){
-            return $this->searchResultsSell($searchResultsById, $req);
-        }
-        else if ($searchResultsByClient->count() > 0) {
-            return $this->searchResultsSell($searchResultsByClient, $req);
-        } else {
-            return  json_encode(new SampleEmpty([]));
-        };
+        if ($p->count() > 0) return $a;
+        else return  0;
         /* 
         return O::whereHas('client', function ($query) use (&$req) {
             return $query->where('name','like', '%' . $req->q . '%');
@@ -306,7 +320,7 @@ class Order extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index_sell(Request $req, $branch_id)
+    public function index_sell(Request $req)
     {
         //
 
@@ -340,16 +354,21 @@ class Order extends Controller
         });
         return R::collection( collect($order_info)->reverse()); */
 
-        if ($req->q == ''
-        ) {
-            $orders = O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell.order_detail'])->whereHas('branch', function ($q) use ($branch_id) {
-                $q->where('branch_id', $branch_id);
-            })->where('type', '=', 1)->paginate(10);
 
-            return R::collection($orders);
+        $branch_id =  auth()->user()->branch_id;
+        if (
+            $req->q == ''
+        ) {
+            return R::collection(O::with(['address', 'client', 'created_by', 'updated_by', 'order_details', 'warranty', 'transactions', 'order_return', 'serial_numbers_purchase.order_detail', 'serial_numbers_sell'])->where('type', '=', 1)->whereHas(
+                'branch',
+                function ($q) use ($branch_id) {
+                    $q->where('branch_id', $branch_id);
+                }
+            )->orderBy('id', 'desc')->paginate(10));
         } else {
             return $this->searchSell($req);
         }
+        
     }
 
     /**
@@ -439,17 +458,22 @@ class Order extends Controller
         DB::beginTransaction();
 
         try {
-            $s = Serial_sell::whereIn('number', $request->serials)->get();
-            if (count($s) > 0) return response( $s , 403 );
+            // $s = Serial_sell::whereIn('number', $request->serials)->get();
+            // if (count($s) > 0) return response( $s , 403 );
 
-            $branch =  Branch::find($request->order['branch_id']);
-            $order =  $branch->orders()->create($request->order);
-
-            if($request->client_id == 0){
-                $id =  Client::where('name' , 'Walk in customer')->where('branch_id' , $request->order['branch_id'])->get(['id'])->first()->id;
-                $order->client_id = $id;
-                $order->save();
+            $branch = auth()->user()->branch;
+            $orderInfo = $request->order;
+            unset($orderInfo['client_id']);
+            $order =  $branch->orders()->create($orderInfo);
+            $client_id = $request->order['client_id'];
+            if ($request->order['client_id'] == 0) {
+                $id =  Client::where('name', 'Walk in customer')->whereHas('branch', function ($q) use ($branch) {
+                    $q->where('branch_id', $branch->id);
+                })->get(['id'])->first()->id;
+                $client_id = $id;
             }
+            $order->client_id = $client_id;
+            $order->save();
 
 
             // $order = O::create($request->order);
@@ -522,15 +546,25 @@ class Order extends Controller
 
         DB::beginTransaction();
         try {
-            $branch =  Branch::find($request->order['branch_id']);
-            $order =  $branch->orders()->create($request->order);
+            $branch = auth()->user()->branch;
+            $orderInfo = $request->order;
+            unset($orderInfo['client_id']);
+            $order =  $branch->orders()->create($orderInfo);
+            $client_id = $request->order['client_id'];
+            if ($request->order['client_id'] == 0) {
 
-            if ($request->client_id == 0) {
-                $id =  Client::where('name', 'Walk in seller')->where('branch_id', $request->order['branch_id'])->get(['id'])->first()->id;
-                $order->client_id = $id;
-                $order->save();
+                $type = 'Walk in seller';
+                if( $request->order['type'] == 1 ) {
+                    $type = 'Walk in customer';
+                } 
+
+                $id =  Client::where('name', $type)->whereHas('branch', function ($q) use ($branch) {
+                    $q->where('branch_id', $branch->id);
+                })->get(['id'])->first()->id;
+                $client_id = $id;                
             }
-
+            $order->client_id = $client_id ;
+            $order->save();
 
             if (  isset($request->address['name']) ||  isset($request->address['mobile']) ||  isset($request->address['address'])) {
                 $order->address()->create($request->address);

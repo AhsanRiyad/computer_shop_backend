@@ -140,8 +140,11 @@ class Transaction extends Controller
     {
         //
         // return $req->q;
-        if ($req->q == '') {
-            return CR::collection(C::with(['client'])->orderBy('id', 'desc')->paginate(10));
+        $branch_id =  auth()->user()->branch_id;
+        if (
+            $req->q == ''
+        ) {
+            return CR::collection(C::where('branch_id' , $branch_id )->with(['client'])->paginate(10));
         } else {
             return $this->search($req);
         }
@@ -182,7 +185,10 @@ class Transaction extends Controller
     public function store(Request $request)
     {
         //
-        C::create($request->all());
+        $branch_id =  auth()->user()->branch_id;
+        $transaction =  C::create($request->all());
+        $transaction->branch_id = $branch_id;
+        $transaction->save();
         return new CR($request->all());
 
         // $product->save($parameters);
@@ -202,9 +208,11 @@ class Transaction extends Controller
     public function store_by_order(Request $request, $order_id)
     {
         //
+        $branch_id =  auth()->user()->branch_id;
         $order = Order::find($order_id);
         $info = $request->all();
         $info['client_id'] = $order->client_id;
+        $info['branch_id'] = $branch_id;
         if ($order->type == 0) {
             $info['is_debit'] = true;
         } else {
@@ -230,8 +238,11 @@ class Transaction extends Controller
     public function store_by_client(Request $request, $client_id)
     {
         //
+        $branch_id =  auth()->user()->branch_id;
         $client = Client::find($client_id);
-        $client->transactions()->create($request->all());
+        $transaction =  $client->transactions()->create($request->all());
+        $transaction->branch_id = $branch_id;
+        $transaction->save();
         return new CR($request->all());
 
         // $product->save($parameters);
@@ -264,6 +275,7 @@ class Transaction extends Controller
         //     ->where('is_debit',  true)
         //     ->groupBy('client_id')
         //     ->get();
+        
         return ClientResource::collection( Client::paginate(10) );
     }
 
@@ -275,6 +287,7 @@ class Transaction extends Controller
         //     ->where('is_debit',  true)
         //     ->groupBy('client_id')
         //     ->get();
+        
         return ClientResourceSeller::collection( Client::where('type' , 'seller')->paginate(10) );
     }
 
@@ -287,6 +300,7 @@ class Transaction extends Controller
         //     ->groupBy('client_id')
         //     ->get();
         // return Client::where('type', 'customer')->paginate(10);
+        
         return ClientResourceCustomer::collection( Client::where('type' , 'customer')->paginate(10) );
     }
 
@@ -338,9 +352,9 @@ class Transaction extends Controller
         // return CR::collection(Client::find($client_id)->Transactions->where('is_debit' , false));
         // $transactions = Client::find($client_id)->Transactions->take(10);
         // $transactions = Client::find($client_id)->Transactions->where('date', 'regexp' ,  '(2021-08-12)')->take(10);
-
-        $transactions = TransactionLedgerTranResource::collection( C::where('client_id' , $client_id)->where('date' , 'like' , '%'. $year .'-'. $month.'%')->get());
-        $orders = TransactionLedgerOrderResource::collection(  Order::where('client_id' , $client_id)->where('date', 'like', '%' . $year . '-' . $month . '%')->get() );
+        $branch_id =  auth()->user()->branch_id;
+        $transactions = TransactionLedgerTranResource::collection( C::where('branch_id', $branch_id)->where('client_id' , $client_id)->where('date' , 'like' , '%'. $year .'-'. $month.'%')->get());
+        $orders = TransactionLedgerOrderResource::collection(  Order::where('branch_id', $branch_id)->where('client_id' , $client_id)->where('date', 'like', '%' . $year . '-' . $month . '%')->get() );
 
         // return $orders;
 
@@ -400,6 +414,7 @@ class Transaction extends Controller
     public function incomeStatement($period)
     {
         //
+        $branch_id =  auth()->user()->branch_id;
         $month =  explode('-', $period)[1];
         $year =  explode('-', $period)[0];
         // C::groupBy('transactionable_id')->where('date', 'like', '%' . $year . '-' . $month . '%')->select('browser', DB::raw("sum('amount')"))->get();
@@ -407,15 +422,17 @@ class Transaction extends Controller
             // C::groupBy('transactionable_id')->where('date', 'like', '%' . $year . '-' . $month . '%')->select('transactionable_id', DB::raw("sum('amount')"))->with(['transactionable'])->get();
 
             DB::table('transactions')
+            ->where('transactions.branch_id' , $branch_id)
             ->where('date', 'like', '%' . $year . '-' . $month . '%')
             ->where('transactionable_type', 'income')
             ->select('transactions.transactionable_id', 'incomes.name', DB::raw("sum(transactions.amount) as amount"))
             ->join('incomes', 'transactions.transactionable_id', '=', 'incomes.id')
             ->groupBy('transactions.transactionable_id')
             ->get();
-        
+
         $expenseList =
         DB::table('transactions')
+        ->where('transactions.branch_id', $branch_id)
         ->where('date', 'like', '%' . $year . '-' . $month . '%')
         ->where('transactionable_type', 'expense')
         ->select('transactions.transactionable_id', 'expenses.name', DB::raw("sum(transactions.amount) as amount"))
@@ -424,10 +441,10 @@ class Transaction extends Controller
         ->get();
 
 
-        $incomeTotal = C::where('transactionable_type' , 'income')->where('date' , 'like' , '%'. $year .'-'. $month.'%')->sum('amount');
-        $expenseTotal =  C::where('transactionable_type' , 'expense')->where('date' , 'like' , '%'. $year .'-'. $month.'%')->sum('amount');
-        $purchaseTotal = Order::where('type', 0)->where('date' , 'like' , '%'. $year .'-'. $month.'%')->get()->sum('total');
-        $sellTotal = Order::where('type', 1)->where('date' , 'like' , '%'. $year .'-'. $month.'%')->get()->sum('total');
+        $incomeTotal = C::where('branch_id', $branch_id)->where('transactionable_type' , 'income')->where('date' , 'like' , '%'. $year .'-'. $month.'%')->sum('amount');
+        $expenseTotal =  C::where('branch_id', $branch_id)->where('transactionable_type' , 'expense')->where('date' , 'like' , '%'. $year .'-'. $month.'%')->sum('amount');
+        $purchaseTotal = Order::where('branch_id', $branch_id)->where('type', 0)->where('date' , 'like' , '%'. $year .'-'. $month.'%')->get()->sum('total');
+        $sellTotal = Order::where('branch_id', $branch_id)->where('type', 1)->where('date' , 'like' , '%'. $year .'-'. $month.'%')->get()->sum('total');
         // $p =  $purchaseTotal->sum('total');
         $netProfit = round( ( $incomeTotal + $sellTotal) - ($purchaseTotal + $expenseTotal) , 2 );
         return compact('incomeTotal', 'expenseTotal', 'purchaseTotal' , 'sellTotal' , 'incomeList' , 'expenseList' , 'netProfit');

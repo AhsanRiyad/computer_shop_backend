@@ -63,23 +63,29 @@ class Brand extends Controller
         // return $user;
     }
 
-
-
     public function dropdown()
     {
         //
-        return BR::collection(B::get(['name', 'id']));
+        $branch_id =  auth()->user()->branch_id;
+        return BR::collection(B::whereHas('branch', function ($q) use ($branch_id) {
+            $q->where('branch_id', $branch_id);
+        })->get(['name', 'id']));
+        // return BR::collection(B::get(['name', 'id']));
     }
 
     public function search(Request $req)
     {
         // return $req->search;
+        $branch_id = auth()->user()->branch_id;
+        $a =  BR::collection(B::whereHas('branch', function ($q) use ($branch_id) {
+            $q->where('branch_id', $branch_id);
+        })->where(function ($q) use ($req) {
+            return $q->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%');
+        })
+        ->orderBy('id', 'desc')->paginate(10));
 
-        if (B::where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->count() > 0) {
-            return BR::collection(B::with(['created_by'])->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%')->paginate(10));
-        }else {
-            return  json_encode(new SampleEmpty([]));
-        };
+        if ($a->count() > 0) return $a;
+        else return  json_encode(new SampleEmpty([]));
 
         // return $req->q;
     }

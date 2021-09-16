@@ -59,6 +59,15 @@ class Unit extends Controller
 
     public function search(Request $req)
     {
+        $branch_id = auth()->user()->branch_id;
+        $a =  BR::collection(B::whereHas('branch', function ($q) use ($branch_id) {
+            $q->where('branch_id', $branch_id);
+        })->where(function ($q) use ($req) {
+            return $q->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%');
+        })->orderBy('id', 'desc')->paginate(10));
+
+        if ($a->count() > 0) return $a;
+        else return  json_encode(new SampleEmpty([]));
     }
 
     /**

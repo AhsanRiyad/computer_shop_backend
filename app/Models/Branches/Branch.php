@@ -57,6 +57,11 @@ class Branch extends Model
         return $this->hasMany('App\Models\Orders\Order' , 'branch_id');
     }
 
+    public function transactions()
+    {
+        return $this->hasMany('App\Models\Transactions\Transaction' , 'branch_id');
+    }
+
     public function clients()
     {
         return $this->belongsToMany('App\Models\Clients\Client');
