@@ -3,12 +3,13 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Microcredit\Dps\Dps;
+use App\Http\Controllers\Shop\ShopController;
+use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Microcredit\Loans\Loan;
 use App\Http\Controllers\Incomes\IncomeController;
 use App\Http\Controllers\Expenses\ExpenseController;
-use App\Http\Controllers\RolePermission\PermissionController;
 use App\Http\Controllers\RolePermission\RoleController;
-use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\RolePermission\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -293,7 +294,7 @@ Route::group([], function () {
             Route::delete('shop/{id}', 'Shop\ShopController@destroy');
 
 
-
+            Route::get('dropdown/shop', [ShopController::class, 'dropdown']);
             Route::post('updateShop', [UserController::class, 'updateShop']);
         });
 

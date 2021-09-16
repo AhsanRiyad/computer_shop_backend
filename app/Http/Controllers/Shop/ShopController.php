@@ -30,7 +30,7 @@ class ShopDropdown extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->user->name
+            'name' => $this->name
         ];
     }
 }
@@ -56,7 +56,9 @@ class ShopController extends Controller
     public function dropdown()
     {
         //
-        return ShopDropdown::collection(B::all());
+        return ShopDropdown::collection( User::with(['roles'])->whereHas('roles', function($q){
+            return $q->where('name' , 'Shop');
+        })->get() );
     }
 
     public function search(Request $req)
