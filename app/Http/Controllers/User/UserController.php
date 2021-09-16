@@ -15,4 +15,20 @@ class UserController extends Controller
         //
         return  Role::collection(User::get(['id', 'name', 'email']));
     }
+
+    public function updateBranch(Request $request)
+    {
+        //
+        return User::find(auth()->user()->id)->update(['shop_id', $request->branch_id]);
+    }
+
+    public function updateShop(Request $request)
+    {
+        //
+        return User::find(auth()->user()->id)->update(['shop_id' , $request->shop_id]);
+        
+    }
+
+
+
 }

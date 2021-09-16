@@ -36,10 +36,9 @@ class Branch extends Controller
      */
     public function store(Request $request)
     {
-        $shop =  auth()->user()->shop;
-        $count = B::where('shop_id' , $shop->id)->where('name' , $request->name)->count();
+        $count = B::where('shop_id' , auth()->user()->id)->where('name' , $request->name)->count();
         if($count == 0){
-            $branch =  $shop->branches()->create($request->all());
+            $branch =  B::create($request->all());
             $branch->clients()->createMany([
                 ['name' => 'Walk in seller', 'type' => 'seller'],
                 ['name' => 'Walk in customer', 'type' => 'customer']

@@ -124,7 +124,7 @@ class RoleController extends Controller
     public function show($id)
     {
         //
-        return   Role::findById($id) ;
+        return   Role::find($id) ;
     }
 
     /**

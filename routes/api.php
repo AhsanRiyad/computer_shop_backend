@@ -291,6 +291,10 @@ Route::group([], function () {
             Route::post('shop', 'Shop\ShopController@store');
             Route::put('shop/{id}', 'Shop\ShopController@update');
             Route::delete('shop/{id}', 'Shop\ShopController@destroy');
+
+
+
+            Route::post('updateShop', [UserController::class, 'updateShop']);
         });
 
    
@@ -347,6 +351,11 @@ Route::group([], function () {
             Route::post('employee', 'Employees\Employee@store');
             Route::put('employee/{id}', 'Employees\Employee@update');
             Route::delete('employee/{id}', 'Employees\Employee@destroy');
+            
+            
+            
+            Route::post('updateBranch', [UserController::class, 'updateBranch']);
+
         });
         
 
