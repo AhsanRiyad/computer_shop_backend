@@ -60,8 +60,8 @@ class Product extends Controller
         // return CR::collection(C::with(['brand', 'category', 'created_by', 'order_detail'])->paginate(10));
         // return Branch::all();
 
-        if ( !isset($branch_id)) return response('branch not defined' , 403);
-
+        // if ( !isset($branch_id)) return response('branch not defined' , 403);
+        $branch_id = auth()->user()->branch_id;
         if ($req->q == ''
         ) {
             return CR::collection(C::with(['brand', 'category', 'created_by' , 'branch'])->whereHas('branch' , function($q) use ($branch_id) {
@@ -196,24 +196,31 @@ class Product extends Controller
     public function store(Request $request)
     {
         //
-        $data =  $request->all();
         // gettype($request->all());
-
-        // return $data['branch_id'];
-
-        $branch =  Branch::find($data['branch_id']);
         
+        // return $data['branch_id'];
+        
+        $branch =  auth()->user()->branch;
+        $count =  C::where('name', $request->name)->whereHas('branch', function ($q) use ($branch) {
+            $q->where('branch_id', $branch->id);
+        })->count();
         // return $request->image;
 
         // return gettype($request->image);
 
-        if ($request->image != NULL && isset($request->image) && !empty($request->image)  ) $data['path'] = $this->upload('products');
-        unset($data['image']);
+        if ($count == 0) {
+            $data =  $request->all();
+            if ($request->image != NULL && isset($request->image) && !empty($request->image)) $data['path'] = $this->upload('products');
+            unset($data['image']);
+            return $branch->products()->create($data);
+        } else {
+            abort(403);
+        }
+
         // $a = [ ...$data, ...['path' => 'new path']  ];
 
         // return array_merge($data , ['path' => 'paapaf']);
         // return $data;
-        return $branch->products()->create($data);
         // $this->upload('qurans');
         // return C::create($data);
 

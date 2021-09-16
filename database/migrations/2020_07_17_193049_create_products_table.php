@@ -23,7 +23,7 @@ class CreateProductsTable extends Migration
             $table->foreign('updated_by')->references('id')->on('users');
             $table->softDeletes();
 
-            $table->string('name')->nullable()->unique();
+            $table->string('name')->nullable();
             $table->text('description')->nullable();
             $table->integer('alert_quantity')->nullable();
             $table->integer('warranty')->nullable();
@@ -38,6 +38,7 @@ class CreateProductsTable extends Migration
 
             $table->bigInteger('category_id')->unsigned()->nullable();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+
         });
     }
 

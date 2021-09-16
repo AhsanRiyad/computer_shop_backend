@@ -14,8 +14,13 @@ class Brand extends Model
         return $this->belongsTo('App\User', 'created_by', 'id');
     }
 
+    public function branch()
+    {
+        return $this->belongsToMany('App\Models\Branches\Branch');
+    }
+
     public function porducts()
     {
-        return $this->hasMany('App\Models\Products\Product', 'category_id');
+        return $this->hasMany('App\Models\Products\Product', 'brand_id');
     }
 }

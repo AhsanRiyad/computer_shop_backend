@@ -16,6 +16,11 @@ class Income extends Model
         return $this->belongsTo('App\User', 'created_by', 'id');
     }
 
+    public function branch()
+    {
+        return $this->belongsToMany('App\Models\Branches\Branch');
+    }
+
     public function transaction()
     {
         return $this->morphMany('App\Models\Transactions\Transaction', 'transactionable');

@@ -340,12 +340,15 @@ Route::group([], function () {
         Route::delete('nominee/{id}', 'Microcredit\Nominee\Nominee@destroy');
 
 
-        //employee
-        Route::get('employee', 'Employees\Employee@index');
-        Route::get('employee/{id}', 'Employees\Employee@show');
-        Route::post('employee', 'Employees\Employee@store');
-        Route::put('employee/{id}', 'Employees\Employee@update');
-        Route::delete('employee/{id}', 'Employees\Employee@destroy');
+        Route::group(['middleware' => ['role:Admin|Shop']], function () {
+            //employee
+            Route::get('employee', 'Employees\Employee@index');
+            Route::get('employee/{id}', 'Employees\Employee@show');
+            Route::post('employee', 'Employees\Employee@store');
+            Route::put('employee/{id}', 'Employees\Employee@update');
+            Route::delete('employee/{id}', 'Employees\Employee@destroy');
+        });
+        
 
         //microcredit transactions
         Route::get('transaction-microcredit', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@index');

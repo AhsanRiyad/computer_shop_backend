@@ -6,7 +6,6 @@ use DB;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Others\SampleEmpty;
-use App\Models\Employees\Employee;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 
@@ -44,12 +43,63 @@ class Employee extends Controller
     public function index(Request $req)
     {
         //
-        if ($req->q == '') {
-            return BR::collection(B::with(['created_by', 'user'])->paginate(10));
+        $branch_id =  auth()->user()->branch_id;
+        if ($req->q == ''
+        ) {
+            return BR::collection(B::with(['created_by', 'branch' , 'user'])->whereHas('branch', function ($q) use ($branch_id) {
+                $q->where('branch_id', $branch_id);
+            })->paginate(10));
         } else {
             return $this->search($req);
         }
     }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+        $validatedData =  $request->validate([
+            "name" => "required|max:55",
+            "email" => "required",
+            "password" => "required|max:100",
+            // "password" => "required|confirmed"
+        ]);
+
+
+        $validatedData["password"] = bcrypt($validatedData["password"]);
+        $User = User::create($validatedData);
+        $User->shop_id = auth()->user()->id;
+        $User->branch_id = auth()->user()->branch_id;
+        $User->save();
+
+        $count =  Role::where('name', 'Employee')->count();
+        if ($count < 1) {
+            Role::create(['name' => 'Employee']);
+        }
+
+        $User->assignRole('Employee');
+
+        $employee =  B::create($request->all());
+        $employee->user_id = $User->id;
+        $employee->save();
+
+        return new BR($employee);
+
+        // $product->save($parameters);
+
+        // return $request;
+        // $a = new P;
+        // $a->name = $request->name;
+        // return $a->save();
+        // return $user;
+    }
+
+
 
     public function dropdown()
     {
@@ -88,47 +138,7 @@ class Employee extends Controller
         }*/
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-        $validatedData =  $request->validate([
-            "name" => "required|max:55",
-            "email" => "required",
-            "password" => "required|max:100",
-            "shop_id" => "required",
-            // "password" => "required|confirmed"
-        ]);
-
-        
-        $validatedData["password"] = bcrypt($validatedData["password"]);
-        $User = User::create($validatedData);
-        
-        $count =  Role::where('name', 'Employee')->count();
-        if($count < 1){
-            Role::create(['name' => 'Employee']);
-        }
-
-        $User->assignRole('Employee');
-        
-        $employee =  Employee::create($request->all());
-        
-        return new BR($employee);
-
-        // $product->save($parameters);
-
-        // return $request;
-        // $a = new P;
-        // $a->name = $request->name;
-        // return $a->save();
-        // return $user;
-    }
-
+   
     /**
      * Display the specified resource.
      *

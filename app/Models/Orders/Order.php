@@ -72,7 +72,7 @@ class Order extends Model
 
     public function branch()
     {
-        return $this->belongsToMany('App\Models\Branches\Branch');
+        return $this->belongsTo('App\Models\Branches\Branch' , 'branch_id' ,  'id');
     }
 
     public function created_by()

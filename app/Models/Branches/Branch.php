@@ -22,9 +22,39 @@ class Branch extends Model
         return $this->belongsToMany('App\Models\Products\Product');
     }
 
+    public function brands()
+    {
+        return $this->belongsToMany('App\Models\Brands\Brand');
+    }
+
+    public function banks()
+    {
+        return $this->belongsToMany('App\Models\Banks\Bank');
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany('App\Models\Categories\Category');
+    }
+
+    public function incomes()
+    {
+        return $this->belongsToMany('App\Models\Incomes\Income');
+    }
+
+    public function expenses()
+    {
+        return $this->belongsToMany('App\Models\Expenses\Expense');
+    }
+
+    public function units()
+    {
+        return $this->belongsToMany('App\Models\Units\Unit');
+    }
+
     public function orders()
     {
-        return $this->belongsToMany('App\Models\Orders\Order');
+        return $this->hasMany('App\Models\Orders\Order' , 'branch_id');
     }
 
     public function clients()

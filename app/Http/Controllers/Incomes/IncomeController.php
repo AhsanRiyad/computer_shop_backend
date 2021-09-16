@@ -18,12 +18,41 @@ class IncomeController extends Controller
     public function indexIncomeName(Request $req)
     {
         //
-        if ($req->q == '') {
-            return BR::collection(B::with(['created_by'])->paginate(10));
+        $branch_id =  auth()->user()->branch_id;
+        if ($req->q == ''
+        ) {
+            return BR::collection(B::with(['created_by'])->whereHas('branch', function ($q) use ($branch_id) {
+                $q->where('branch_id', $branch_id);
+            })->paginate(10));
         } else {
             return $this->search($req);
         }
     }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeIncomeName(Request $request)
+    {
+
+        $branch =  auth()->user()->branch;
+        $count =  B::where('name', $request->name)->whereHas('branch', function ($q) use ($branch) {
+            $q->where('branch_id', $branch->id);
+        })->count();
+
+        if ($count == 0) {
+            return $branch->incomes()->create($request->all());
+        } else {
+            abort(403);
+        }
+
+        // B::create($request->all());
+        // return new BR($request->all());
+    }
+
 
     public function dropdown()
     {
@@ -46,18 +75,7 @@ class IncomeController extends Controller
         
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function storeIncomeName(Request $request)
-    {
-        B::create($request->all());
-        return new BR($request->all());
-    }
-
+    
     public function indexIncome()
     {
         return BR::collection(Transaction::where('transactionable_type', 'income')->with(['transactionable'])->paginate(10));

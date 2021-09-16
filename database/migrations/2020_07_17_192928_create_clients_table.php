@@ -24,9 +24,9 @@ class CreateClientsTable extends Migration
             $table->softDeletes();
 
             $table->string('name')->nullable();
-            $table->string('email')->nullable()->unique();
-            $table->string('mobile')->nullable()->unique();
-            
+            $table->string('email')->nullable();
+            $table->string('mobile')->nullable();
+
             $table->text('address')->nullable();
             $table->string('type')->nullable();
 

@@ -444,6 +444,14 @@ class Order extends Controller
 
             $branch =  Branch::find($request->order['branch_id']);
             $order =  $branch->orders()->create($request->order);
+
+            if($request->client_id == 0){
+                $id =  Client::where('name' , 'Walk in customer')->where('branch_id' , $request->order['branch_id'])->get(['id'])->first()->id;
+                $order->client_id = $id;
+                $order->save();
+            }
+
+
             // $order = O::create($request->order);
             $order->address()->delete();
             $order->address()->create( $request->address);
@@ -516,6 +524,14 @@ class Order extends Controller
         try {
             $branch =  Branch::find($request->order['branch_id']);
             $order =  $branch->orders()->create($request->order);
+
+            if ($request->client_id == 0) {
+                $id =  Client::where('name', 'Walk in seller')->where('branch_id', $request->order['branch_id'])->get(['id'])->first()->id;
+                $order->client_id = $id;
+                $order->save();
+            }
+
+
             if (  isset($request->address['name']) ||  isset($request->address['mobile']) ||  isset($request->address['address'])) {
                 $order->address()->create($request->address);
             }

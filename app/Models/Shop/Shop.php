@@ -15,7 +15,10 @@ class Shop extends Model
     {
         return $this->belongsTo('App\User', 'created_by', 'id');
     }
-
+    public function branches()
+    {
+        return $this->hasMany('App\Models\Branches\Branch', 'shop_id');
+    }
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id', 'id');

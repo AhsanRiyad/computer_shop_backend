@@ -20,12 +20,50 @@ class Brand extends Controller
     public function index(Request $req)
     {
         //
+        $branch_id =  auth()->user()->branch_id;
         if ($req->q == '') {
-            return BR::collection(B::with(['created_by'])->paginate(10));
+            return BR::collection(B::with(['created_by'])->whereHas('branch' , function ($q) use ($branch_id) {
+                $q->where('branch_id', $branch_id);
+            } )->paginate(10));
         } else {
             return $this->search($req);
         }
     }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+        $branch =  auth()->user()->branch;
+        $count =  B::where('name', $request->name)->whereHas('branch', function ($q) use ($branch) {
+            $q->where('branch_id', $branch->id);
+        })->count();
+
+        if ($count == 0) {
+            return $branch->brands()->create($request->all());
+        } else {
+            abort(403);
+        }
+
+
+        // B::create($request->all());
+        // return new BR($request->all());
+
+        // $product->save($parameters);
+
+        // return $request;
+        // $a = new P;
+        // $a->name = $request->name;
+        // return $a->save();
+        // return $user;
+    }
+
+
 
     public function dropdown()
     {
@@ -64,27 +102,7 @@ class Brand extends Controller
         }*/
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-        B::create($request->all());
-        return new BR($request->all());
-
-        // $product->save($parameters);
-
-        // return $request;
-        // $a = new P;
-        // $a->name = $request->name;
-        // return $a->save();
-        // return $user;
-    }
-
+  
     /**
      * Display the specified resource.
      *

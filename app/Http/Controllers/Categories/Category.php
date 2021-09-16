@@ -32,11 +32,44 @@ class Category extends Controller
     public function index(Request $req)
     {
         //
-        if ($req->q == '') {
-            return CR::collection(C::with(['created_by'])->paginate(10));
+        $branch_id =  auth()->user()->branch_id;
+        if ($req->q == ''
+        ) {
+            return CR::collection(C::with(['created_by'])->whereHas('branch', function ($q) use ($branch_id) {
+                $q->where('branch_id', $branch_id);
+            })->paginate(10));
         } else {
             return $this->search($req);
         }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+        $branch =  auth()->user()->branch;
+        $count =  C::where('name', $request->name)->whereHas('branch', function ($q) use ($branch) {
+            $q->where('branch_id', $branch->id);
+        })->count();
+
+        if ($count == 0) {
+            return $branch->categories()->create($request->all());
+        } else {
+            return response('already exists', 403);
+        }
+
+        // $product->save($parameters);
+
+        // return $request;
+        // $a = new P;
+        // $a->name = $request->name;
+        // return $a->save();
+        // return $user;
     }
 
     public function dropdown()
@@ -75,26 +108,7 @@ class Category extends Controller
         }*/
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-        C::create($request->all());
-        return new CR($request->all());
-
-        // $product->save($parameters);
-
-        // return $request;
-        // $a = new P;
-        // $a->name = $request->name;
-        // return $a->save();
-        // return $user;
-    }
+   
 
     /**
      * Display the specified resource.

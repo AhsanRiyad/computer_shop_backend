@@ -39,25 +39,81 @@ class Client extends Controller
     public function index(Request $req)
     {
         //
-        if ($req->q == '') {
-            return CR::collection(C::with(['created_by'])->paginate(10));
+        $branch_id =  auth()->user()->branch_id;
+        return $branch_id;
+        if (
+            $req->q == ''
+        ) {
+            return CR::collection(C::with(['created_by'])->whereHas('branch', function ($q) use ($branch_id) {
+                $q->where('branch_id', $branch_id);
+            })->paginate(10));
         } else {
             return $this->search($req);
         }
     }
 
-    public function getAllSeller()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
     {
         //
-        return CR::collection(C::where('type', '=', 'seller')->with(['created_by'])->paginate(10));
-        
+        $branch =  auth()->user()->branch;
+        $count =  C::where('name', $request->name)->whereHas('branch', function ($q) use ($branch) {
+            $q->where('branch_id', $branch->id);
+        })->count();
+
+        if ($count == 0) {
+            return $branch->clients()->create($request->all());
+        } else {
+            return response('already exists', 403);
+        }
+
+        // $product->save($parameters);
+
+        // return $request;
+        // $a = new P;
+        // $a->name = $request->name;
+        // return $a->save();
+        // return $user;
+    }
+    public function getAllSeller(Request $req)
+    {
+        //
+        // return CR::collection(C::where('type', '=', 'seller')->with(['created_by'])->paginate(10));
+
+        //
+        $branch_id =  auth()->user()->branch_id;
+        // return $branch_id;
+        if (
+            $req->q == ''
+        ) {
+            return CR::collection(C::where('type', 'seller')->with(['created_by'])->whereHas('branch', function ($q) use ($branch_id) {
+                $q->where('branch_id', $branch_id);
+            })->paginate(10));
+        } else {
+            return $this->search($req);
+        }
     }
 
-    public function getAllCustomer()
+    public function getAllCustomer(Request $req)
     {
         //
-        return CR::collection(C::where('type', '=', 'customer')->with(['created_by'])->paginate(10));
-        
+        $branch_id =  auth()->user()->branch_id;
+        // return $branch_id;
+        if (
+            $req->q == ''
+        ) {
+            return CR::collection(C::where('type' , 'customer')->with(['created_by'])->whereHas('branch', function ($q) use ($branch_id) {
+                $q->where('branch_id', $branch_id);
+            })->paginate(10));
+        } else {
+            return $this->search($req);
+        }
+
     }
 
     public function index_seller()
@@ -105,28 +161,6 @@ class Client extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-        $branch =  Branch::find($request->branch_id);
-        return $branch->clients()->create($request->all());
-        // C::create($request->all());
-        return new CR($request->all());
-
-        // $product->save($parameters);
-
-        // return $request;
-        // $a = new P;
-        // $a->name = $request->name;
-        // return $a->save();
-        // return $user;
-    }
 
     /**
      * Display the specified resource.

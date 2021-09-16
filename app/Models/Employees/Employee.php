@@ -21,4 +21,14 @@ class Employee extends Model
         return $this->belongsTo('App\User', 'user_id', 'id');
     }
 
+    public function shop()
+    {
+        return $this->belongsTo('App\User', 'shop_id', 'id');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo('App\Models\Branches\Branch', 'branch_id', 'id');
+    }
+
 }

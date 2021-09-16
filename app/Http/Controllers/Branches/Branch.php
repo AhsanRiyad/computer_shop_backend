@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Branches;
 
-use App\Http\Controllers\Controller;
+use DB;
 use Illuminate\Http\Request;
+use App\Models\Clients\Client;
+use App\Http\Others\SampleEmpty;
+use App\Http\Controllers\Controller;
 use App\Models\Branches\Branch as B;
 use App\Http\Resources\Branches\Branch as BR;
-use DB;
-use App\Http\Others\SampleEmpty;
 
 class Branch extends Controller
 {
@@ -19,10 +20,33 @@ class Branch extends Controller
     public function index(Request $req)
     {
         //
+        $shop_id =  auth()->user()->shop_id;
         if ($req->q == '') {
-            return BR::collection(B::with(['created_by'])->paginate(10));
+            return BR::collection(B::where('shop_id' , $shop_id )->with(['created_by'])->paginate(10));
         } else {
             return $this->search($req);
+        }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $shop =  auth()->user()->shop;
+        $count = B::where('shop_id' , $shop->id)->where('name' , $request->name)->count();
+        if($count == 0){
+            $branch =  $shop->branches()->create($request->all());
+            $branch->clients()->createMany([
+                ['name' => 'Walk in seller', 'type' => 'seller'],
+                ['name' => 'Walk in customer', 'type' => 'customer']
+            ]); 
+            return new BR($request->all());
+        }else{
+            abort(403);
         }
     }
 
@@ -54,17 +78,7 @@ class Branch extends Controller
         
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        B::create($request->all());
-        return new BR($request->all());
-    }
+    
 
     /**
      * Display the specified resource.

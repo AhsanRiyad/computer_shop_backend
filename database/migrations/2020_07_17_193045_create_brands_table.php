@@ -23,7 +23,9 @@ class CreateBrandsTable extends Migration
             $table->foreign('updated_by')->references('id')->on('users');
             $table->softDeletes();
 
-            $table->string('name')->nullable()->unique();
+
+
+            $table->string('name')->nullable();
             $table->string('description')->nullable();
 
 

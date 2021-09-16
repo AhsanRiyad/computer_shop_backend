@@ -18,12 +18,38 @@ class ExpenseController extends Controller
     public function indexExpenseName(Request $req)
     {
         //
-        if ($req->q == '') {
-            return BR::collection(B::with(['created_by'])->paginate(10));
+        $branch_id =  auth()->user()->branch_id;
+        if ($req->q == ''
+        ) {
+            return BR::collection(B::with(['created_by'])->whereHas('branch', function ($q) use ($branch_id) {
+                $q->where('branch_id', $branch_id);
+            })->paginate(10));
         } else {
             return $this->search($req);
         }
     }
+
+    public function storeExpenseName(Request $request)
+    {
+
+        $branch =  auth()->user()->branch;
+        $count =  B::where('name', $request->name)->whereHas('branch', function ($q) use ($branch) {
+            $q->where('branch_id', $branch->id);
+        })->count();
+
+        if ($count == 0) {
+            return $branch->expenses()->create($request->all());
+        } else {
+            abort(403);
+        }
+
+        // $branch =  auth()->user()->branch;
+        // return $branch->expenses()->create($request->all());
+
+        // B::create($request->all());
+        // return new BR($request->all());
+    }
+
 
     public function dropdown()
     {
@@ -49,11 +75,7 @@ class ExpenseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storeExpenseName(Request $request)
-    {
-        B::create($request->all());
-        return new BR($request->all());
-    }
+    
 
     public function indexExpense()
     {

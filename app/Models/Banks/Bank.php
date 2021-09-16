@@ -14,4 +14,9 @@ class Bank extends Model
     {
         return $this->belongsTo('App\User', 'created_by', 'id');
     }
+
+    public function branch()
+    {
+        return $this->belongsToMany('App\Models\Branches\Branch');
+    }
 }

@@ -23,8 +23,11 @@ class CreateExpensesTable extends Migration
             $table->foreign('updated_by')->references('id')->on('users');
             $table->softDeletes();
 
-            $table->string('name')->nullable()->unique();
+            $table->string('name')->nullable();
             $table->string('description')->nullable();
+
+            $table->bigInteger('branch_id')->unsigned()->nullable();
+            $table->foreign('branch_id')->references('id')->on('branches');
         });
     }
 

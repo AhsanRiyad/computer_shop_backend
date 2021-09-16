@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Shop;
 use DB;
 use App\User;
 use Illuminate\Http\Request;
+use App\Models\Clients\Client;
 use App\Models\Shop\Shop as B;
 use App\Models\Branches\Branch;
 use App\Http\Others\SampleEmpty;
+
+
 use Spatie\Permission\Models\Role;
-
-
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Shop\Shop as BR;
 use Illuminate\Support\Facades\Redirect;
@@ -115,8 +116,17 @@ class ShopController extends Controller
         }
         $User->assignRole('Shop');
         $Shop =  $User->shop()->create($request->all());
-        Branch::create([ 'name' => 'Branch-1' , 'address' => 'Your location', 'shop_id' => $User->id ]);
+        $branch =  Branch::create([ 'name' => 'Branch-1' , 'address' => 'Your location', 'shop_id' => $User->id ]);
 
+        $User->shop_id = $User->id;
+        $User->branch_id  = $branch->id;
+        $User->save();
+
+        $branch->clients()->createMany([
+            ['name' => 'Walk in seller', 'type' => 'seller'],
+            ['name' => 'Walk in customer', 'type' => 'customer']
+        ]); 
+        
         return new BR($Shop);
 
         // $product->save($parameters);

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\User;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
@@ -21,6 +22,13 @@ class AuthController extends Controller
         $User = User::create($validatedData);
 
         $accessToken = $User->createToken('authToken')->accessToken;
+
+        $count =  Role::where('name', 'Admin')->count();
+        if ($count < 1) {
+            Role::create(['name' => 'Admin']);
+        }
+
+        $User->assignRole('Admin');
 
         return response(['user' => $User, 'accessToken' => $accessToken]);
     }
