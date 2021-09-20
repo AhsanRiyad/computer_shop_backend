@@ -19,14 +19,20 @@ class UserController extends Controller
     public function updateBranch(Request $request)
     {
         //
-        return User::find(auth()->user()->id)->update(['branch_id', $request->branch_id]);
+        $user = User::find(auth()->user()->id);
+        $user->branch_id = $request->branch_id;
+        $user->save();
+        return $user->refresh();
     }
 
     public function updateShop(Request $request)
     {
         //
-        return User::find(auth()->user()->id)->update(['shop_id' , $request->shop_id]);
-        
+        // return $request->shop_id;
+        $user = User::find(auth()->user()->id);
+        $user->shop_id = $request->shop_id;
+        $user->save();
+        return $user->refresh();
     }
 
 
