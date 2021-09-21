@@ -24,8 +24,11 @@ class Dps extends Controller
     public function index(Request $req)
     {
         //
-        if ($req->q == '') {
-            return BR::collection(B::with(['member' , 'collector' ])->paginate(10));
+        $branch_id =  auth()->user()->branch_id;
+        if (
+            $req->q == ''
+        ) {
+            return BR::collection(B::where('branch_id', $branch_id)->with(['client'])->paginate(10));
         } else {
             return $this->search($req);
         }
@@ -34,7 +37,8 @@ class Dps extends Controller
     public function dropdown()
     {
         //
-        return BR::collection(B::get(['id']));
+        $branch_id =  auth()->user()->branch_id;
+        return BR::collection( B::where('branch_id' , $branch_id)->get(['id']) );
     }
 
     /**
@@ -65,7 +69,10 @@ class Dps extends Controller
     {
         //
         // return $request;
-        $dps = B::create($request->all());
+        $branch =  auth()->user()->branch;
+        $dps =  $branch->dps()->create($request->all());
+
+        // $dps = B::create($request->all());
         // $dps->nominee()->associate(Nominee::create($request->nominee));
         // $dps->save();
         return $dps->refresh();

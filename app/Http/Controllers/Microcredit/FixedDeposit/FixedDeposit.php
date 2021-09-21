@@ -24,8 +24,11 @@ class FixedDeposit extends Controller
     public function index(Request $req)
     {
         //
-        if ($req->q == '') {
-            return BR::collection(B::with(['member', 'collector'])->paginate(10));
+        $branch_id =  auth()->user()->branch_id;
+        if (
+            $req->q == ''
+        ) {
+            return BR::collection(B::where('branch_id', $branch_id)->with(['client'])->paginate(10));
         } else {
             return $this->search($req);
         }
@@ -34,7 +37,8 @@ class FixedDeposit extends Controller
     public function dropdown()
     {
         //
-        return BR::collection(B::get(['name', 'id']));
+        $branch_id =  auth()->user()->branch_id;
+        return BR::collection(B::where('branch_id', $branch_id)->get(['id']));
     }
 
     /**
@@ -65,7 +69,11 @@ class FixedDeposit extends Controller
     {
         //
         // return $request;
-        $dps = B::create($request->all());
+        // return $request;
+        $branch =  auth()->user()->branch;
+        $dps =  $branch->FixedDeposit()->create($request->all());
+
+        // $dps = B::create($request->all());
         // $dps->nominee()->associate(Nominee::create($request->nominee));
         // $dps->save();
         return $dps->refresh();

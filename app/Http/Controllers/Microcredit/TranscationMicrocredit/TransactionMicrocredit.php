@@ -10,7 +10,7 @@ use App\Models\Microcredit\Loans\Loan;
 use App\Models\Microcredit\FixedDeposit\FixedDeposit;
 use App\Http\Resources\Microcredit\Transaction\Transaction;
 use App\Models\Microcredit\TransactionMicrocredit\TransactionMicrocredit as T;
-
+use App\Http\Resources\Transactions\Transaction as TR;
 class TransactionMicrocredit extends Controller
 {
     /**
@@ -18,11 +18,20 @@ class TransactionMicrocredit extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $req)
     {
         //
-        $transaction = T::all();
-        return $transaction;
+        // $transaction = T::all();
+
+        $branch_id =  auth()->user()->branch_id;
+        if (
+            $req->q == ''
+        ) {
+            return TR::collection(T::where('branch_id', $branch_id)->with(['client'])->paginate(10));
+        } else {
+            return $this->search($req);
+        }
+        // return $transaction;
     }
 
     /**
@@ -45,19 +54,27 @@ class TransactionMicrocredit extends Controller
     {
         //
         $data = $request->all();
+        $branch_id =  auth()->user()->branch_id;
         if($type == 'dps'){
             $Dps =  Dps::find($data['dpsOrLoan_id']);
             unset($data['dps_id']);
-            $Dps->transactionMicrocredit()->create($data);
+            $transaction =  $Dps->transactionMicrocredit()->create($data);
+            $transaction->branch_id = $branch_id;
+            $transaction->save();
             return $Dps->with(['transactionMicrocredit'])->get();
         }else if($type == 'fixedDeposit'){
             $FixedDeposit =  FixedDeposit::find($data['fdr_id']);
             unset($data['fdr_id']);
+            $transaction =  $FixedDeposit->transactionMicrocredit()->create($data);
+            $transaction->branch_id = $branch_id;
+            $transaction->save();
             return $FixedDeposit;
         }else if($type == 'loan'){
             $Loan =  Loan::find($data['dpsOrLoan_id']);
             unset($data['loan_id']);
-            $Loan->transactionMicrocredit()->create($data);
+            $transaction =  $Loan->transactionMicrocredit()->create($data);
+            $transaction->branch_id = $branch_id;
+            $transaction->save();
             return $Loan;
         }
         // return $dps->transactionMicrocredit;
@@ -69,8 +86,9 @@ class TransactionMicrocredit extends Controller
     {
         // return $req->search;
 
-        if (T::where('id', 'like', '%' . $req->q . '%')->orWhere('amount', 'like', '%' . $req->q . '%')->count() > 0) {
-            return Transaction::collection(T::with(['created_by'])->where('id', 'like', '%' . $req->q . '%')->orWhere('amount', 'like', '%' . $req->q . '%')->paginate(10));
+        $branch_id =  auth()->user()->branch_id;
+        if (T::where('id', 'like', '%' . $req->q . '%')->where('branch_id', $branch_id)->orWhere('order_id', 'like', '%' . $req->q . '%')->count() > 0) {
+            return TR::collection(T::with(['client'])->where('branch_id', $branch_id)->where('id', 'like', '%' . $req->q . '%')->orWhere('order_id', 'like', '%' . $req->q . '%')->paginate(10));
         } else {
             return  json_encode(new SampleEmpty([]));
         };

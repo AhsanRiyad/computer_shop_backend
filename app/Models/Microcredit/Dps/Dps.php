@@ -38,4 +38,9 @@ class Dps extends Model
     {
         return $this->belongsTo('App\Models\Employees\Employee', 'collector_id', 'id')->with(['user']);
     }
+
+    public function branch()
+    {
+        return $this->belongsTo('App\Models\Branches\Branch', 'branch_id', 'id');
+    }
 }

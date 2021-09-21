@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Microcredit\Members;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Microcredit\Members\Member as B;
-use App\Models\Microcredit\Nominee\Nominee;
-use App\Http\Resources\Microcredit\Members\Member as BR;
 use DB;
+use Illuminate\Http\Request;
+use App\Http\Others\SampleEmpty;
+use App\Http\Controllers\Controller;
+use App\Models\Microcredit\Nominee\Nominee;
+use App\Models\Microcredit\Members\Member as B;
+use App\Http\Resources\Microcredit\Members\Member as BR;
 
 class Member extends Controller
 {
@@ -21,17 +22,48 @@ class Member extends Controller
     {
         //
         // return B::with(['created_by'])->paginate(10);
-        if ($req->q == '') {
-            return BR::collection(B::with(['created_by', 'nominee'])->paginate(10));
+
+        $branch_id =  auth()->user()->branch_id;
+        // return $branch_id;
+        if (
+            $req->q == ''
+        ) {
+            return BR::collection(B::with(['created_by'])->whereHas('branch', function ($q) use ($branch_id) {
+                $q->where('branch_id', $branch_id);
+            })->paginate(10));
         } else {
             return $this->search($req);
         }
+
     }
 
     public function dropdown()
     {
         //
-        return BR::collection(B::get(['name', 'id']));
+        // return BR::collection(B::get(['name', 'id']));
+
+        $branch_id =  auth()->user()->branch_id;
+        // return BR::collection(B::where('branch_id', $branch_id)->get(['name', 'id']));
+        return BR::collection(B::whereHas('branch', function ($q) use ($branch_id) {
+            $q->where('branch_id', $branch_id);
+        })->orderBy('id', 'desc')->get(['name', 'id']));
+    }
+
+
+    public function search(Request $req)
+    {
+        $branch_id = auth()->user()->branch_id;
+        // $req['type'] = $type;
+
+        $a =  BR::collection(B::whereHas('branch', function ($q) use ($branch_id) {
+            $q->where('branch_id', $branch_id);
+        })->where(function ($q) use ($req) {
+            return $q->where('id', 'like', '%' . $req->q . '%')->orWhere('name', 'like', '%' . $req->q . '%');
+        })->orderBy('id', 'desc')->paginate(10));
+
+        if ($a->count() > 0) return $a;
+        else return  json_encode(new SampleEmpty([]));
+        // return $req->q;
     }
 
     /**
@@ -62,10 +94,24 @@ class Member extends Controller
     {
         //
         // Nominee::create($request->nominee);
-        $member = B::create($request->member);
-        $member->nominee()->associate(Nominee::create($request->nominee));
-        $member->save();
-        return $member->refresh();
+        // $member = B::create($request->member);
+        // $member->nominee()->associate(Nominee::create($request->nominee));
+        // $member->save();
+        // return $member->refresh();
+        // return $request->member['name'];
+        $branch =  auth()->user()->branch;
+        // return $branch;
+        $count =  B::where('name', $request->member['name'])->whereHas('branch', function ($q) use ($branch) {
+            $q->where('branch_id', $branch->id);
+        })->count();
+        if ($count == 0) {
+            $member =  $branch->members()->create($request->member);
+            $member->nominee()->associate(Nominee::create($request->nominee));
+            $member->save();
+            return $member->refresh();
+        } else {
+            return response('already exists', 403);
+        }
     }
 
     /**

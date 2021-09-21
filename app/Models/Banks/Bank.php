@@ -17,6 +17,6 @@ class Bank extends Model
 
     public function branch()
     {
-        return $this->belongsToMany('App\Models\Branches\Branch');
+        return $this->belongsToMany('App\Models\Branches\Branch' , 'branch_bank');
     }
 }

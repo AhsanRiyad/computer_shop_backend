@@ -35,4 +35,9 @@ class TransactionMicrocredit extends Model
     {
         return $this->belongsTo('App\Models\Banks\Bank', 'bank_id', 'id');
     }
+
+    public function branch()
+    {
+        return $this->belongsTo('App\Models\Branches\Branch', 'branch_id', 'id');
+    }
 }

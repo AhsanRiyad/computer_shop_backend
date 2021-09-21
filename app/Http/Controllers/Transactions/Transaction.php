@@ -153,9 +153,9 @@ class Transaction extends Controller
     public function search(Request $req)
     {
         // return $req->search;
-
-        if (C::where('id', 'like', '%' . $req->q . '%')->orWhere('order_id', 'like', '%' . $req->q . '%')->count() > 0) {
-            return CR::collection(C::with(['client'])->where('id', 'like', '%' . $req->q . '%')->orWhere('order_id', 'like', '%' . $req->q . '%')->paginate(10));
+        $branch_id =  auth()->user()->branch_id;
+        if (C::where('id', 'like', '%' . $req->q . '%')->where('branch_id', $branch_id )->orWhere('order_id', 'like', '%' . $req->q . '%')->count() > 0) {
+            return CR::collection(C::with(['client'])->where('branch_id', $branch_id)->where('id', 'like', '%' . $req->q . '%')->orWhere('order_id', 'like', '%' . $req->q . '%')->paginate(10));
         } else {
             return  json_encode(new SampleEmpty([]));
         };

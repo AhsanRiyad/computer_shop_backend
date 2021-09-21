@@ -10,7 +10,6 @@ class Transaction extends Model
     protected $guarded = ['id'];
     protected $casts = [ 'client_id' => 'integer' , 'order_id' => 'integer' , 'is_debit' => 'boolean' , 'is_cash' => 'boolean' , 'is_advance' => 'boolean' , 'tk' => 'double'  ];
 
-
     public function client()
     {
         return $this->belongsTo('App\Models\Clients\Client', 'client_id' , 'id')->with(['branch']);;
@@ -25,12 +24,15 @@ class Transaction extends Model
     {
         return $this->belongsTo('App\Models\Transactions\Refund', 'refund_id', 'id');
     }
-
  
     public function transactionable()
     {
         return $this->morphTo();
     }
 
+    public function branch()
+    {
+        return $this->belongsTo('App\Models\Branches\Branch', 'branch_id', 'id');
+    }
     
 }

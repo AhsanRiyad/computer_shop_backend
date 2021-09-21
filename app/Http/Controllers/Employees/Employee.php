@@ -102,7 +102,13 @@ class Employee extends Controller
     public function dropdown()
     {
         //
-        return EmployeeDropdown::collection(B::all());
+        $branch_id =  auth()->user()->branch_id;
+        // return BR::collection(B::where('branch_id', $branch_id)->get(['name', 'id']));
+        return EmployeeDropdown::collection(B::whereHas('branch', function ($q) use ($branch_id) {
+            $q->where('branch_id', $branch_id);
+        })->orderBy('id', 'desc')->get());
+
+        // return EmployeeDropdown::collection(B::all());
     }
 
     public function search(Request $req)

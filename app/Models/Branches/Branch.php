@@ -29,7 +29,7 @@ class Branch extends Model
 
     public function banks()
     {
-        return $this->belongsToMany('App\Models\Banks\Bank');
+        return $this->belongsToMany('App\Models\Banks\Bank' , 'branch_bank');
     }
 
     public function categories()
@@ -62,8 +62,28 @@ class Branch extends Model
         return $this->hasMany('App\Models\Transactions\Transaction' , 'branch_id');
     }
 
+    public function dps()
+    {
+        return $this->hasMany('App\Models\Microcredit\Dps\Dps' , 'branch_id');
+    }
+
+    public function loans()
+    {
+        return $this->hasMany('App\Models\Microcredit\Loans\Loan' , 'branch_id');
+    }
+
+    public function FixedDeposit()
+    {
+        return $this->hasMany('App\Models\Microcredit\FixedDeposit\FixedDeposit' , 'branch_id');
+    }
+
     public function clients()
     {
         return $this->belongsToMany('App\Models\Clients\Client');
+    }
+
+    public function members()
+    {
+        return $this->belongsToMany('App\Models\Microcredit\Members\Member');
     }
 }

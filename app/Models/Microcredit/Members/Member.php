@@ -48,4 +48,9 @@ class Member extends Model
         return $this->hasMany('App\Models\Microcredit\Loans\Loan', 'member_id');
     }
 
+    public function branch()
+    {
+        return $this->belongsToMany('App\Models\Branches\Branch');
+    }
+
 }
