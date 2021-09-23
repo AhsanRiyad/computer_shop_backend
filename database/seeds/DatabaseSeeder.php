@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         $validatedData["email"] = "admin@venusit.com";
         $validatedData["name"] = "Riyad";
         $User = User::create($validatedData);
-        Role::create(['name' => 'Admin']);
+        Role::create([ 'name' => 'Admin']);
         $User->assignRole('Admin');
     }
 }

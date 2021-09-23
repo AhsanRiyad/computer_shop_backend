@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\RolePermission;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Permission;
 use App\Http\Resources\Role\Role as RoleResource;
+
 class PermissionController extends Controller
 {
     /**
@@ -65,6 +67,40 @@ class PermissionController extends Controller
     public function edit($id)
     {
         //
+    }
+    public function getUsersPermissions($userId)
+    {
+        //
+        $user =  User::find($userId);
+        // return $user->roles[0]->permissions;
+        $permissions = [];
+        // $permission[] = $user->roles[0]->permissions;
+
+        foreach ($user->roles as $value) {
+            # code...
+            $permissions[] = $value->permissions;
+        }
+        return $permissions[0]->merge($user->permissions);
+        // return $user->permissions;
+        // return array_merge($permissions[0] ,$user->permissions);
+
+
+        // return $permissions[0] ?? $permissions ;
+        // return $permissions;
+        // return $user;
+        // return $permissionNames = $user->getPermissionNames();
+        // $permissions = User::with('roles')->get();
+        // return $permissions;
+    }
+    public function givePermissionsToUser(Request $request, $userId)
+    {
+        //
+        // return $request->permissionNames;
+        $user =  User::find($userId);
+        // return $user->permissions;
+        // return $user->getPermissionNames();
+        $user->syncPermissions($request->permissionNames);
+        return response('permission given' , 200);
     }
 
     /**

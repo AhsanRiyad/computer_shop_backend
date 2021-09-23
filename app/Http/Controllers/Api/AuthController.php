@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\RolePermission\PermissionController;
 
 class AuthController extends Controller
 {
@@ -38,7 +39,6 @@ class AuthController extends Controller
             "email" => "required",
             "password" => "required|max:100"
         ]);
-        
 
         if (!auth()->attempt($loginData)) {
             return response(["msg" => "invalid user"] , 401);
@@ -58,12 +58,16 @@ class AuthController extends Controller
             $shop_id = $user->shop_id;
         }
 
+        $permissionController = new PermissionController();
+        $permissions =  $permissionController->getUsersPermissions($user->id);
+
         return response([ 
                           'user' => User::find(auth()->id()),
                           'accessToken' => $accessToken,
                           'roles' => $user->roles,
                           'shop_id' =>  $shop_id,
-                          'branch_id' =>  $branch_id
+                          'branch_id' =>  $branch_id,
+                          'permissions' => $permissions
                         ]
                        );
     }

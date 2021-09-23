@@ -67,15 +67,17 @@ class RoleController extends Controller
     public function assignMultiplePermission(Request $request, $id)
     {
         //
+        // return
+        //     $role = Role::find($id);
         try {
             //code...
             $permissions =  Permission::whereIn('id' , $request->permissionIds )->get();
             $role = Role::find($id);
             $role->syncPermissions($permissions);
-            return response(200);
-        } catch (\Throwable $th) {
+            return response('success' , 200);
+        } catch (\Exception $e) {
             //throw $th;
-            return response(403);
+            return response($e , 403);
         }
     }
 

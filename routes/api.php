@@ -134,14 +134,22 @@ Route::group([], function () {
         Route::post('branch', 'Branches\Branch@store');
         Route::put('branch/{id}', 'Branches\Branch@update');
         Route::delete('branch/{id}', 'Branches\Branch@destroy');
+        
+        
+                //bank
+        Route::group(['middleware' => ['role_or_permission:Admin|microcredit']], function () {
+            //microcredit transactions
+            Route::get('bank', 'Banks\Bank@index');
+            Route::get('bank/{id}', 'Banks\Bank@index');
+            Route::get('bank/{id}', 'Banks\Bank@show');
+            Route::post('bank', 'Banks\Bank@store');
+            Route::put('bank/{id}', 'Banks\Bank@update');
+            Route::delete('bank/{id}', 'Banks\Bank@destroy');
+        });
 
-        //bank
-        Route::get('bank', 'Banks\Bank@index');
-        Route::get('bank/{id}', 'Banks\Bank@index');
-        Route::get('bank/{id}', 'Banks\Bank@show');
-        Route::post('bank', 'Banks\Bank@store');
-        Route::put('bank/{id}', 'Banks\Bank@update');
-        Route::delete('bank/{id}', 'Banks\Bank@destroy');
+
+
+        
 
         //income
         Route::get('income-name', 'Incomes\IncomeController@indexIncomeName');
@@ -279,6 +287,9 @@ Route::group([], function () {
             Route::get('role/user/{userId}', 'RolePermission\RoleController@getUsersRole');
             Route::get('role/permission/{roleId}', 'RolePermission\RoleController@getPermissions');
 
+            Route::get('permissions/user/{userId}', 'RolePermission\PermissionController@getUsersPermissions');
+            Route::post('permissions/{userId}', 'RolePermission\PermissionController@givePermissionsToUser');
+
             Route::resource('role', 'RolePermission\RoleController');
             Route::resource('permission', 'RolePermission\PermissionController');
 
@@ -322,12 +333,15 @@ Route::group([], function () {
         Route::put('dps/{id}', 'Microcredit\Dps\Dps@update');
         Route::delete('dps/{id}', 'Microcredit\Dps\Dps@destroy');
 
-        //fixedDeposit
-        Route::get('fixedDeposit', 'Microcredit\FixedDeposit\FixedDeposit@index');
-        Route::get('fixedDeposit/{id}', 'Microcredit\FixedDeposit\FixedDeposit@show');
-        Route::post('fixedDeposit', 'Microcredit\FixedDeposit\FixedDeposit@store');
-        Route::put('fixedDeposit/{id}', 'Microcredit\FixedDeposit\FixedDeposit@update');
-        Route::delete('fixedDeposit/{id}', 'Microcredit\FixedDeposit\FixedDeposit@destroy');
+        Route::group(['middleware' => ['role_or_permission:Admin|microcredit']], function () {
+            //microcredit transactions
+            //fixedDeposit
+            Route::get('fixedDeposit', 'Microcredit\FixedDeposit\FixedDeposit@index');
+            Route::get('fixedDeposit/{id}', 'Microcredit\FixedDeposit\FixedDeposit@show');
+            Route::post('fixedDeposit', 'Microcredit\FixedDeposit\FixedDeposit@store');
+            Route::put('fixedDeposit/{id}', 'Microcredit\FixedDeposit\FixedDeposit@update');
+            Route::delete('fixedDeposit/{id}', 'Microcredit\FixedDeposit\FixedDeposit@destroy');
+        });
 
         //Grantors
         Route::get('grantor', 'Microcredit\Grantors\Grantor@index');
@@ -358,15 +372,15 @@ Route::group([], function () {
             Route::post('updateBranch', [UserController::class, 'updateBranch']);
 
         });
-        
 
-        //microcredit transactions
-        Route::get('transaction-microcredit', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@index');
-        Route::post('transaction-microcredit/instalment/{type}', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@store');
-        Route::get('transaction-microcredit/instalment', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@getInstalment');
-        Route::put('transaction-microcredit/instalment/{id}', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@editInstalment');
-        Route::get('transaction-microcredit/instalment/{id}', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@show');
-
+        Route::group(['middleware' => ['role_or_permission:Admin|microcredit']], function () {
+            //microcredit transactions
+            Route::get('transaction-microcredit', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@index');
+            Route::post('transaction-microcredit/instalment/{type}', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@store');
+            Route::get('transaction-microcredit/instalment', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@getInstalment');
+            Route::put('transaction-microcredit/instalment/{id}', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@editInstalment');
+            Route::get('transaction-microcredit/instalment/{id}', 'Microcredit\TranscationMicrocredit\TransactionMicrocredit@show');
+        });
     });
 });
 
